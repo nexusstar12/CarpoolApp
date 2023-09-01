@@ -15,12 +15,12 @@
 
 | Student      | Student Full Name |Student SFSU Email | GitHub Username | Discord Username   |        Role         |
 |    :---:     |   :---:           |       :---:       |     :---:       |        :---:       |        :---:        | 
-|      #1      |                   |                   |                 |                    |        Lead         |
-|      #2      |                   |                   |                 |                    |                     |
-|      #3      |                   |                   |                 |                    |                     |
-|      #4      |                   |                   |                 |                    |                     |
-|      #5      |                   |                   |                 |                    |                     |
-|      #6      |                   |                   |                 |                    |                     |
+|      #1      |    Jonathan Sum   |     jsum@sfsu.edu |    nasalito9    |      hoe2          |                     |
+|      #2      |  Kendrick Rivas   |  krivas2@sfsu.edu |  yaboikendrick  |  kendrickkrivas    |                     |
+|      #3      |  Kristian Goranov |  kgoranov@sfsu.edu|  kkrstchn       |  bonemaster7977    |                     |
+|      #4      |Isiah Paul-McGlothin|ipaulmcglothin@mail.sfsu.edu|IamGemek|     gemek         |                     |
+|      #5      |  Phillip Diec     |     gdiec@sfsu.edu|   nexusstar12   |      Nexusstar     |                     |
+|      #6      |  Zoe Panagopoulos |zpanagopoulos@sfsu.edu| zrrrpy       |       zrrrpy       |         Team Lead   |
 
 
 4. All the team members must sign the team contract found [here](https://forms.gle/dxATAsa9isXKbcBn7). Missing signatures from students will result in these students being dropped from the course since this means that they disagree with the policies and terms needed to work in a team environment. 
