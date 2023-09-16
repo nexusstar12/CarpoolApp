@@ -4,7 +4,7 @@ services:
   mysqldb:
     image: mysql:8.1.0
     restart: unless-stopped
-    env_file: features/.env
+    env_file: poolapp/.env
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
@@ -16,9 +16,9 @@ services:
   app:
     depends_on:
       - mysqldb
-    build: ./features
+    build: poolapp
     restart: unless-stopped
-    env_file: features/.env
+    env_file: poolapp/.env
     ports:
       - "8080:8080"
     volumes:
