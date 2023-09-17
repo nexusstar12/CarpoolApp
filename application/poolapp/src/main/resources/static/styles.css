@@ -1,0 +1,16 @@
+h1 {
+    text-align: center;
+}
+.personalInfo{
+    text-align: center;
+    position: relative;
+    top: 250px;
+}
+.personalPhoto{
+    position: relative;
+    top: 150px;
+}
+.heading{
+    text-align: center;
+    font-size: 20px;
+}
