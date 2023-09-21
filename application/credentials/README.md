@@ -9,3 +9,31 @@ using MySQLWorkbench.
 Points will be deducted if teams do not add their credentials here once they have chosen their 
 technology stack or if their step-by-step descriptions are not clear enough. You have been warned! 
 
+<br>**Credentials**
+<br><img src="credentials table.png">
+
+**Access Instructions**</br>
+<br>*SSH Instructions*
+<br>1. Download the [.pem](guest_cloud_key.pem) file in this credentials folder.
+<br>2. Open the command line on your device.
+<br>3. Run this command:
+`ssh -i [path to pem file] guest@35.227.145.220`
+<br>4. The command was successful if you see something like this after running it:</br>
+<br><img src="successful ssh.png"></br>
+*Database Instructions*
+<br> 1. Open MySQL Workbench
+<br> 2. Click the + icon next to MySQL Connections
+<br> 3. Provide a Connection Name (i.e. “pool-app”)
+<br> 4. Keep “Standard (TCP/IP)” set as the Connection Method
+<br> 5. Enter 35.230.60.237 as the Hostname
+<br> 6. Enter 3306 for the Port if it is not pre-filled. Your setup should now look like this:
+<br><img src="MySQL connection setup.png">
+<br> 7. Click “OK” 
+<br> 8. The dialogue window will close and the connection should now display under MySQL Connections
+<br> 9. Click on the connection you just created (should display by the Connection Name provided in step 3)
+<br> 10. Provide the following password when prompted: `team04csc648`
+<br> 11. Click “OK”
+<br>If the connection is successful, you should see “pool-db” under Schemas on the left.
+<br><img src="successful db connection.png">
+
+
