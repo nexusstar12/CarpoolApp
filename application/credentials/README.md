@@ -26,9 +26,11 @@ technology stack or if their step-by-step descriptions are not clear enough. You
 <br> 1. Open MySQL Workbench
 <br> 2. Click the + icon next to MySQL Connections
 <br> 3. Provide a Connection Name (i.e. “pool-app”)
-<br> 4. Keep “Standard (TCP/IP)” set as the Connection Method
-<br> 5. Enter 35.230.60.237 as the Hostname
-<br> 6. Enter 3306 for the Port if it is not pre-filled. Your setup should now look like this:
+<br> 4. Keep `Standard (TCP/IP)` set as the Connection Method
+<br> 5. Enter `35.230.60.237` as the Hostname
+<br> 6. Enter `3306` for the Port if it is not pre-filled. 
+<br> 7. Enter `root` for the username.
+<br>Your setup should now look like this:
 <br><img src="MySQL connection setup.png">
 <br> 7. Click “OK” 
 <br> 8. The dialogue window will close and the connection should now display under MySQL Connections
