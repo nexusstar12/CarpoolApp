@@ -14,7 +14,7 @@ technology stack or if their step-by-step descriptions are not clear enough. You
 
 **Access Instructions**</br>
 <br>*SSH Instructions*
-<br>1. Download the [.pem](guest_cloud_key.pem) file in this credentials folder.
+<br>1. Download the [.pem](guest_ssh_key.pem) file in this credentials folder.
 <br>2. Open the command line on your device.
 <br>3. Run this command:
 `ssh -i [path to pem file] guest@35.227.145.220`
