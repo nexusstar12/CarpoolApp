@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HelloController {
     @RequestMapping(value = "/")
     public String index() {
-        return "aboutMe.html";
+        return "aboutMe";
     }
 }
