@@ -1,0 +1,64 @@
+h1 {
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+.personalInfo{
+    text-align: center;
+    position: relative;
+    top: 250px;
+}
+.personalPhoto{
+    position: relative;
+    top: 150px;
+}
+.heading{
+    text-align: center;
+    font-size: 20px;
+}
+.allMembers{
+    line-height: 60px;
+    font-size: 20px;
+}
+.member1{
+    border: 1px solid black;
+    border-radius : 15px;
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+}
+.member2{
+    border: 1px solid black;
+    border-radius : 15px;
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+}
+.member3{
+    border: 1px solid black;
+    border-radius : 15px;
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+}
+.member4{
+    border: 1px solid black;
+    border-radius : 15px;
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+}
+.member5{
+    border: 1px solid black;
+    border-radius : 15px;
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+}
+.member6{
+    border: 1px solid black;
+    border-radius : 15px;
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+}
+
