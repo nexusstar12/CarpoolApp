@@ -6,16 +6,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 import SignInPage from '../pages/SignInPage';
 import SignUp from './SignUp';
+import SearchBar from './SearchBar';
 
 
 
 
 export default function Bar() {
   return (
-    <Router>
+  
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -28,6 +29,7 @@ export default function Bar() {
           >
             <MenuIcon />
           </IconButton>
+          <SearchBar/>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Pool
           </Typography>
@@ -38,15 +40,10 @@ export default function Bar() {
             <Link to="/signin">
               <Button color="inherit">Login</Button>
             </Link>
-            
-          
         </Toolbar>
       </AppBar>
     </Box>
-    <Routes>
-              <Route path="/signup" element={<SignUp/>} />
-              <Route path="/signin" element={<SignInPage/>} />
-      </Routes>
-    </Router>
+   
+  
   );
 }
