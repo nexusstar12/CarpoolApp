@@ -10,6 +10,7 @@ import {Link } from 'react-router-dom';
 import SignInPage from '../pages/SignInPage';
 import SignUp from './SignUp';
 import SearchBar from './SearchBar';
+import Dropdown from './Dropdown';
 
 
 
@@ -30,6 +31,7 @@ export default function Bar() {
             <MenuIcon />
           </IconButton>
           <SearchBar/>
+          <Dropdown/>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Pool
           </Typography>
