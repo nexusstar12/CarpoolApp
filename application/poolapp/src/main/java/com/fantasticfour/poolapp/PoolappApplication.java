@@ -35,15 +35,6 @@ public class PoolappApplication {
 			for (User fetchedUser : userRepository.findAll()) {
 				System.out.println(fetchedUser.getName());
 			}
-
-			// Inspect the beans provided by Spring Boot
-			System.out.println("Let's inspect the beans provided by Spring Boot:");
-			ApplicationContext ctx = SpringApplication.run(PoolappApplication.class, args);
-			String[] beanNames = ctx.getBeanDefinitionNames();
-			Arrays.sort(beanNames);
-			for (String beanName : beanNames) {
-				System.out.println(beanName);
-			}
 		};
 	}
 }
