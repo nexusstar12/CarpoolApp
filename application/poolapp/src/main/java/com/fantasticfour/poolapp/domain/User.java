@@ -1,9 +1,6 @@
 package com.fantasticfour.poolapp.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity // This annotation marks this class as a JPA entity
 public class User {
