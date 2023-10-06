@@ -6,4 +6,51 @@ to organize the contents of the prototypes' folder as you see fit. But remember 
 This does include the structure of your application. Points will be deducted from poorly structured application folders.
 
 ## Please use the rest of the README.md to store important information for your team's application. 
+Local Setup for MacOS
 
+## 1. Docker
+
+Download Docker Desktop https://www.docker.com/products/docker-desktop/ 
+
+Version 4.23.0
+
+Create account for login after downloading 
+
+## 2. IntelliJ Idea Ultimate
+
+Download the IDE
+
+Create account and login once downloaded
+
+## 3. JAVA17
+
+On mac https://download.oracle.com/java/17/archive/jdk-17.0.8_macos-aarch64_bin.dmg 
+Inside the DMG file, you will likely see an icon labeled "JDK 17" or similar. Drag this icon to the "Applications" folder to install Java.
+
+On the terminal, then navigate to the downloads folder and then run the following command: 	tar -xzf jdk-17.macosx-x64.tar.gz
+
+Once extracted, you can set up your JAVA_HOME environment variable to point to the installation directory, and add the "bin" directory to your PATH in your shell profile file
+In order to check if correctly installed run the command: 	java –version
+
+## 4. Maven
+ 
+## 5. Node & Node npm
+   
+Open the terminal
+
+In order to have a Node Version Manager, one shall run the command
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
+
+Then close your terminal
+
+Reopen the terminal and then you can install Node.js by running nvm install –lts
+
+You can set the default Node.js version to use if you have multiple versions installed. To do this, run
+nvm alias default <version> 
+
+In order to check that node and npm are installed you run
+node -v
+npm -v
+
+## 6. React
+## 7. Google CLI
