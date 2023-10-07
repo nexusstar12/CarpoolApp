@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a87d8887-92dd-404f-8b7c-0fd45cd34c9a" name="Changes" comment="Account now links User and Password through a one-to-one relationship.">
+      <change afterPath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Pool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="backend" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2WAWdFOsUyOtnHM7qzzVg8gZTCQ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Phillipdebugstation",
+    "last_opened_file_path": "C:/Users/Nexusstar/Desktop/CSC648",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="PoolappApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="poolapp" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.fantasticfour.poolapp.PoolappApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a87d8887-92dd-404f-8b7c-0fd45cd34c9a" name="Changes" comment="" />
+      <created>1696175950841</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696175950841</updated>
+      <workItem from="1696175954903" duration="1906000" />
+      <workItem from="1696177903218" duration="44080000" />
+    </task>
+    <task id="LOCAL-00001" summary="Changed application.properties to test JPA with DB, along with reformatting repo to look cleaner, added User.java and UserRepository.java">
+      <option name="closed" value="true" />
+      <created>1696176297001</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1696176297001</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed some errors">
+      <option name="closed" value="true" />
+      <created>1696282795627</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1696282795627</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fixed some errors">
+      <option name="closed" value="true" />
+      <created>1696311587522</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1696311587522</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixed some errors">
+      <option name="closed" value="true" />
+      <created>1696375594845</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1696375594845</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Replaced HelloController with other controllers, and added other Database classes">
+      <option name="closed" value="true" />
+      <created>1696375704617</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1696375704617</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Pushing latest working version">
+      <option name="closed" value="true" />
+      <created>1696529299251</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1696529299251</updated>
+    </task>
+    <task id="LOCAL-00007" summary="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine">
+      <option name="closed" value="true" />
+      <created>1696622461364</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1696622461364</updated>
+    </task>
+    <task id="LOCAL-00008" summary="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine">
+      <option name="closed" value="true" />
+      <created>1696622584632</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1696622584632</updated>
+    </task>
+    <task id="LOCAL-00009" summary="User and Password works in the database.">
+      <option name="closed" value="true" />
+      <created>1696641926684</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1696641926684</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Account now links User and Password through a one-to-one relationship.">
+      <option name="closed" value="true" />
+      <created>1696642579533</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1696642579533</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Changed application.properties to test JPA with DB, along with reformatting repo to look cleaner, added User.java and UserRepository.java" />
+    <MESSAGE value="Fixed some errors" />
+    <MESSAGE value="Replaced HelloController with other controllers, and added other Database classes" />
+    <MESSAGE value="Pushing latest working version" />
+    <MESSAGE value="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine" />
+    <MESSAGE value="User and Password works in the database." />
+    <MESSAGE value="Account now links User and Password through a one-to-one relationship." />
+    <option name="LAST_COMMIT_MESSAGE" value="Account now links User and Password through a one-to-one relationship." />
+  </component>
+</project>

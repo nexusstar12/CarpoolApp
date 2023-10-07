@@ -15,22 +15,27 @@ public class PoolappApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PoolappApplication.class, args);
 	}
+	private UserRepository userRepository;
 
 	@Autowired
-	private UserRepository userRepository;
+	public PoolappApplication(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Bean
 	public CommandLineRunner commandLineRunner() {
 		return args -> {
 			// Create and save a new user
 			User user = new User();
-			user.setName("John Doe");
+			user.setFirstName("John");
+			user.setLastName("Doe");
+			user.setPhoneNumber("123-456-7890");
 			user.setEmail("john.doe@example.com");
 			userRepository.save(user);
 
 			// Fetch and print all users from the database
 			for (User fetchedUser : userRepository.findAll()) {
-				System.out.println(fetchedUser.getName());
+				System.out.println(fetchedUser.getFirstName() + " " + fetchedUser.getLastName());
 			}
 		};
 	}
