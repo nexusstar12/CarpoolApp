@@ -7,7 +7,7 @@ public class User {
 
     @Id // Marks this field as the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Use database to auto-generate this value
-    private Long id;
+    private int user_id;
 
     private String name;
 
@@ -15,12 +15,12 @@ public class User {
 
     // Standard getters and setters go here
 
-    public Long getId() {
-        return id;
+    public int getId() {
+        return user_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(int id) {
+        this.user_id = id;
     }
 
     public String getName() {
