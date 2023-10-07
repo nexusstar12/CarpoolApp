@@ -16,11 +16,10 @@ import java.util.Map;
 public class SearchBarController {
     @Autowired
     private UserRepository userRepository;
-
     @GetMapping("/searchbar")
-    public List<User> searchBar (@RequestParam String filter, @RequestParam String value) { //http://localhost:8080/searchbar?filter=[filtertype]&value=[valuetosearch]
+    public List<User> searchBar (@RequestParam String query) { //http://localhost:8080/searchbar?query:[searchparameter]
 
-        String regex = "^" + value;
+        String regex = "^" + query;
 
         //returns a list of users
         return userRepository.findByNameMatchesRegex(regex);
