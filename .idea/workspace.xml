@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a87d8887-92dd-404f-8b7c-0fd45cd34c9a" name="Changes" comment="User and Password works in the database.">
+    <list default="true" id="a87d8887-92dd-404f-8b7c-0fd45cd34c9a" name="Changes" comment="Account now links User and Password through a one-to-one relationship.">
+      <change afterPath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Pool.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +81,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696175950841</updated>
       <workItem from="1696175954903" duration="1906000" />
-      <workItem from="1696177903218" duration="43115000" />
+      <workItem from="1696177903218" duration="44080000" />
     </task>
     <task id="LOCAL-00001" summary="Changed application.properties to test JPA with DB, along with reformatting repo to look cleaner, added User.java and UserRepository.java">
       <option name="closed" value="true" />
@@ -155,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696641926684</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Account now links User and Password through a one-to-one relationship.">
+      <option name="closed" value="true" />
+      <created>1696642579533</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1696642579533</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,6 +187,7 @@
     <MESSAGE value="Pushing latest working version" />
     <MESSAGE value="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine" />
     <MESSAGE value="User and Password works in the database." />
-    <option name="LAST_COMMIT_MESSAGE" value="User and Password works in the database." />
+    <MESSAGE value="Account now links User and Password through a one-to-one relationship." />
+    <option name="LAST_COMMIT_MESSAGE" value="Account now links User and Password through a one-to-one relationship." />
   </component>
 </project>
