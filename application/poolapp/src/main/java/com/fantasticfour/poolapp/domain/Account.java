@@ -6,6 +6,6 @@
 //import jakarta.persistence.JoinColumn;
 //
 //@Entity
-//public class Account extends User {
+//public class Account{
 //
 //}

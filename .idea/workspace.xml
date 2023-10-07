@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a87d8887-92dd-404f-8b7c-0fd45cd34c9a" name="Changes" comment="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine" />
+    <list default="true" id="a87d8887-92dd-404f-8b7c-0fd45cd34c9a" name="Changes" comment="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Password.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Password.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/User.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,7 +83,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696175950841</updated>
       <workItem from="1696175954903" duration="1906000" />
-      <workItem from="1696177903218" duration="39099000" />
+      <workItem from="1696177903218" duration="42449000" />
     </task>
     <task id="LOCAL-00001" summary="Changed application.properties to test JPA with DB, along with reformatting repo to look cleaner, added User.java and UserRepository.java">
       <option name="closed" value="true" />
@@ -136,7 +141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696622461364</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="User has no errors when running the application, all properties of User (ID, first/last name, phone number, and email) working fine">
+      <option name="closed" value="true" />
+      <created>1696622584632</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1696622584632</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
