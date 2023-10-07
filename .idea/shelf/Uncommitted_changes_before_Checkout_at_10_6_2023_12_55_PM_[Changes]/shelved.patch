@@ -1,0 +1,78 @@
+Index: application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.fantasticfour.poolapp.domain;\r\n\r\nimport jakarta.persistence.Entity;\r\nimport jakarta.persistence.OneToOne;\r\nimport jakarta.persistence.CascadeType;\r\nimport jakarta.persistence.JoinColumn;\r\n\r\n@Entity\r\npublic class Account extends User {\r\n\r\n    \r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java b/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java
+--- a/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java	
++++ b/application/poolapp/src/main/java/com/fantasticfour/poolapp/domain/Account.java	
+@@ -1,12 +1,11 @@
+-package com.fantasticfour.poolapp.domain;
+-
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.OneToOne;
+-import jakarta.persistence.CascadeType;
+-import jakarta.persistence.JoinColumn;
+-
+-@Entity
+-public class Account extends User {
+-
+-    
+-}
+\ No newline at end of file
++//package com.fantasticfour.poolapp.domain;
++//
++//import jakarta.persistence.Entity;
++//import jakarta.persistence.OneToOne;
++//import jakarta.persistence.CascadeType;
++//import jakarta.persistence.JoinColumn;
++//
++//@Entity
++//public class Account extends User {
++//
++//}
+\ No newline at end of file
+Index: application/poolapp/src/main/java/com/fantasticfour/poolapp/PoolappApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.fantasticfour.poolapp;\r\n\r\nimport com.fantasticfour.poolapp.repository.UserRepository;\r\nimport com.fantasticfour.poolapp.domain.User;\r\n\r\nimport org.springframework.boot.CommandLineRunner;\r\nimport org.springframework.boot.SpringApplication;\r\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.context.annotation.Bean;\r\n\r\n@SpringBootApplication\r\npublic class PoolappApplication {\r\n\r\n\tpublic static void main(String[] args) {\r\n\t\tSpringApplication.run(PoolappApplication.class, args);\r\n\t}\r\n\r\n\t@Autowired\r\n\tprivate UserRepository userRepository;\r\n\r\n\t@Bean\r\n\tpublic CommandLineRunner commandLineRunner() {\r\n\t\treturn args -> {\r\n\t\t\t// Create and save a new user\r\n\t\t\tUser user = new User();\r\n\t\t\tuser.setName(\"John Doe\");\r\n\t\t\tuser.setEmail(\"john.doe@example.com\");\r\n\t\t\tuserRepository.save(user);\r\n\r\n\t\t\t// Fetch and print all users from the database\r\n\t\t\tfor (User fetchedUser : userRepository.findAll()) {\r\n\t\t\t\tSystem.out.println(fetchedUser.getName());\r\n\t\t\t}\r\n\t\t};\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/poolapp/src/main/java/com/fantasticfour/poolapp/PoolappApplication.java b/application/poolapp/src/main/java/com/fantasticfour/poolapp/PoolappApplication.java
+--- a/application/poolapp/src/main/java/com/fantasticfour/poolapp/PoolappApplication.java	
++++ b/application/poolapp/src/main/java/com/fantasticfour/poolapp/PoolappApplication.java	
+@@ -15,22 +15,27 @@
+ 	public static void main(String[] args) {
+ 		SpringApplication.run(PoolappApplication.class, args);
+ 	}
+-
+-	@Autowired
+ 	private UserRepository userRepository;
+ 
++	@Autowired
++	public PoolappApplication(UserRepository userRepository) {
++		this.userRepository = userRepository;
++	}
++
+ 	@Bean
+ 	public CommandLineRunner commandLineRunner() {
+ 		return args -> {
+ 			// Create and save a new user
+ 			User user = new User();
+-			user.setName("John Doe");
++			user.setFirstName("John");
++			user.setLastName("Doe");
++			user.setPhoneNumber("123-456-7890");
+ 			user.setEmail("john.doe@example.com");
+ 			userRepository.save(user);
+ 
+ 			// Fetch and print all users from the database
+ 			for (User fetchedUser : userRepository.findAll()) {
+-				System.out.println(fetchedUser.getName());
++				System.out.println(fetchedUser.getFirstName() + " " + fetchedUser.getLastName());
+ 			}
+ 		};
+ 	}
