@@ -1,12 +1,12 @@
 //whole sign in page
 
-import React from 'react';
-import SignIn from '../components/SignIn';
+import React from "react";
+import SignIn from "../components/SignIn";
 
 const SignInPage = () => {
   return (
     <div>
-      <SignIn/>
+      <SignIn />
     </div>
   );
 };
