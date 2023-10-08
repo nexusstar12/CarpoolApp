@@ -1,28 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import Bar from './components/Bar';
-import SignIn from './components/SignIn';
-import SignInPage from './pages/SignInPage';
-import SignUp from './components/SignUp';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { useState } from 'react';
+import "./App.css";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
+import HomePage from "./pages/HomePage";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Bar from "./components/Bar";
 
 function App() {
   return (
     <div className="App">
       <Router>
-      <Bar/>
-      <Routes>
-              <Route path="/signup" element={<SignUp/>} />
-              <Route path="/signin" element={<SignInPage/>} />
-      </Routes>
-    </Router>
+        <Bar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signin" element={<SignInPage />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
 
-
 export default App;
-
-
-
