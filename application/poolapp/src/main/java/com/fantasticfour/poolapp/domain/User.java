@@ -16,6 +16,17 @@ public class User {
 
     private String lastName;
 
+    //testing no derived value for name yet.
+    //easier to serch full name
+    private String name;
+    public String getName  () {
+        return name;
+    }
+    public void setName (String name) {
+        this.name = name;
+    }
+    //testing above code
+
     private String phoneNumber;
 
     private String email;
