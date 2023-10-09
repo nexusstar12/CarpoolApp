@@ -7,17 +7,10 @@ import React, { useState, useEffect } from "react";
 
 function HomePage() {
   const [search, setSearch] = useState("");
-  const [result, setResult] = useState("");
 
-  const handleSearchSubmit = (hehe) => {
-    setSearch(hehe);
+  const handleSearchSubmit = ({ searchQuery, filterOption }) => {
+    setSearch({ searchQuery, filterOption });
   };
-
-  useEffect(() => {
-    axios.get("").then((response) => {
-      setResult(response.data);
-    });
-  }, [search]);
 
   return (
     <div className="search-container">
