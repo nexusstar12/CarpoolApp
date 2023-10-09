@@ -30,8 +30,49 @@ public class Pool {
     private String startState;
     private String startZip;
 
+    private double startLatitude;
+    private double startLongitude;
+
     private String endStreet;
     private String endCity;
+
+    private String endState;
+    private String endZip;
+
+    private double endLatitude;
+    private double endLongitude;
+
+    public double getStartLatitude() {
+        return startLatitude;
+    }
+
+    public void setStartLatitude(double startLatitude) {
+        this.startLatitude = startLatitude;
+    }
+
+    public double getStartLongitude() {
+        return startLongitude;
+    }
+
+    public void setStartLongitude(double startLongitude) {
+        this.startLongitude = startLongitude;
+    }
+
+    public double getEndLatitude() {
+        return endLatitude;
+    }
+
+    public void setEndLatitude(double endLatitude) {
+        this.endLatitude = endLatitude;
+    }
+
+    public double getEndLongitude() {
+        return endLongitude;
+    }
+
+    public void setEndLongitude(double endLongitude) {
+        this.endLongitude = endLongitude;
+    }
 
     public String getStartStreet() {
         return startStreet;
@@ -96,10 +137,6 @@ public class Pool {
     public void setEndZip(String endZip) {
         this.endZip = endZip;
     }
-
-    private String endState;
-    private String endZip;
-
 
 
     public int getPoolId() {

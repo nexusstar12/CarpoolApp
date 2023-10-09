@@ -43,14 +43,17 @@ public class SearchBarController {
                 matchByStartCity(regex, results);
                 break;
             case "startZip":
-                System.out.println("start zip to be implemented");
+//                System.out.println("start zip to be implemented");
+                matchByStartZip(value, results);
                 break;
             case "endZip":
-                System.out.println("end zip to be implemented");
+                matchByEndZip(value, results);
                 break;
             case "zip":
                 loadZipData();
                 break;
+            case "modify":
+                fixlonglat(regex,results);
          }
 
         return results;
@@ -83,12 +86,77 @@ public class SearchBarController {
         }
     }
 
-    private void matchByStartZip (String regex, List<Map<String, Object>> results) {
-        //TODO:
+    private void matchByStartZip (String value, List<Map<String, Object>> results) {
+      Optional<ZipData> zipOptionalEnity=  zipDataRepository.findById(value);
+
+        System.out.println("in matchbystartzip");
+        ZipData zipDataEntity;
+        if (zipOptionalEnity.isPresent()) {
+            zipDataEntity = zipOptionalEnity.get();
+            // Now you can manipulate the entity object as needed.
+
+            //        $iDistance = 20;
+//        $iRadius = 6371; // earth radius in km
+//        $iRadius = 3958; // earth radius in miles
+//        $fLat = x.y; // Your position latitude
+//        $fLon = x.y; // Your position longitude
+            double longitude = zipDataEntity.getLongitude();
+            double latitude = zipDataEntity.getLatitude();
+            double radius = 3958.00; //earth radius in miles
+            double distance = 5;
+
+            System.out.println("zip: " + zipDataEntity.getZipCode() + " " + "long: " + longitude+ " " + "lat: " + latitude);
+
+            List<Pool> poolList =  poolRepository.findWithinDistanceUsingStartZip(latitude, radius, longitude, distance);
+
+            // default behaviour if there are no matches
+            //TODO: IMPLEMENT DEFAUST BEHAVIOUR IF THERE ISNT A VALID ZIP.
+
+            for(Pool pool: poolList) {
+                Map<String, Object> poolMap = new HashMap<>();
+                poolMap.put("Pool", pool);
+                results.add(poolMap);
+            }
+        } else {
+            //TODO: ENTITY DOESNT EXITS SEND BACK EMPTY LIST
+        }
+
+
     }
 
-    private void matchByEndZip (String regex, List<Map<String, Object>> results) {
-        //TODO:
+    private void matchByEndZip (String value, List<Map<String, Object>> results) {
+        Optional<ZipData> zipOptionalEnity=  zipDataRepository.findById(value);
+
+        ZipData zipDataEntity;
+        if (zipOptionalEnity.isPresent()) {
+            zipDataEntity = zipOptionalEnity.get();
+            // Now you can manipulate the entity object as needed.
+
+            //        $iDistance = 20;
+//        $iRadius = 6371; // earth radius in km
+//        $iRadius = 3958; // earth radius in miles
+//        $fLat = x.y; // Your position latitude
+//        $fLon = x.y; // Your position longitude
+            double longitude = zipDataEntity.getLongitude();
+            double latitude = zipDataEntity.getLatitude();
+            double radius = 3958.00; //earth radius in miles
+            double distance = 5;
+
+            System.out.println("zip: " + zipDataEntity.getZipCode() + " " + "long: " + longitude+ " " + "lat: " + latitude);
+
+            List<Pool> poolList =  poolRepository.findWithinDistanceUsingEndZip(latitude, radius, longitude, distance);
+
+            // default behaviour if there are no matches
+            //TODO: IMPLEMENT DEFAUST BEHAVIOUR IF THERE ISNT A VALID ZIP.
+
+            for(Pool pool: poolList) {
+                Map<String, Object> poolMap = new HashMap<>();
+                poolMap.put("Pool", pool);
+                results.add(poolMap);
+            }
+        } else {
+            //TODO: ENTITY DOESNT EXITS SEND BACK EMPTY LIST
+        }
     }
 
     private void loadZipData () {
@@ -139,6 +207,29 @@ public class SearchBarController {
             // Handle the exception
             System.out.println("An error occurred: " + e.getMessage());
         }
+    }
+
+    private void fixlonglat (String value, List<Map<String, Object>> results) {
+        List<Pool> poollist = poolRepository.findAll();
+
+        for (Pool pool: poollist) {
+            Optional<ZipData> startzip=  zipDataRepository.findById(pool.getStartZip());
+            Optional<ZipData> endzip=  zipDataRepository.findById(pool.getEndZip());
+            if(startzip.isPresent()) {
+                ZipData zipData = startzip.get();
+                pool.setStartLatitude(zipData.getLatitude());
+                pool.setStartLongitude(zipData.getLongitude());
+            }
+            if(endzip.isPresent()) {
+                ZipData zipData =endzip.get();
+                pool.setEndLatitude(zipData.getLatitude());
+                pool.setEndLongitude(zipData.getLongitude());
+            }
+
+            poolRepository.saveAndFlush(pool);
+        }
+
+
     }
 
 
