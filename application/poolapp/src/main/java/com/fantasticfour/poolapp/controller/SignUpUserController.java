@@ -75,6 +75,7 @@ public class SignUpUserController {
         responseMap.put("password", addPassword);
         responseMap.put("account", addAccount);
 
+        //returns a map of added user, account, and password
         //TODO: ADD VALIDATION USER, account, and paswword are ADDED
         return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
     }
