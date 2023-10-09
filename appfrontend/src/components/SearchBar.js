@@ -57,10 +57,10 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
         onChange={handleFilterChange}
         style={{ minWidth: "120px" }}
       >
-        <MenuItem value="origin">origin</MenuItem>
-        <MenuItem value="destination">destination</MenuItem>
-        <MenuItem value="city name">city name</MenuItem>
-        <MenuItem value="name">user name</MenuItem>
+        <MenuItem value="startZip">origin</MenuItem>
+        <MenuItem value="endZip">destination</MenuItem>
+        <MenuItem value="city">city</MenuItem>
+        <MenuItem value="name">user</MenuItem>
       </Select>
     </div>
   );
