@@ -20,7 +20,8 @@
 |      #3      |  Kristian Goranov |  kgoranov@sfsu.edu|  kkrstchn       |  bonemaster7977    |  Frontend Lead   |
 |      #4      |Isiah Paul-McGlothin|ipaulmcglothin@mail.sfsu.edu|IamGemek|     gemek         | Backend Baron II |
 |      #5      |  Phillip Diec     |     gdiec@sfsu.edu|   nexusstar12   |      Nexusstar     | Backend Baron I  |
-|      #6      |  Zoe Panagopoulos |zpanagopoulos@sfsu.edu| zrrrpy       |       zrrrpy       |    Team Lead     |
+|      #6      |Xuan Duy Anh Nguyen| anguyen96@sfsu.edu|nguyenxuanduyanh |      nxdanh        | Devops Officer   |
+|      #7      |  Zoe Panagopoulos |zpanagopoulos@sfsu.edu| zrrrpy       |       zrrrpy       |    Team Lead     |
 
 
 4. All the team members must sign the team contract found [here](https://forms.gle/dxATAsa9isXKbcBn7). Missing signatures from students will result in these students being dropped from the course since this means that they disagree with the policies and terms needed to work in a team environment. 
