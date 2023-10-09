@@ -28,10 +28,12 @@ public class SearchBarController {
     private ZipDataRepository zipDataRepository;
 
     @GetMapping("/api/searchbar")
-    public List<Map<String, Object>> searchBar (@RequestParam String filter, @RequestParam String value) {
+//    List<Map<String, Object>>
+    public List<Object> searchBar (@RequestParam String filter, @RequestParam String value) {
         //http://localhost:8080/api/searchbar?filter=[columnNameInDB]&value=[stringTobesearched]
 
-        List<Map<String, Object>> results = new ArrayList<>();
+//        Map<String, Object>
+        List<Object> results = new ArrayList<>();
         //value to be searched in db
         String regex = "^" + value;
 
@@ -59,34 +61,38 @@ public class SearchBarController {
         return results;
     }
 
-    private void matchByUserName (String regex, List<Map<String, Object>> results) {
+//    List<Map<String, Object>>
+    private void matchByUserName (String regex, List<Object> results) {
         List<User> userList =  userRepository.findByNameMatchesRegex(regex);
+        results.addAll(userList);
 
-        //hash map for each user that will be returned in a list
-        for(User user : userList) {
-            Map<String, Object> userMap = new HashMap<>();
-            userMap.put("User", user);
-            results.add(userMap);
+//        //hash map for each user that will be returned in a list
+//        for(User user : userList) {
+//            Map<String, Object> userMap = new HashMap<>();
+//            userMap.put("User", user);
+//            results.add(userMap);
         }
-    }
 
-    private void matchByStartCity (String regex, List<Map<String, Object>> results) {
+
+    private void matchByStartCity (String regex, List<Object> results) {
         List<Pool> poolList =  poolRepository.findByCityMatchesRegex(regex);
 
         //default behaviour if there are no matches
         if (poolList.isEmpty()) {
             regex = "^san Francisco";
             poolList = poolRepository.findByCityMatchesRegex(regex);
+        }else {
+            results.addAll(poolList);
         }
 
-        for(Pool pool: poolList) {
-            Map<String, Object> poolMap = new HashMap<>();
-            poolMap.put("Pool", pool);
-            results.add(poolMap);
-        }
+//        for(Pool pool: poolList) {
+//            Map<String, Object> poolMap = new HashMap<>();
+//            poolMap.put("Pool", pool);
+//            results.add(poolMap);
+//        }
     }
 
-    private void matchByStartZip (String value, List<Map<String, Object>> results) {
+    private void matchByStartZip (String value, List<Object> results) {
       Optional<ZipData> zipOptionalEnity=  zipDataRepository.findById(value);
 
         System.out.println("in matchbystartzip");
@@ -112,11 +118,12 @@ public class SearchBarController {
             // default behaviour if there are no matches
             //TODO: IMPLEMENT DEFAUST BEHAVIOUR IF THERE ISNT A VALID ZIP.
 
-            for(Pool pool: poolList) {
-                Map<String, Object> poolMap = new HashMap<>();
-                poolMap.put("Pool", pool);
-                results.add(poolMap);
-            }
+            results.addAll(poolList);
+//            for(Pool pool: poolList) {
+//                Map<String, Object> poolMap = new HashMap<>();
+//                poolMap.put("Pool", pool);
+//                results.add(poolMap);
+//            }
         } else {
             //TODO: ENTITY DOESNT EXITS SEND BACK EMPTY LIST
         }
@@ -124,7 +131,7 @@ public class SearchBarController {
 
     }
 
-    private void matchByEndZip (String value, List<Map<String, Object>> results) {
+    private void matchByEndZip (String value, List<Object> results) {
         Optional<ZipData> zipOptionalEnity=  zipDataRepository.findById(value);
 
         ZipData zipDataEntity;
@@ -148,12 +155,12 @@ public class SearchBarController {
 
             // default behaviour if there are no matches
             //TODO: IMPLEMENT DEFAUST BEHAVIOUR IF THERE ISNT A VALID ZIP.
-
-            for(Pool pool: poolList) {
-                Map<String, Object> poolMap = new HashMap<>();
-                poolMap.put("Pool", pool);
-                results.add(poolMap);
-            }
+            results.addAll(poolList);
+//            for(Pool pool: poolList) {
+//                Map<String, Object> poolMap = new HashMap<>();
+//                poolMap.put("Pool", pool);
+//                results.add(poolMap);
+//            }
         } else {
             //TODO: ENTITY DOESNT EXITS SEND BACK EMPTY LIST
         }
@@ -209,7 +216,7 @@ public class SearchBarController {
         }
     }
 
-    private void fixlonglat (String value, List<Map<String, Object>> results) {
+    private void fixlonglat (String value, List<Object> results) {
         List<Pool> poollist = poolRepository.findAll();
 
         for (Pool pool: poollist) {
