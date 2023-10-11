@@ -9,6 +9,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const [filterOption, setFilterOption] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -57,10 +58,10 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
         onChange={handleFilterChange}
         style={{ minWidth: "120px" }}
       >
-        <MenuItem value="startZip">origin</MenuItem>
-        <MenuItem value="endZip">destination</MenuItem>
-        <MenuItem value="city">city</MenuItem>
-        <MenuItem value="name">user</MenuItem>
+        <MenuItem value="startZip">Starting Zipcode</MenuItem>
+        <MenuItem value="endZip">Ending Zipcode</MenuItem>
+        <MenuItem value="city">City</MenuItem>
+        {/* <MenuItem value="name">user</MenuItem> */}
       </Select>
     </div>
   );
