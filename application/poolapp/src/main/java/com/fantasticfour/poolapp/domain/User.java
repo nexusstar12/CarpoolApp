@@ -12,6 +12,8 @@ public class User {
     @Column(name = "user_id")
     private int userId; // Changed from Long to int
 
+    @Column(unique = true)
+    private String email;
     private String firstName;
 
     private String lastName;
@@ -19,8 +21,6 @@ public class User {
     private String name;
 
     private String phoneNumber;
-
-    private String email;
 
     // Standard getters and setters
 
