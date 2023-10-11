@@ -84,18 +84,11 @@ public class SearchBarController {
         }else {
             results.addAll(poolList);
         }
-
-//        for(Pool pool: poolList) {
-//            Map<String, Object> poolMap = new HashMap<>();
-//            poolMap.put("Pool", pool);
-//            results.add(poolMap);
-//        }
     }
 
     private void matchByStartZip (String value, List<Object> results) {
       Optional<ZipData> zipOptionalEnity=  zipDataRepository.findById(value);
 
-        System.out.println("in matchbystartzip");
         ZipData zipDataEntity;
         if (zipOptionalEnity.isPresent()) {
             zipDataEntity = zipOptionalEnity.get();
@@ -111,24 +104,20 @@ public class SearchBarController {
             double radius = 3958.00; //earth radius in miles
             double distance = 5;
 
-            System.out.println("zip: " + zipDataEntity.getZipCode() + " " + "long: " + longitude+ " " + "lat: " + latitude);
-
             List<Pool> poolList =  poolRepository.findWithinDistanceUsingStartZip(latitude, radius, longitude, distance);
 
             // default behaviour if there are no matches
-            //TODO: IMPLEMENT DEFAUST BEHAVIOUR IF THERE ISNT A VALID ZIP.
-
-            results.addAll(poolList);
-//            for(Pool pool: poolList) {
-//                Map<String, Object> poolMap = new HashMap<>();
-//                poolMap.put("Pool", pool);
-//                results.add(poolMap);
-//            }
+            if (poolList.isEmpty()) {
+                //returns san francisco entries to results list.
+                defaaultResultsReturned(results);
+            }else {
+                //send back results
+                results.addAll(poolList);
+            }
         } else {
-            //TODO: ENTITY DOESNT EXITS SEND BACK EMPTY LIST
+            //empyt value or no matching zip
+            defaaultResultsReturned(results);
         }
-
-
     }
 
     private void matchByEndZip (String value, List<Object> results) {
@@ -154,15 +143,15 @@ public class SearchBarController {
             List<Pool> poolList =  poolRepository.findWithinDistanceUsingEndZip(latitude, radius, longitude, distance);
 
             // default behaviour if there are no matches
-            //TODO: IMPLEMENT DEFAUST BEHAVIOUR IF THERE ISNT A VALID ZIP.
-            results.addAll(poolList);
-//            for(Pool pool: poolList) {
-//                Map<String, Object> poolMap = new HashMap<>();
-//                poolMap.put("Pool", pool);
-//                results.add(poolMap);
-//            }
+            if (poolList.isEmpty()) {
+                //returns san francisco entries to results list.
+                defaaultResultsReturned(results);
+            }else {
+                //send back results
+                results.addAll(poolList);
+            }
         } else {
-            //TODO: ENTITY DOESNT EXITS SEND BACK EMPTY LIST
+            defaaultResultsReturned(results);
         }
     }
 
@@ -235,9 +224,13 @@ public class SearchBarController {
 
             poolRepository.saveAndFlush(pool);
         }
-
-
     }
 
+
+    private void defaaultResultsReturned (List<Object> results) {
+        String regex = "^san Francisco";
+        List<Pool> poolList =  poolRepository.findByCityMatchesRegex(regex);
+        results.addAll(poolList);
+    }
 
 }
