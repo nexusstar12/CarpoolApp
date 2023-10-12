@@ -1,15 +1,12 @@
-import * as React from "react";
+import { useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import SearchBar from "./SearchBar";
-import Dropdown from "./Dropdown";
 import Popup from "reactjs-popup";
+import { UserContext } from "../App";
 
 const popupContentStyle = {
   color: "blue", // Change text color
@@ -17,6 +14,8 @@ const popupContentStyle = {
 };
 
 export default function Bar() {
+  const userContext = useContext(UserContext);
+  const isLoggedIn = userContext.userInfo?.email;
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -24,7 +23,7 @@ export default function Bar() {
           <Popup
             trigger={<Button color="inherit">Post a pool</Button>}
             position="right center"
-            contentStyle={popupContentStyle} // Apply custom styles to the popup content
+            contentStyle={popupContentStyle}
           >
             <div color="red">Feature coming soon</div>
           </Popup>
@@ -32,7 +31,7 @@ export default function Bar() {
           <Popup
             trigger={<Button color="inherit">Join a pool</Button>}
             position="right center"
-            contentStyle={popupContentStyle} // Apply custom styles to the popup content
+            contentStyle={popupContentStyle}
           >
             <div color="red">Feature coming soon</div>
           </Popup>
@@ -40,7 +39,7 @@ export default function Bar() {
           <Popup
             trigger={<Button color="inherit">How it works</Button>}
             position="right center"
-            contentStyle={popupContentStyle} // Apply custom styles to the popup content
+            contentStyle={popupContentStyle}
           >
             <div color="red">Feature coming soon</div>
           </Popup>
@@ -51,12 +50,23 @@ export default function Bar() {
           <Link to="/">
             <Button color="inherit">Home</Button>
           </Link>
-          <Link to="/signup">
-            <Button color="inherit">Signup</Button>
-          </Link>
-          <Link to="/signin">
-            <Button color="inherit">Login</Button>
-          </Link>
+
+          {isLoggedIn ? (
+            <Typography color="inherit">{userContext.userInfo.name}</Typography>
+          ) : (
+            <Link to="/signup">
+              <Button color="inherit">Signup</Button>
+            </Link>
+          )}
+          {isLoggedIn ? (
+            <Link to="/logout">
+              <Button color="inherit"> Logout</Button>
+            </Link>
+          ) : (
+            <Link to="/signin">
+              <Button color="inherit"> Login</Button>
+            </Link>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

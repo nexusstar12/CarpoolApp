@@ -8,6 +8,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -25,6 +26,13 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
 
   const handleFilterChange = (event) => {
     setFilterOption(event.target.value);
+    if (event.target.value === "startZip") {
+      setSearchPlaceholder("Enter a start location zip code");
+    } else if (event.target.value === "endZip") {
+      setSearchPlaceholder("Enter an end location zip code");
+    } else if (event.target.value === "city") {
+      setSearchPlaceholder("Enter a city");
+    }
   };
 
   const closePopup = () => {
@@ -32,36 +40,40 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <Popup
-        open={isPopupOpen}
-        onClose={closePopup}
-        position="bottom center"
-        arrow={false}
+    <div style={{ marginTop: "100px" }}>
+      <h2>Find a carpool in your area. </h2>
+      <div
+        className="search-bar"
+        style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
       >
-        Please select an option before searching.
-      </Popup>
-      <TextField
-        label="Search"
-        variant="outlined"
-        value={searchQuery}
-        onChange={handleSearchInputChange}
-        onKeyDown={handleKeyDown}
-        style={{ marginRight: "10px", width: "500px" }}
-      />
-
-      <Select
-        label="Filter"
-        variant="outlined"
-        value={filterOption}
-        onChange={handleFilterChange}
-        style={{ minWidth: "120px" }}
-      >
-        <MenuItem value="startZip">origin</MenuItem>
-        <MenuItem value="endZip">destination</MenuItem>
-        <MenuItem value="city">city</MenuItem>
-        <MenuItem value="name">user</MenuItem>
-      </Select>
+        <Popup
+          open={isPopupOpen}
+          onClose={closePopup}
+          position="bottom center"
+          arrow={false}
+        >
+          Please select an option before searching.
+        </Popup>
+        <TextField
+          label={searchPlaceholder}
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchInputChange}
+          onKeyDown={handleKeyDown}
+          style={{ marginRight: "10px", width: "400px" }}
+        />
+        <Select
+          label="Filter"
+          variant="outlined"
+          value={filterOption}
+          onChange={handleFilterChange}
+          style={{ minWidth: "120px" }}
+        >
+          <MenuItem value="startZip">Starting Zipcode</MenuItem>
+          <MenuItem value="endZip">Ending Zipcode</MenuItem>
+          <MenuItem value="city">City</MenuItem>
+        </Select>
+      </div>
     </div>
   );
 };
