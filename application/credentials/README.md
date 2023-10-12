@@ -15,7 +15,7 @@ technology stack or if their step-by-step descriptions are not clear enough. You
 **Access Instructions**</br>
 <br>*SSH Instructions*
 <br>1. Download the [.pem](guest_ssh_key.pem) file from this credentials folder.
-<br>2. Open the command line on your device.
+<br>2. Open the command line on your device. (Use Git Bash if running on a Windows OS device)
 <br>3. Run this command: `ssh-keygen -R 35.227.145.220`
 <br>4. Then, run this command:
 `ssh -i [path to pem file] guest@35.227.145.220`
