@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +12,9 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axiosInstance from "../config/axios.config";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 function Copyright(props) {
   return (
@@ -31,15 +34,29 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const history = useNavigate();
+  const [error, setError] = useState(null);
+  const userContext = useContext(UserContext);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // axiosInstance.post("/api/signin/", data);
+    const email = data.get("email");
+    const password = data.get("password");
+
+    const requestBody = { email, password };
+    try {
+      const response = await axiosInstance.post("/api/signin/", requestBody);
+      if (response.status === 200) {
+        userContext.setUserInfo(response.data[0]);
+        history("/");
+      }
+    } catch (error) {
+      setError(error.response.data[0]);
+    }
   };
 
   return (
@@ -52,8 +69,7 @@ export default function SignIn() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
+            backgroundImage: "url(login_poolapp.jpg)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -105,6 +121,9 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
+              <Typography color="error" variant="body2">
+                {error}
+              </Typography>
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -117,6 +136,7 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
+
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

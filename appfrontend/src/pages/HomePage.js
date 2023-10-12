@@ -17,14 +17,28 @@ function HomePage() {
   };
 
   return (
-    <div className="search-container">
-      <SearchBar onSearch={handleSearchSubmit} />
-      <div className="search-results-container">
-        <SearchResult
-          className="search-result"
-          result={result}
-          itemsPerPage={10}
+    <div className="home-page-container">
+      <div className="image-container">
+        <img
+          src="homepage_carpool.jpg"
+          style={{ width: "100%", height: "100%" }} // Set the width to 50% of the screen
+          alt="Description of the image"
         />
+      </div>
+      <div className="search-container">
+        <h1 style={{ fontSize: "50px" }}>Get there, together.</h1>
+        <SearchBar onSearch={handleSearchSubmit} />
+        {result.length > 0 ? (
+          <div className="search-results-container">
+            <SearchResult
+              className="search-result"
+              result={result}
+              itemsPerPage={10}
+            />
+          </div>
+        ) : (
+          <div className="search-results-empty"></div>
+        )}
       </div>
     </div>
   );
