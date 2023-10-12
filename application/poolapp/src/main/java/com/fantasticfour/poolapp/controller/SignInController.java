@@ -12,10 +12,7 @@ import com.fantasticfour.poolapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ public class SignInController {
     @Autowired
     private AccountRepository accountRepository;
 
-    @GetMapping("/")
+    @PostMapping("/")
     public ResponseEntity<List<Object>> signInUser (@RequestBody Map<String, String> jsonMap) {
 
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
