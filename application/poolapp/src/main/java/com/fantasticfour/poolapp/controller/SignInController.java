@@ -63,7 +63,7 @@ public class SignInController {
        //check if password matches
        if (account.getPassword().getPassword().equals(jsonMap.get("password"))) {
            responseList.add(user);
-           return new ResponseEntity<>(responseList, HttpStatus.FOUND);
+           return new ResponseEntity<>(responseList, HttpStatus.OK);
         }
 
         responseList.add("Incorrect username or password");
