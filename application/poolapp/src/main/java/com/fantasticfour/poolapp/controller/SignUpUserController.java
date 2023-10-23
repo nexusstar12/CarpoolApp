@@ -3,10 +3,14 @@ package com.fantasticfour.poolapp.controller;
 import com.fantasticfour.poolapp.domain.Account;
 import com.fantasticfour.poolapp.domain.Password;
 import com.fantasticfour.poolapp.domain.User;
+import com.fantasticfour.poolapp.domain.Driver;
+import com.fantasticfour.poolapp.domain.Passenger;
 import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.services.AccountService;
 import com.fantasticfour.poolapp.services.PasswordService;
 import com.fantasticfour.poolapp.services.UserService;
+import com.fantasticfour.poolapp.services.DriverService;
+import com.fantasticfour.poolapp.services.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +39,12 @@ public class SignUpUserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DriverService driverService;
+
+    @Autowired
+    private PassengerService passengerService;
+
 //    @PostMapping("/")
 //    public ResponseEntity<User> addUser (@RequestBody User user) {
 //        User newUser = userServce.addUser(user);
@@ -55,7 +65,6 @@ public class SignUpUserController {
         String name = firstName + " " + lastName;
 
 
-
         User newUser = new User();
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
@@ -69,8 +78,6 @@ public class SignUpUserController {
             responseMap.put("message", "duplicate user email");
             return new ResponseEntity<>(responseMap, HttpStatus.CONFLICT);
         }
-
-
 
         //create new password
         //TODO: HASH PASSWORD
@@ -94,8 +101,25 @@ public class SignUpUserController {
         responseMap.put("password", addPassword);
         responseMap.put("account", addAccount);
 
+        //allow user to assign the driver role to their existing account
+        if ("driver".equals(jsonMap.get("role"))){
+            Driver driver = new Driver();
+            driver.setUser(addedUser);
+            driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
+            driver.setDriversLicense(jsonMap.get("driversLicense"));
+            driverService.addDriver(driver);
+            responseMap.put("driver", driver);
+        } else if ("passenger".equals(jsonMap.get("role"))) {
+            Passenger passenger = new Passenger();
+            passenger.setUser(addedUser);
+            passengerService.addPassenger(passenger);
+            responseMap.put("passenger", passenger);
+        } else {
+            // Unknown roles
+        }
+
         //returns a map of added user, account, and password
-        //TODO: ADD VALIDATION USER, account, and paswword are ADDED
+        //TODO: ADD VALIDATION USER, account, and password are ADDED
         return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
     }
 }
