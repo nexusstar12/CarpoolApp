@@ -14,6 +14,10 @@ public class Profile {
     @JoinColumn(name = "user_id")
     private User userId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pool_id", referencedColumnName = "poolId")
+    private Pool pool;
+
     // Here, you might want to use an enum or another mechanism to distinguish between passenger and driver.
     // For simplicity, let's use a String. Depending on your actual data model, this might change.
     private String userType;

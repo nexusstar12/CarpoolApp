@@ -2,6 +2,9 @@ package com.fantasticfour.poolapp.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Pool {
 
@@ -39,6 +42,9 @@ public class Pool {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Crew crew;
+
+    @OneToMany(mappedBy = "pool", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Profile> profiles = new ArrayList<>();
 
     //Getters and Setters
 

@@ -25,12 +25,9 @@ public class ProfileController {
         return new ResponseEntity<>(newProfile, HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<Profile> getProfilesFromPool(@RequestBody int poolInt){
-        List<Profile> profile = new ArrayList<>();
-        if(pool.getPoolList()){
-
-        }
+    public ResponseEntity<List<Profile>> getProfilesFromPool(@PathVariable int poolId) {
+        List<Profile> profiles = profileService.getProfilesByPoolId(poolId);
+        return new ResponseEntity<>(profiles, HttpStatus.OK);
     }
 
 }
