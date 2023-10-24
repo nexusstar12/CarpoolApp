@@ -1,16 +1,13 @@
 package com.fantasticfour.poolapp.controller;
 
-import com.fantasticfour.poolapp.domain.Account;
-import com.fantasticfour.poolapp.domain.Password;
-import com.fantasticfour.poolapp.domain.User;
-import com.fantasticfour.poolapp.domain.Driver;
-import com.fantasticfour.poolapp.domain.Passenger;
+import com.fantasticfour.poolapp.domain.*;
 import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.services.AccountService;
 import com.fantasticfour.poolapp.services.PasswordService;
 import com.fantasticfour.poolapp.services.UserService;
 import com.fantasticfour.poolapp.services.DriverService;
 import com.fantasticfour.poolapp.services.PassengerService;
+import com.fantasticfour.poolapp.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +41,9 @@ public class SignUpUserController {
 
     @Autowired
     private PassengerService passengerService;
+
+    @Autowired
+    private ProfileService profileService;
 
 //    @PostMapping("/")
 //    public ResponseEntity<User> addUser (@RequestBody User user) {
@@ -101,18 +101,26 @@ public class SignUpUserController {
         responseMap.put("password", addPassword);
         responseMap.put("account", addAccount);
 
-        //allow user to assign the driver role to their existing account
+        //allow user to assign the driver role to their existing account & profile
         if ("driver".equals(jsonMap.get("role"))){
             Driver driver = new Driver();
             driver.setUser(addedUser);
             driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
             driver.setDriversLicense(jsonMap.get("driversLicense"));
             driverService.addDriver(driver);
+
+            Profile profile = new Profile();
+            profile.setUserType("driver");
+            profileService.addProfile(profile);
             responseMap.put("driver", driver);
         } else if ("passenger".equals(jsonMap.get("role"))) {
             Passenger passenger = new Passenger();
             passenger.setUser(addedUser);
             passengerService.addPassenger(passenger);
+
+            Profile profile = new Profile();
+            profile.setUserType("passenger");
+            profileService.addProfile(profile);
             responseMap.put("passenger", passenger);
         } else {
             // Unknown roles
