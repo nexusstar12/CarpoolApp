@@ -6,6 +6,7 @@ import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.repository.AccountRepository;
 import com.fantasticfour.poolapp.repository.PasswordRepository;
 import com.fantasticfour.poolapp.repository.UserRepository;
+import com.fantasticfour.poolapp.repository.DriverRepository;
 import com.fantasticfour.poolapp.services.AccountService;
 import com.fantasticfour.poolapp.services.PasswordService;
 import com.fantasticfour.poolapp.services.UserService;
@@ -35,13 +36,15 @@ public class SignInController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private DriverRepository driverRepository;
     @GetMapping("/")
     public ResponseEntity<List<Object>> signInUser (@RequestBody Map<String, String> jsonMap) {
 
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
         List<Object> responseList = new ArrayList<>();
 
-        //user to response list if email exists.
+        //Fetch user by email
        Optional<User> optionalUser = userRepository.findByEmail(jsonMap.get("email"));
 
        //check if user exists by email
@@ -66,13 +69,15 @@ public class SignInController {
        //check if password matches
        if (account.getPassword().getPassword().equals(jsonMap.get("password"))) {
            responseList.add(user);
+
+           // Check if user is a driver
+           boolean isDriver = driverRepository.findByUser_UserId(user.getUserId()).isPresent();
+           responseList.add("Is Driver: " + isDriver);
+
            return new ResponseEntity<>(responseList, HttpStatus.FOUND);
         }
 
         responseList.add("Incorrect username or password");
        return new ResponseEntity<>(responseList, HttpStatus.NOT_FOUND);
-
-
-
     }
 }
