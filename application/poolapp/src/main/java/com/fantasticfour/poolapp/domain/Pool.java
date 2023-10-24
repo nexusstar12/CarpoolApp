@@ -1,10 +1,6 @@
 package com.fantasticfour.poolapp.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 @Entity
 public class Pool {
@@ -21,8 +17,6 @@ public class Pool {
     private Boolean recurring;
     private int numberOfUsers;
     private String poolList;
-
-    // Standard getters and setters
 
     //Test
     private String startStreet;
@@ -42,102 +36,11 @@ public class Pool {
     private double endLatitude;
     private double endLongitude;
 
-    public double getStartLatitude() {
-        return startLatitude;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
+    private Crew crew;
 
-    public void setStartLatitude(double startLatitude) {
-        this.startLatitude = startLatitude;
-    }
-
-    public double getStartLongitude() {
-        return startLongitude;
-    }
-
-    public void setStartLongitude(double startLongitude) {
-        this.startLongitude = startLongitude;
-    }
-
-    public double getEndLatitude() {
-        return endLatitude;
-    }
-
-    public void setEndLatitude(double endLatitude) {
-        this.endLatitude = endLatitude;
-    }
-
-    public double getEndLongitude() {
-        return endLongitude;
-    }
-
-    public void setEndLongitude(double endLongitude) {
-        this.endLongitude = endLongitude;
-    }
-
-    public String getStartStreet() {
-        return startStreet;
-    }
-
-    public void setStartStreet(String startStreet) {
-        this.startStreet = startStreet;
-    }
-
-    public String getStartCity() {
-        return startCity;
-    }
-
-    public void setStartCity(String startCity) {
-        this.startCity = startCity;
-    }
-
-    public String getStartState() {
-        return startState;
-    }
-
-    public void setStartState(String startState) {
-        this.startState = startState;
-    }
-
-    public String getStartZip() {
-        return startZip;
-    }
-
-    public void setStartZip(String startZip) {
-        this.startZip = startZip;
-    }
-
-    public String getEndStreet() {
-        return endStreet;
-    }
-
-    public void setEndStreet(String endStreet) {
-        this.endStreet = endStreet;
-    }
-
-    public String getEndCity() {
-        return endCity;
-    }
-
-    public void setEndCity(String endCity) {
-        this.endCity = endCity;
-    }
-
-    public String getEndState() {
-        return endState;
-    }
-
-    public void setEndState(String endState) {
-        this.endState = endState;
-    }
-
-    public String getEndZip() {
-        return endZip;
-    }
-
-    public void setEndZip(String endZip) {
-        this.endZip = endZip;
-    }
-
+    //Getters and Setters
 
     public int getPoolId() {
         return poolId;
@@ -209,5 +112,109 @@ public class Pool {
 
     public void setPoolList(String poolList) {
         this.poolList = poolList;
+    }
+
+    public String getStartStreet() {
+        return startStreet;
+    }
+
+    public void setStartStreet(String startStreet) {
+        this.startStreet = startStreet;
+    }
+
+    public String getStartCity() {
+        return startCity;
+    }
+
+    public void setStartCity(String startCity) {
+        this.startCity = startCity;
+    }
+
+    public String getStartState() {
+        return startState;
+    }
+
+    public void setStartState(String startState) {
+        this.startState = startState;
+    }
+
+    public String getStartZip() {
+        return startZip;
+    }
+
+    public void setStartZip(String startZip) {
+        this.startZip = startZip;
+    }
+
+    public double getStartLatitude() {
+        return startLatitude;
+    }
+
+    public void setStartLatitude(double startLatitude) {
+        this.startLatitude = startLatitude;
+    }
+
+    public double getStartLongitude() {
+        return startLongitude;
+    }
+
+    public void setStartLongitude(double startLongitude) {
+        this.startLongitude = startLongitude;
+    }
+
+    public String getEndStreet() {
+        return endStreet;
+    }
+
+    public void setEndStreet(String endStreet) {
+        this.endStreet = endStreet;
+    }
+
+    public String getEndCity() {
+        return endCity;
+    }
+
+    public void setEndCity(String endCity) {
+        this.endCity = endCity;
+    }
+
+    public String getEndState() {
+        return endState;
+    }
+
+    public void setEndState(String endState) {
+        this.endState = endState;
+    }
+
+    public String getEndZip() {
+        return endZip;
+    }
+
+    public void setEndZip(String endZip) {
+        this.endZip = endZip;
+    }
+
+    public double getEndLatitude() {
+        return endLatitude;
+    }
+
+    public void setEndLatitude(double endLatitude) {
+        this.endLatitude = endLatitude;
+    }
+
+    public double getEndLongitude() {
+        return endLongitude;
+    }
+
+    public void setEndLongitude(double endLongitude) {
+        this.endLongitude = endLongitude;
+    }
+
+    public Crew getCrew() {
+        return crew;
+    }
+
+    public void setCrew(Crew crew) {
+        this.crew = crew;
     }
 }
