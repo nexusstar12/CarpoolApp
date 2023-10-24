@@ -3,7 +3,9 @@ package com.fantasticfour.poolapp.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Pool {
@@ -46,6 +48,12 @@ public class Pool {
     @OneToMany(mappedBy = "pool", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Profile> profiles = new ArrayList<>();
 
+    @ManyToMany
+    private Set<Profile> members = new HashSet<>();
+
+    public void addProfile(Profile profile){
+        this.members.add(profile);
+    }
     //Getters and Setters
 
     public int getPoolId() {
@@ -223,4 +231,6 @@ public class Pool {
     public void setCrew(Crew crew) {
         this.crew = crew;
     }
+
+
 }
