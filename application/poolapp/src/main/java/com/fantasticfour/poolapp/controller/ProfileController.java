@@ -24,10 +24,21 @@ public class ProfileController {
         Profile newProfile = profileService.addProfile(profile);
         return new ResponseEntity<>(newProfile, HttpStatus.CREATED);
     }
-
-    public ResponseEntity<List<Profile>> getProfilesFromPool(@PathVariable int poolId) {
-        List<Profile> profiles = profileService.getProfilesByPoolId(poolId);
+    @GetMapping("{id}")
+    public ResponseEntity<List<Profile>> getProfilesFromPool(@PathVariable int id) {
+        List<Profile> profiles = profileService.getProfilesByPoolId(id);
         return new ResponseEntity<>(profiles, HttpStatus.OK);
     }
+    @GetMapping("/")
+    public ResponseEntity<Profile> getProfileFromPassenger(@RequestBody int id){
+        Profile newProfile = profileService.getProfileByPassengerId(id);
+        return new ResponseEntity<>(newProfile, HttpStatus.FOUND);
+    }
+    @GetMapping("{id}")
+    public ResponseEntity<List<Profile>> getProfilesFromCrew(@PathVariable int id){
+        List<Profile> profiles = profileService.getProfilesByCrewId(id);
+        return new ResponseEntity<>(profiles, HttpStatus.OK);
+    }
+
 
 }
