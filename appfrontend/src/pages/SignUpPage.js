@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axiosInstance from "../config/axios.config";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import {isPhoneNumberValid} from "../utilities/phoneNumberValidation"; 
 
 const defaultTheme = createTheme();
 
@@ -21,14 +22,19 @@ export default function SignUp() {
   const history = useNavigate();
   const [error, setError] = useState(null);
 
+  //phone number validation
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isValid, setIsValid] = useState(false);      
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const firstName = data.get("firstName");
     const lastName = data.get("lastName");
+    const phoneNumber = data.get("phoneNumber"); //kendrick added
     const email = data.get("email");
     const password = data.get("password");
-    const requestBody = { firstName, lastName, email, password };
+    const requestBody = { firstName, lastName, phoneNumber, email, password };
 
     try {
       const response = await axiosInstance.post("/api/signup/", requestBody);
@@ -39,6 +45,15 @@ export default function SignUp() {
     } catch (error) {
       setError(error.response.data.message);
     }
+  };
+
+  //entering a value
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    const isValid = isPhoneNumberValid(inputValue);
+    console.log(isValid);
+    setPhoneNumber(inputValue);
+    setIsValid(isValid);
   };
 
   return (
@@ -88,6 +103,22 @@ export default function SignUp() {
                     name="lastName"
                     autoComplete="family-name"
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="phoneNumber"          //kendrick added phone number 
+                    label="Phone Number"
+                    name="phoneNumber"
+                    autoComplete="phoneNumber"
+                    onChange={handleInputChange}
+                  />
+                   {isValid ? (
+                      <p className="valid">Phone number is valid</p>
+                    ) : (
+                    <p className="invalid">Phone number is invalid</p>
+                      )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
