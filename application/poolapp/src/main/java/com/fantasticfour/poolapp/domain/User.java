@@ -12,24 +12,15 @@ public class User {
     @Column(name = "user_id")
     private int userId; // Changed from Long to int
 
+    @Column(unique = true)
+    private String email;
     private String firstName;
 
     private String lastName;
 
-    //testing no derived value for name yet.
-    //easier to serch full name
     private String name;
-    public String getName  () {
-        return name;
-    }
-    public void setName (String name) {
-        this.name = name;
-    }
-    //testing above code
 
     private String phoneNumber;
-
-    private String email;
 
     // Standard getters and setters
 
@@ -57,6 +48,12 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getName  () {
+        return name;
+    }
+    public void setName (String name) {
+        this.name = name;
+    }
     public String getPhoneNumber() {
         return phoneNumber;
     }

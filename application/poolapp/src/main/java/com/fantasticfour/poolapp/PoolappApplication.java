@@ -25,13 +25,8 @@ public class PoolappApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner() {
 		return args -> {
-			// Create and save a new user
-			User user = new User();
-			user.setFirstName("John");
-			user.setLastName("Doe");
-			user.setPhoneNumber("123-456-7890");
-			user.setEmail("john.doe@example.com");
-			userRepository.save(user);
+			//always check if email exists before saving a user.
+			//causes error
 
 			// Fetch and print all users from the database
 			for (User fetchedUser : userRepository.findAll()) {
