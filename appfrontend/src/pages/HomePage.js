@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import SearchBar from "../components/SearchBar";
 import React, { useState } from "react";
 import axiosInstance from "../config/axios.config";

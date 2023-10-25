@@ -20,14 +20,16 @@ export default function Bar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Popup
+          {/* <Popup
             trigger={<Button color="inherit">Post a pool</Button>}
             position="right center"
             contentStyle={popupContentStyle}
           >
             <div color="red">Feature coming soon</div>
-          </Popup>
-
+          </Popup> */}
+          <Link to="/create-pool">
+            <Button color="inherit">Post a pool</Button>
+          </Link>
           <Popup
             trigger={<Button color="inherit">Join a pool</Button>}
             position="right center"

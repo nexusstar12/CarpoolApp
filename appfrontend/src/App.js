@@ -2,6 +2,7 @@ import "./App.css";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
+import PoolCreationPage from "./pages/PoolCreationPage";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Bar from "./components/Bar";
 import { createContext, useState } from "react";
@@ -19,6 +20,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/signin" element={<SignInPage />} />
+            <Route path="/create-pool" element={<PoolCreationPage />} />
           </Routes>
         </Router>
       </div>

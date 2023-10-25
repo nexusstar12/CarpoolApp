@@ -14,27 +14,49 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axiosInstance from "../config/axios.config";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import {isPhoneNumberValid} from "../utilities/phoneNumberValidation"; 
+import { isPhoneNumberValid } from "../utilities/phoneNumberValidation";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Alert from "@mui/material/Alert";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const history = useNavigate();
   const [error, setError] = useState(null);
+  const [registerDriver, setRegisterDriver] = useState(false);
+  const [licenseError, setLicenseError] = useState("");
+  const licenseRegex = /^[A-Za-z0-9]{1,20}$/; // 20 characters regex validation for the driver's license
 
-  //phone number validation
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isValid, setIsValid] = useState(false);      
+  const handleLicenseChange = (e) => {
+    const value = e.target.value;
+    if (!licenseRegex.test(value)) {
+      setLicenseError(
+        "Please enter valid driver license (Max 20 chars, letters & numbers only)"
+      );
+    } else {
+      setLicenseError("");
+    }
+  };
+
+  const [isValid, setIsValid] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const firstName = data.get("firstName");
     const lastName = data.get("lastName");
-    const phoneNumber = data.get("phoneNumber"); //kendrick added
+    const phoneNumber = data.get("phoneNumber");
     const email = data.get("email");
     const password = data.get("password");
     const requestBody = { firstName, lastName, phoneNumber, email, password };
+
+    if (!isValid) {
+      setError("Invalid phone number");
+      return;
+    }
 
     try {
       const response = await axiosInstance.post("/api/signup/", requestBody);
@@ -47,23 +69,22 @@ export default function SignUp() {
     }
   };
 
-  //entering a value
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    const isValid = isPhoneNumberValid(inputValue);
-    console.log(isValid);
-    setPhoneNumber(inputValue);
-    setIsValid(isValid);
-  };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid
+          item
+          xs={12}
+          sm={10}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+        >
           <Box
             sx={{
-              my: 8,
+              my: registerDriver ? 4 : 2,
               mx: 4,
               display: "flex",
               flexDirection: "column",
@@ -108,17 +129,11 @@ export default function SignUp() {
                   <TextField
                     required
                     fullWidth
-                    id="phoneNumber"          //kendrick added phone number 
+                    id="phoneNumber"
                     label="Phone Number"
                     name="phoneNumber"
                     autoComplete="phoneNumber"
-                    onChange={handleInputChange}
                   />
-                   {isValid ? (
-                      <p className="valid">Phone number is valid</p>
-                    ) : (
-                    <p className="invalid">Phone number is invalid</p>
-                      )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -144,11 +159,40 @@ export default function SignUp() {
                 <Grid item xs={12}>
                   <FormControlLabel
                     control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
+                      <Checkbox
+                        color="primary"
+                        onChange={(e) => setRegisterDriver(e.target.checked)}
+                      />
                     }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
+                    label="Would you like to register as a driver?"
                   />
                 </Grid>
+                {registerDriver && (
+                  <>
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <TextField
+                        required
+                        sx={{ width: "70%" }} // Adjust this value as per your requirement for size
+                        name="driverLicense"
+                        label="Driver's License"
+                        onChange={handleLicenseChange}
+                        error={!!licenseError}
+                        helperText={licenseError}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormControlLabel
+                        control={<Checkbox color="primary" />}
+                        label="FasTrak verification status"
+                        name="fasTrakVerification"
+                      />
+                    </Grid>
+                  </>
+                )}
               </Grid>
               <Button
                 type="submit"
