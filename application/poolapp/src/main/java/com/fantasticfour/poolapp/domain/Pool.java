@@ -41,6 +41,8 @@ public class Pool {
     private double endLatitude;
     private double endLongitude;
 
+    private boolean publicOrPrivate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Crew crew;
@@ -56,6 +58,12 @@ public class Pool {
     }
     //Getters and Setters
 
+    public boolean getViewable(){
+        return publicOrPrivate;
+    }
+    public void setViewable(boolean status){
+        publicOrPrivate = status;
+    }
     public int getPoolId() {
         return poolId;
     }
