@@ -22,6 +22,10 @@ public class Profile {
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Crew crew;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "passenger_id", referencedColumnName = "passenger_id")
+    private Passenger passenger;
+
     private String userType;
     // Here, you might want to use an enum or another mechanism to distinguish between passenger and driver.
     // For simplicity, let's use a String. Depending on your actual data model, this might change.

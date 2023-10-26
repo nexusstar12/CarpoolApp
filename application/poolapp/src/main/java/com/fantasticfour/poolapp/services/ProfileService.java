@@ -31,4 +31,8 @@ public class ProfileService  {
         return profileRepository.findByCrew_CrewId(crewId);
     }
 
+    public Profile getProfileByPassengerId(int passengerId){
+        return profileRepository.findByPassenger_PassengerId(passengerId);
+    }
+
 }

@@ -34,4 +34,10 @@ public class ProfileController {
         List<Profile> profiles = profileService.getProfilesByCrewId(id);
         return new ResponseEntity<>(profiles, HttpStatus.OK);
     }
+
+    @GetMapping("/passenger/{id}")
+    public ResponseEntity<Profile> getProfileFromPassenger(@PathVariable int id){
+        Profile profile = profileService.getProfileByPassengerId(id);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
 }

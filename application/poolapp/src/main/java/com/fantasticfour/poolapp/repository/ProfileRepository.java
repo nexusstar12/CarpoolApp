@@ -17,4 +17,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer> {
     List<Profile> findByPool_PoolId(@Param("poolId") int poolId);
 
     List<Profile> findByCrew_CrewId(@Param("crewId") int crewId);
+
+    Profile findByPassenger_PassengerId(@Param("passengerId")int passengerId);
+
+
 }
