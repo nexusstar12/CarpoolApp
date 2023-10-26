@@ -13,10 +13,10 @@ public class PoolController {
     @Autowired
     private PoolService poolService;
 
-    @PostMapping("/join/{poolId}")
+    /*@PostMapping("/join/{poolId}")
     public ResponseEntity<?> joinPool(@PathVariable int poolId, @RequestBody int profileId){
         poolService.addProfileToPool(poolId, profileId);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+    }*/
 
 }

@@ -2,12 +2,7 @@ package com.fantasticfour.poolapp.controller;
 
 import com.fantasticfour.poolapp.domain.*;
 import com.fantasticfour.poolapp.repository.UserRepository;
-import com.fantasticfour.poolapp.services.AccountService;
-import com.fantasticfour.poolapp.services.PasswordService;
-import com.fantasticfour.poolapp.services.UserService;
-import com.fantasticfour.poolapp.services.DriverService;
-import com.fantasticfour.poolapp.services.PassengerService;
-import com.fantasticfour.poolapp.services.ProfileService;
+import com.fantasticfour.poolapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +37,8 @@ public class SignUpUserController {
     @Autowired
     private PassengerService passengerService;
 
-    @Autowired
-    private ProfileService profileService;
+    /*@Autowired
+    private ProfileService profileService;*/
 
 //    @PostMapping("/")
 //    public ResponseEntity<User> addUser (@RequestBody User user) {
@@ -111,7 +106,7 @@ public class SignUpUserController {
 
             Profile profile = new Profile();
             profile.setUserType("driver");
-            profileService.addProfile(profile);
+            //profileService.addProfile(profile);
             responseMap.put("driver", driver);
         } else if ("passenger".equals(jsonMap.get("role"))) {
             Passenger passenger = new Passenger();
@@ -120,7 +115,7 @@ public class SignUpUserController {
 
             Profile profile = new Profile();
             profile.setUserType("passenger");
-            profileService.addProfile(profile);
+            //profileService.addProfile(profile);
             responseMap.put("passenger", passenger);
         } else {
             // Unknown roles

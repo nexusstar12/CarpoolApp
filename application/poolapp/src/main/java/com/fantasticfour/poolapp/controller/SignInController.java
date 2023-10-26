@@ -1,15 +1,11 @@
 package com.fantasticfour.poolapp.controller;
 
 import com.fantasticfour.poolapp.domain.Account;
-import com.fantasticfour.poolapp.domain.Password;
 import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.repository.AccountRepository;
+import com.fantasticfour.poolapp.repository.DriverRepository;
 import com.fantasticfour.poolapp.repository.PasswordRepository;
 import com.fantasticfour.poolapp.repository.UserRepository;
-import com.fantasticfour.poolapp.repository.DriverRepository;
-import com.fantasticfour.poolapp.services.AccountService;
-import com.fantasticfour.poolapp.services.PasswordService;
-import com.fantasticfour.poolapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -7,6 +7,7 @@ public class Passenger {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "passenger_id", nullable = false)
     private int passengerId;
 
     @OneToOne
