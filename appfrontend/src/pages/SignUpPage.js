@@ -53,7 +53,7 @@ export default function SignUp() {
     const password = data.get("password");
     const requestBody = { firstName, lastName, phoneNumber, email, password };
 
-    if (!isValid) {
+    if (!isPhoneNumberValid(phoneNumber)) {
       setError("Invalid phone number");
       return;
     }
