@@ -9,6 +9,7 @@ import com.fantasticfour.poolapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,10 @@ public class SignInController {
 
     @Autowired
     private DriverRepository driverRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/")
     public ResponseEntity<List<Object>> signInUser (@RequestBody Map<String, String> jsonMap) {
 
@@ -62,7 +67,11 @@ public class SignInController {
        }
 
        //check if password matches
-       if (account.getPassword().getPassword().equals(jsonMap.get("password"))) {
+        String inputPassword = jsonMap.get("password");
+        String storedPassword = account.getPassword().getPassword(); //hashed password
+        boolean isPasswordMatching = passwordEncoder.matches(inputPassword, storedPassword);
+
+       if (isPasswordMatching) {
            responseList.add(user);
 
            // Check if user is a driver
