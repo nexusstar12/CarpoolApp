@@ -26,22 +26,13 @@ const defaultTheme = createTheme();
 export default function SignUp() {
   const history = useNavigate();
   const [error, setError] = useState(null);
+  const [phoneError, setPhoneError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [licenseError, setLicenseError] = useState(null);
+
   const [registerDriver, setRegisterDriver] = useState(false);
-  const [licenseError, setLicenseError] = useState("");
-  const licenseRegex = /^[A-Za-z0-9]{1,20}$/; // 20 characters regex validation for the driver's license
-
-  const handleLicenseChange = (e) => {
-    const value = e.target.value;
-    if (!licenseRegex.test(value)) {
-      setLicenseError(
-        "Please enter valid driver license (Max 20 chars, letters & numbers only)"
-      );
-    } else {
-      setLicenseError("");
-    }
-  };
-
-  const [isValid, setIsValid] = useState(false);
+  const licenseRegex = /^[a-zA-Z0-9]+$/; // 20 characters regex validation for the driver's license
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -49,16 +40,46 @@ export default function SignUp() {
     const firstName = data.get("firstName");
     const lastName = data.get("lastName");
     const phoneNumber = data.get("phoneNumber");
+    const driverLicense = data.get("driverLicense");
     const email = data.get("email");
     const password = data.get("password");
-    const requestBody = { firstName, lastName, phoneNumber, email, password };
+    const fasTrakVerification = data.get("fasTrakVerification");
+
+    const requestBody = {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      password,
+      fasTrakVerification,
+      role: driverLicense ? "driver" : "passenger",
+    };
 
     if (!isPhoneNumberValid(phoneNumber)) {
-      setError("Invalid phone number");
+      setPhoneError("Invalid phone number");
       return;
+    } else {
+      setPhoneError(false);
+    }
+
+    if (driverLicense) {
+      if (!licenseRegex.test(driverLicense)) {
+        setLicenseError("Invalid license");
+        return;
+      } else {
+        setLicenseError(false);
+      }
+    }
+
+    if (!email || !emailRegex.test(email)) {
+      setEmailError("Invalid email");
+      return;
+    } else {
+      setEmailError(false);
     }
 
     try {
+      console.log("requestBody", requestBody);
       const response = await axiosInstance.post("/api/signup/", requestBody);
 
       if (response.status === 201) {
@@ -71,7 +92,7 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main" sx={{ minHeight: "100vh" }}>
         <CssBaseline />
         <Grid
           item
@@ -101,7 +122,7 @@ export default function SignUp() {
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
+              sx={{ mt: 3 }} // Set a maxHeight and overflowY
             >
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -133,6 +154,8 @@ export default function SignUp() {
                     label="Phone Number"
                     name="phoneNumber"
                     autoComplete="phoneNumber"
+                    error={!!phoneError}
+                    helperText={phoneError}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -143,6 +166,8 @@ export default function SignUp() {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    error={!!emailError}
+                    helperText={emailError}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -179,15 +204,16 @@ export default function SignUp() {
                         sx={{ width: "70%" }} // Adjust this value as per your requirement for size
                         name="driverLicense"
                         label="Driver's License"
-                        onChange={handleLicenseChange}
                         error={!!licenseError}
                         helperText={licenseError}
                       />
                     </Grid>
+
                     <Grid item xs={12}>
                       <FormControlLabel
                         control={<Checkbox color="primary" />}
-                        label="FasTrak verification status"
+                        value={true}
+                        label="I have an active FasTrak account"
                         name="fasTrakVerification"
                       />
                     </Grid>
