@@ -1,5 +1,6 @@
 package com.fantasticfour.poolapp.controller;
 
+import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.services.PoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,21 @@ public class PoolController {
     @PostMapping("/join/{poolId}")
     public ResponseEntity<?> joinPool(@PathVariable int poolId, @RequestBody int profileId){
         poolService.addProfileToPool(poolId, profileId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pool> markVisibility(@RequestParam String status, @PathVariable int poolId) {
+        if(status == "public"){
+            poolService.setProfileToPublic(true, poolId);
+        }
+        else if(status == "private"){
+            poolService.setProfileToPrivate(false, poolId);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

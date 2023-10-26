@@ -30,5 +30,21 @@ public class PoolService {
         }
     }
 
+    public void setProfileToPublic(boolean status, int poolId){
+        Optional<Pool> poolOptional = poolRepository.findById(poolId);
+        if(poolOptional.isPresent()) {
+            Pool pool = poolOptional.get();
+            pool.setViewable(status);
+        }
+    }
+
+    public void setProfileToPrivate(boolean status,int poolId){
+        Optional<Pool> poolOptional = poolRepository.findById(poolId);
+        if(poolOptional.isPresent()) {
+            Pool pool = poolOptional.get();
+            pool.setViewable(status);
+        }
+    }
+
 
 }
