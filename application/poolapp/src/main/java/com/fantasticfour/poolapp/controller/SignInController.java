@@ -50,7 +50,7 @@ public class SignInController {
            user = optionalUser.get();
        }else {
            responseList.add("Incorrect username or password");
-           return new ResponseEntity<>(responseList, HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(responseList, HttpStatus.UNAUTHORIZED);
        }
 
        Optional<Account> optionalAccount = accountRepository.findAccountByUserId(user.getUserId());
@@ -60,7 +60,7 @@ public class SignInController {
            account = optionalAccount.get();
        }else {
            responseList.add("Could not find account");
-           return new ResponseEntity<>(responseList, HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(responseList, HttpStatus.UNAUTHORIZED);
        }
 
        //check if password matches
@@ -75,10 +75,10 @@ public class SignInController {
            boolean isDriver = driverRepository.findByUser_UserId(user.getUserId()).isPresent();
            responseList.add("Is Driver: " + isDriver);
 
-           return new ResponseEntity<>(responseList, HttpStatus.FOUND);
+           return new ResponseEntity<>(responseList, HttpStatus.OK);
         }
 
         responseList.add("Incorrect username or password");
-       return new ResponseEntity<>(responseList, HttpStatus.NOT_FOUND);
+       return new ResponseEntity<>(responseList, HttpStatus.UNAUTHORIZED);
     }
 }
