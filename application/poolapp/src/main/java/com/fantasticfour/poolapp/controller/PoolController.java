@@ -20,7 +20,7 @@ public class PoolController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/create/{poolId}")
     public ResponseEntity<Pool> markVisibility(@RequestParam String status, @PathVariable int poolId) {
         if(status == "public"){
             poolService.setProfileToPublic(true, poolId);
