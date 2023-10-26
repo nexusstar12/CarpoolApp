@@ -26,12 +26,9 @@ public class ProfileService  {
     public List<Profile> getProfilesByPoolId(int poolId) {
         return profileRepository.findByPool_PoolId(poolId);
     }
-    /*public Profile getProfileByPassengerId(int passengerId){
-        return profileRepository.findProfileByPassengerId(passengerId);
-    }
 
-    /*public List<Profile> getProfilesByCrewId(int crewId) {
+    public List<Profile> getProfilesByCrewId(int crewId) {
         return profileRepository.findByCrew_CrewId(crewId);
-    }*/
+    }
 
 }
