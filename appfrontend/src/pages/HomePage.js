@@ -1,27 +1,45 @@
-import axios from "axios";
-
 import SearchBar from "../components/SearchBar";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import Bar from "../components/Bar";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import axiosInstance from "../config/axios.config";
+import { SearchResult } from "../components/SearchResult";
 
 function HomePage() {
   const [search, setSearch] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState([]);
 
-  const handleSearchSubmit = (hehe) => {
-    setSearch(hehe);
+  const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
+    setSearch({ searchQuery, filterOption });
+
+    const data = await axiosInstance.get(
+      `/api/searchbar?filter=${filterOption}&value=${searchQuery}`
+    );
+    setResult(data.data);
   };
 
-  useEffect(() => {
-    axios.get("").then((response) => {
-      setResult(response.data);
-    });
-  }, [search]);
-
   return (
-    <div className="search-container">
-      <SearchBar onSearch={handleSearchSubmit} />
+    <div className="home-page-container">
+      <div className="image-container">
+        <img
+          src="homepage_carpool.jpg"
+          style={{ width: "100%", height: "100%" }} // Set the width to 50% of the screen
+          alt="Description of the image"
+        />
+      </div>
+      <div className="search-container">
+        <h1 style={{ fontSize: "50px" }}>Get there, together.</h1>
+        <SearchBar onSearch={handleSearchSubmit} />
+        {result.length > 0 ? (
+          <div className="search-results-container">
+            <SearchResult
+              className="search-result"
+              result={result}
+              itemsPerPage={10}
+            />
+          </div>
+        ) : (
+          <div className="search-results-empty"></div>
+        )}
+      </div>
     </div>
   );
 }
