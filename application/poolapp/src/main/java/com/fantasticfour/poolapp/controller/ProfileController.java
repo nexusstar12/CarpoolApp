@@ -19,7 +19,7 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @PostMapping("/")
+    @PostMapping({"", "/"})
     public ResponseEntity<Profile> addProfile(@RequestBody Profile profile) {
         Profile newProfile = profileService.addProfile(profile);
         return new ResponseEntity<>(newProfile, HttpStatus.CREATED);

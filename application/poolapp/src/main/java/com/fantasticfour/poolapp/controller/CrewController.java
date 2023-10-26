@@ -17,7 +17,7 @@ public class CrewController {
     @Autowired
     private CrewService crewService;
 
-    @PostMapping("/")
+    @PostMapping({"", "/"})
     public ResponseEntity<Crew> addCrew(@RequestBody Crew crew) {
         Crew newCrew = crewService.addCrew(crew);
         return new ResponseEntity<>(newCrew, HttpStatus.CREATED);
@@ -30,7 +30,7 @@ public class CrewController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public ResponseEntity<List<Crew>> getAllCrews() {
         List<Crew> crews = crewService.getAllCrews();
         if (crews.isEmpty()) {

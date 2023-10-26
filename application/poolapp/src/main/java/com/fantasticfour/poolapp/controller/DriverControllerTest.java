@@ -23,7 +23,7 @@ public class DriverControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/")
+    @PostMapping({"", "/"})
     public ResponseEntity<Driver> addDriver(@RequestBody Driver driver){
         // Fetch the associated User first
         Optional<User> userOpt = userRepository.findById((long) 1.0); // Better: Get this ID from the driver object or client request, not hardcoded

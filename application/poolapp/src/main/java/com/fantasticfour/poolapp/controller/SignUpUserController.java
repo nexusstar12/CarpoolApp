@@ -52,7 +52,7 @@ public class SignUpUserController {
 //        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 //    }
 
-    @PostMapping("/")
+    @PostMapping({"", "/"})
     public ResponseEntity<Map<String, Object>> addUser (@RequestBody Map<String, String> jsonMap) {
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 

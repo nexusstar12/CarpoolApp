@@ -35,7 +35,7 @@ public class SignInController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("")
+    @PostMapping({"", "/"})
     public ResponseEntity<List<Object>> signInUser (@RequestBody Map<String, String> jsonMap) {
 
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
