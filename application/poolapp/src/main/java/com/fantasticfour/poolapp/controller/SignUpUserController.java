@@ -6,6 +6,7 @@ import com.fantasticfour.poolapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,9 @@ public class SignUpUserController {
 
     @Autowired
     private PassengerService passengerService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /*@Autowired
     private ProfileService profileService;*/
@@ -74,10 +78,9 @@ public class SignUpUserController {
             return new ResponseEntity<>(responseMap, HttpStatus.CONFLICT);
         }
 
-        //create new password
-        //TODO: HASH PASSWORD
+        //create new hashed password
         Password newPassword = new Password();
-        newPassword.setPassword(jsonMap.get("password"));
+        newPassword.setPassword(passwordEncoder.encode(jsonMap.get("password")));
 
         //create new account that links user and password
         Account newAccount = new Account();
