@@ -20,13 +20,13 @@ public class PoolController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/create/{poolId}")
-    public ResponseEntity<Pool> markVisibility(@RequestParam String status, @PathVariable int poolId) {
+    @PostMapping("/create/{id}")
+    public ResponseEntity<Pool> markVisibility(@RequestParam String status, @PathVariable int id) {
         if(status == "public"){
-            poolService.setProfileToPublic(true, poolId);
+            poolService.setProfileToPublic(true, id);
         }
         else if(status == "private"){
-            poolService.setProfileToPrivate(false, poolId);
+            poolService.setProfileToPrivate(false, id);
         }
         else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

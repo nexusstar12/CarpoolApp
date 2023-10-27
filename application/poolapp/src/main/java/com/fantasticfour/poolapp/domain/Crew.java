@@ -25,6 +25,9 @@ public class Crew {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member3_id", referencedColumnName = "user_id")
     private User member3;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
+    private Pool pool;
 
     // Constructors, getters, setters, etc.
     public int getCrewId() {

@@ -36,4 +36,8 @@ public class CrewService {
     public void deleteCrew(int id) {
         crewRepository.deleteById(id);
     }
+
+    public Crew getCrewbyPoolId(int poolId){
+        return crewRepository.findByPool_PoolId(poolId);
+    }
 }

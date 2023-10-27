@@ -1,8 +1,10 @@
 package com.fantasticfour.poolapp.repository;
 
 import com.fantasticfour.poolapp.domain.Pool;
+import com.fantasticfour.poolapp.domain.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -20,4 +22,5 @@ public interface PoolRepository extends JpaRepository<Pool, Integer> {
             "COS(?1 * pi() / 180) * COS(abs(end_latitude) * pi() / 180) * POWER(SIN((?3 - end_longitude) * pi() / 180 / 2), 2) )) " +
             "AS distance FROM pool HAVING distance < ?4 ORDER BY distance", nativeQuery = true)
     List<Pool> findWithinDistanceUsingEndZip(Double latitude, Double radius, Double longitude, Double distance);
+
 }
