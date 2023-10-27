@@ -49,13 +49,13 @@ export default function SignIn() {
 
     const requestBody = { email, password };
     try {
-      const response = await axiosInstance.post("/api/signin/", requestBody);
+      const response = await axiosInstance.post("/signin", requestBody);
       if (response.status === 200) {
-        userContext.setUserInfo(response.data[0]);
+        userContext.setUserInfo(response.data);
         history("/");
       }
     } catch (error) {
-      setError(error.response.data[0]);
+      setError(error.response.data);
     }
   };
 
@@ -144,7 +144,7 @@ export default function SignIn() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signup" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

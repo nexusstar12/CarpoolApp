@@ -12,7 +12,7 @@ function HomePage() {
     setSearch({ searchQuery, filterOption });
 
     const data = await axiosInstance.get(
-      `/api/searchbar?filter=${filterOption}&value=${searchQuery}`
+      `/searchbar?filter=${filterOption}&value=${searchQuery}`
     );
     setResult(data.data);
   };
@@ -22,7 +22,7 @@ function HomePage() {
       <div className="image-container">
         <img
           src="homepage_carpool.jpg"
-          style={{ width: "100%", height: "100%" }} // Set the width to 50% of the screen
+          style={{ width: "100%", height: "100%" }}
           alt="Description of the image"
         />
       </div>

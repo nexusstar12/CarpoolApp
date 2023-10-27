@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   TextField,
@@ -15,18 +15,23 @@ import {
   MenuItem,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
+import { useContext } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { UserContext } from "../App";
 
 export default function PostPool() {
-  const [selectedDate, setSelectedDate] = React.useState(null);
-  const [type, setType] = React.useState("");
+  const userContext = useContext(UserContext);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [privacy, setPrivacy] = useState("");
+
+  console.log("userContext", userContext.userInfo);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const name = data.get("name");
     const startStreet = data.get("startStreet");
     const startCity = data.get("startCity");
     const startZip = data.get("startZip");
@@ -38,6 +43,7 @@ export default function PostPool() {
     const formattedDate = selectedDate?.format("YYYY-MM-DD HH:mm:ss");
 
     const requestBody = {
+      name,
       start: {
         startStreet,
         startCity,
@@ -51,10 +57,26 @@ export default function PostPool() {
         endCity,
         endState,
       },
-      type,
+      privacy,
     };
     console.log("requestBody", requestBody);
   };
+  if (!userContext?.userInfo?.isDrive) {
+    return (
+      <Box
+        sx={{
+          mt: 5,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6" color="error">
+          Only drivers can create a pool.
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <Box
       component="form"
@@ -67,18 +89,32 @@ export default function PostPool() {
         alignItems: "center",
       }}
     >
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 400 }}>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 3,
+          width: "80%",
+          maxWidth: 400,
+          overflowY: "auto",
+          maxHeight: "80vh",
+        }}
+      >
         <Typography variant="h5" align="center" mb={3}>
           PoolApp
         </Typography>
-        <Typography variant="h6" align="center" mb={3}>
-          Post a Pool
-        </Typography>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            Pool Name
+          </AccordionSummary>
+          <AccordionDetails>
+            <TextField fullWidth name="name" label="Pool Name" sx={{ mb: 2 }} />
+          </AccordionDetails>
+        </Accordion>
 
         {/* Enter start location section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            Enter start location
+            Start Location
           </AccordionSummary>
           <AccordionDetails>
             <TextField
@@ -111,7 +147,7 @@ export default function PostPool() {
         {/* Enter end location section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            Enter end location
+            End Location
           </AccordionSummary>
           <AccordionDetails>
             <TextField
@@ -139,7 +175,7 @@ export default function PostPool() {
         {/* Start time/date section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            Start time/date
+            Date & Time
           </AccordionSummary>
           <AccordionDetails>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -159,10 +195,13 @@ export default function PostPool() {
         {/* Public or Private Pool section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            Public or Private Pool?
+            Privacy Settings
           </AccordionSummary>
           <AccordionDetails>
-            <RadioGroup value={type} onChange={(e) => setType(e.target.value)}>
+            <RadioGroup
+              value={privacy}
+              onChange={(e) => setPrivacy(e.target.value)}
+            >
               <FormControlLabel
                 value="public"
                 control={<Radio />}
@@ -178,7 +217,6 @@ export default function PostPool() {
             </RadioGroup>
             <Select fullWidth value="Private Pools">
               <MenuItem value="Private Pools">Private Pools</MenuItem>
-              {/* Add more MenuItems if needed */}
             </Select>
           </AccordionDetails>
         </Accordion>

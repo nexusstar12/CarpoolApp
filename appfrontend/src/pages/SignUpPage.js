@@ -15,11 +15,6 @@ import axiosInstance from "../config/axios.config";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { isPhoneNumberValid } from "../utilities/phoneNumberValidation";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Alert from "@mui/material/Alert";
 
 const defaultTheme = createTheme();
 
@@ -31,7 +26,7 @@ export default function SignUp() {
   const [licenseError, setLicenseError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
-  const licenseRegex = /^[a-zA-Z0-9]+$/; // 20 characters regex validation for the driver's license
+  const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
   const handleSubmit = async (event) => {
@@ -80,7 +75,7 @@ export default function SignUp() {
 
     try {
       console.log("requestBody", requestBody);
-      const response = await axiosInstance.post("/api/signup/", requestBody);
+      const response = await axiosInstance.post("/signup", requestBody);
 
       if (response.status === 201) {
         history("/signin");
@@ -122,7 +117,7 @@ export default function SignUp() {
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 3 }} // Set a maxHeight and overflowY
+              sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -201,7 +196,7 @@ export default function SignUp() {
                     >
                       <TextField
                         required
-                        sx={{ width: "70%" }} // Adjust this value as per your requirement for size
+                        sx={{ width: "70%" }}
                         name="driverLicense"
                         label="Driver's License"
                         error={!!licenseError}
