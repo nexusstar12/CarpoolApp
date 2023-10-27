@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // All endpoints in the API
-                .allowedOrigins(frontEndUrl) // Your frontend app origin
+                .allowedOriginPatterns("*") // Your frontend app origin
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS") // Allowed request methods
                 .allowCredentials(true) // Credentials, cookies, HTTP authentication
                 .maxAge(3600) // Pre-flight request cache duration
