@@ -36,49 +36,44 @@ public class SignInController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping({"", "/"})
-    public ResponseEntity<List<Object>> signInUser (@RequestBody Map<String, String> jsonMap) {
+    public ResponseEntity<?> signInUser (@RequestBody Map<String, String> jsonMap) {
 
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-        List<Object> responseList = new ArrayList<>();
 
         //Fetch user by email
-       Optional<User> optionalUser = userRepository.findByEmail(jsonMap.get("email"));
+        Optional<User> optionalUser = userRepository.findByEmail(jsonMap.get("email"));
 
-       //check if user exists by email
-       User user;
-       if (optionalUser.isPresent()){
-           user = optionalUser.get();
-       }else {
-           responseList.add("Incorrect username or password");
-           return new ResponseEntity<>(responseList, HttpStatus.UNAUTHORIZED);
-       }
+        //check if user exists by email
+        User user;
+        if (optionalUser.isPresent()){
+            user = optionalUser.get();
+        } else {
+            return new ResponseEntity<>("Incorrect username or password", HttpStatus.UNAUTHORIZED);
+        }
 
-       Optional<Account> optionalAccount = accountRepository.findAccountByUserId(user.getUserId());
+        Optional<Account> optionalAccount = accountRepository.findAccountByUserId(user.getUserId());
 
-       Account account;
-       if (optionalAccount.isPresent()) {
-           account = optionalAccount.get();
-       }else {
-           responseList.add("Could not find account");
-           return new ResponseEntity<>(responseList, HttpStatus.UNAUTHORIZED);
-       }
+        //Check if account exists for the user
+        Account account;
+        if (optionalAccount.isPresent()) {
+            account = optionalAccount.get();
+        } else {
+            return new ResponseEntity<>("Could not find account", HttpStatus.UNAUTHORIZED);
+        }
 
-       //check if password matches
+        //check if password matches
         String inputPassword = jsonMap.get("password");
         String storedPassword = account.getPassword().getPassword(); //hashed password
         boolean isPasswordMatching = passwordEncoder.matches(inputPassword, storedPassword);
 
-       if (isPasswordMatching) {
-           responseList.add(user);
+        if (isPasswordMatching) {
+            // Check if user is a driver
+            boolean isDriver = driverRepository.findByUser_UserId(user.getUserId()).isPresent();
+            user.setIsDriver(isDriver);
 
-           // Check if user is a driver
-           boolean isDriver = driverRepository.findByUser_UserId(user.getUserId()).isPresent();
-           responseList.add("Is Driver: " + isDriver);
-
-           return new ResponseEntity<>(responseList, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
 
-        responseList.add("Incorrect username or password");
-       return new ResponseEntity<>(responseList, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("Incorrect username or password", HttpStatus.UNAUTHORIZED);
     }
 }
