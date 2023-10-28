@@ -4,6 +4,7 @@ import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
 
 export default function ListPoolPage() {
+  const [createdCrews, setCreatedCrews] = useState([]);
   const [data, setData] = useState({
     myPools: [
       {
@@ -92,6 +93,9 @@ export default function ListPoolPage() {
       setData((prevData) => ({ ...prevData, myPools: updatedMyPools }));
     }
     if (type === "JOIN POOL") {
+    }
+    if (!createdCrews.includes(poolId)) {
+      setCreatedCrews((prev) => [...prev, poolId]);
     }
     console.log("data", data);
   };
@@ -195,11 +199,11 @@ export default function ListPoolPage() {
           <CardTitle>{dataRow?.name}</CardTitle>
 
           {/* Time */}
-          <TimeContainer>
+          <CardContainer>
             <Typography variant="body2" color="textSecondary">
-              <strong>Starts: </strong> {dataRow.startTime || "N/A"}
+              <strong>Starting Time: </strong> {dataRow.startTime || "N/A"}
             </Typography>
-          </TimeContainer>
+          </CardContainer>
 
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
@@ -230,15 +234,26 @@ export default function ListPoolPage() {
           </CardContainer>
 
           {/* Button */}
-          <JoinButton
-            variant="contained"
-            onClick={() => handleClick(dataRow.poolId, type)}
-            style={{
-              backgroundColor: type === "LEAVE POOL" ? "red" : "green",
-            }}
-          >
-            {type}
-          </JoinButton>
+          {type !== "CREATE CREW" || !createdCrews.includes(dataRow.poolId) ? (
+            <JoinButton
+              variant="contained"
+              onClick={() => handleClick(dataRow.poolId, type)}
+              style={{
+                backgroundColor:
+                  type === "LEAVE POOL"
+                    ? "red"
+                    : type === "JOIN POOL"
+                    ? "green"
+                    : "blue",
+              }}
+            >
+              {type}
+            </JoinButton>
+          ) : (
+            <Typography variant="h6" color="black">
+              Crew Created!
+            </Typography>
+          )}
         </StyledCardContent>
       </StyledCard>
     ));
