@@ -61,22 +61,22 @@ export default function PostPool() {
     };
     console.log("requestBody", requestBody);
   };
-  if (!userContext?.userInfo?.isDrive) {
-    return (
-      <Box
-        sx={{
-          mt: 5,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          Only drivers can create a pool.
-        </Typography>
-      </Box>
-    );
-  }
+  // if (!userContext?.userInfo?.isDrive) {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         mt: 5,
+  //         display: "flex",
+  //         flexDirection: "column",
+  //         alignItems: "center",
+  //       }}
+  //     >
+  //       <Typography variant="h6" color="error">
+  //         Only drivers can create a pool.
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
   return (
     <Box
       component="form"

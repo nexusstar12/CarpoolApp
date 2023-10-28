@@ -35,7 +35,7 @@ export default function SignUp() {
     const firstName = data.get("firstName");
     const lastName = data.get("lastName");
     const phoneNumber = data.get("phoneNumber");
-    const driverLicense = data.get("driverLicense");
+    const driversLicense = data.get("driversLicense");
     const email = data.get("email");
     const password = data.get("password");
     const fasTrakVerification = data.get("fasTrakVerification");
@@ -47,7 +47,8 @@ export default function SignUp() {
       email,
       password,
       fasTrakVerification,
-      role: driverLicense ? "driver" : "passenger",
+      driversLicense,
+      role: driversLicense ? "driver" : "passenger",
     };
 
     if (!isPhoneNumberValid(phoneNumber)) {
@@ -57,8 +58,8 @@ export default function SignUp() {
       setPhoneError(false);
     }
 
-    if (driverLicense) {
-      if (!licenseRegex.test(driverLicense)) {
+    if (driversLicense) {
+      if (!licenseRegex.test(driversLicense)) {
         setLicenseError("Invalid license");
         return;
       } else {

@@ -43,41 +43,18 @@ export default function Bar() {
               Post a pool
             </Button>
           </Link>
-          <Popup
-            trigger={
-              <Button
-                color="inherit"
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                Join a pool
-              </Button>
-            }
-            position="right center"
-            contentStyle={popupContentStyle}
-          >
-            <div color="red">Feature coming soon</div>
-          </Popup>
-
-          <Popup
-            trigger={
-              <Button
-                color="inherit"
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                How it works
-              </Button>
-            }
-            position="right center"
-            contentStyle={popupContentStyle}
-          >
-            <div color="red">Feature coming soon</div>
-          </Popup>
+          <Link to="/" style={{ textDecoration: "none", margin: "0 8px" }}>
+            <Button
+              color="inherit"
+              sx={{
+                fontWeight: "bold",
+                color: "#fff",
+                "&:hover": { background: "rgba(255,255,255,0.08)" },
+              }}
+            >
+              Join a pool
+            </Button>
+          </Link>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Pool
@@ -93,7 +70,6 @@ export default function Bar() {
               Home
             </Button>
           </Link>
-
           {isLoggedIn ? (
             <Typography>{userContext.userInfo.name}</Typography>
           ) : (
@@ -109,6 +85,38 @@ export default function Bar() {
                 }}
               >
                 Signup
+              </Button>
+            </Link>
+          )}
+          {!isLoggedIn && (
+            <Link
+              to="/my-pools"
+              style={{ textDecoration: "none", margin: "0 8px" }}
+            >
+              <Button
+                sx={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                My Pools
+              </Button>
+            </Link>
+          )}
+          {isLoggedIn && (
+            <Link
+              to="/signup"
+              style={{ textDecoration: "none", margin: "0 8px" }}
+            >
+              <Button
+                sx={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                My Crews
               </Button>
             </Link>
           )}
