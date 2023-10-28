@@ -104,9 +104,9 @@ export default function Bar() {
               </Button>
             </Link>
           )}
-          {isLoggedIn && (
+      
             <Link
-              to="/signup"
+              to="/my-crews"
               style={{ textDecoration: "none", margin: "0 8px" }}
             >
               <Button
@@ -119,7 +119,7 @@ export default function Bar() {
                 My Crews
               </Button>
             </Link>
-          )}
+        
           {isLoggedIn ? (
             <Link style={{ textDecoration: "none", margin: "0 8px" }}>
               <Button
