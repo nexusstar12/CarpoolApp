@@ -6,12 +6,39 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.*;
 
+
 @Entity
 public class Pool {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poolId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
+    private Crew crew;
+
+    @OneToMany(mappedBy = "pool", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Profile> profiles = new ArrayList<>();
+
+    @ManyToMany
+    private Set<Profile> members = new HashSet<>();//may not need
+
+    @ManyToOne
+    @JoinColumn(name = "member_1_id")
+    private Profile member1;
+
+    @ManyToOne
+    @JoinColumn(name = "member_2_id")
+    private Profile member2;
+
+    @ManyToOne
+    @JoinColumn(name = "member_3_id")
+    private Profile member3;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private Profile creator;
 
     private String description;
     private LocalDateTime startTime;
@@ -41,15 +68,37 @@ public class Pool {
 
     private boolean publicOrPrivate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
-    private Crew crew;
+    public Profile getMember1() {
+        return member1;
+    }
 
-    @OneToMany(mappedBy = "pool", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Profile> profiles = new ArrayList<>();
+    public void setMember1(Profile member1) {
+        this.member1 = member1;
+    }
 
-    @ManyToMany
-    private Set<Profile> members = new HashSet<>();
+    public Profile getMember2() {
+        return member2;
+    }
+
+    public void setMember2(Profile member2) {
+        this.member2 = member2;
+    }
+
+    public Profile getMember3() {
+        return member3;
+    }
+
+    public void setMember3(Profile member3) {
+        this.member3 = member3;
+    }
+
+    public Profile getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Profile creator) {
+        this.creator = creator;
+    }
 
     public void addProfile(Profile profile){
         this.members.add(profile);
