@@ -1,14 +1,21 @@
 package com.fantasticfour.poolapp.controller;
 
+import com.fantasticfour.poolapp.CustomResponse.CrewListResponse;
+import com.fantasticfour.poolapp.CustomResponse.CrewResponse;
 import com.fantasticfour.poolapp.domain.Crew;
 import com.fantasticfour.poolapp.services.CrewService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/crew")
@@ -24,10 +31,40 @@ public class CrewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Crew> getCrewById(@PathVariable("id") int id) {
-        Optional<Crew> crew = crewService.getCrewById(id);
-        return crew.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<List<CrewResponse>> getCrewById(@PathVariable("id") int userId) {
+
+        CrewListResponse crewListResponse = new CrewListResponse();
+        List<CrewResponse> crewResponselist = new ArrayList<>();
+
+        List<Crew> crews = crewService.getCrewByUserId(userId).stream().filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        if(!crews.isEmpty()){
+            for (Crew crew: crews
+                 ) {
+                CrewResponse crewResponse = new CrewResponse();
+                crewResponse.setCrewId(crew.getCrewId());
+                crewResponse.setDescription(crew.getDescription());
+                if ((crew.getMember1() != null)) {
+                    crewResponse.setOneMember(crew.getMember1());
+                } else {
+                    System.out.println("User does not Exist");
+                }
+                if ((crew.getMember2() != null)) {
+                    crewResponse.setOneMember(crew.getMember2());
+                } else {
+                    System.out.println("User does not Exist");
+                }
+                if ((crew.getMember3() != null)) {
+                    crewResponse.setOneMember(crew.getMember3());
+                } else {
+                    System.out.println("User does not Exist");
+                }
+                crewResponselist.add(crewResponse);
+            }
+            return new ResponseEntity<>(crewResponselist,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping({"", "/"})

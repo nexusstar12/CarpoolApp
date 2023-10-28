@@ -14,18 +14,18 @@ public class Crew {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member1_id", referencedColumnName = "user_id")
     private User member1;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member2_id", referencedColumnName = "user_id")
     private User member2;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member3_id", referencedColumnName = "user_id")
     private User member3;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Pool pool;
 
@@ -68,5 +68,17 @@ public class Crew {
 
     public void setMember3(User member3) {
         this.member3 = member3;
+    }
+
+    @Override
+    public String toString() {
+        return "Crew{" +
+                "crewId=" + crewId +
+                ", description='" + description + '\'' +
+                ", member1=" + member1 +
+                ", member2=" + member2 +
+                ", member3=" + member3 +
+                ", pool=" + pool +
+                '}';
     }
 }

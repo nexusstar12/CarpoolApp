@@ -18,9 +18,11 @@ public class CrewService {
         return crewRepository.save(crew);
     }
 
-    public Optional<Crew> getCrewById(int id) {
-        return crewRepository.findById(id);
+    public List<Optional<Crew>> getCrewByUserId(int id) {
+        return crewRepository.findByUser_UserId(id);
     }
+
+    public Optional<Crew> getCrewById(int id) {return crewRepository.findById(id);}
 
     public List<Crew> getAllCrews() {
         return crewRepository.findAll();
