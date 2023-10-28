@@ -2,10 +2,9 @@ package com.fantasticfour.poolapp.domain;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 public class Pool {
@@ -15,8 +14,7 @@ public class Pool {
     private int poolId;
 
     private String description;
-    private String startTime;
-    private String endTime;
+    private LocalDateTime startTime;
     private String startLocation;
     private String endLocation;
     private Boolean recurring;
@@ -80,20 +78,12 @@ public class Pool {
         this.description = description;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public String getStartLocation() {
