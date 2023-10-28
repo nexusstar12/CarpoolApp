@@ -35,4 +35,10 @@ public class PoolController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+//    @GetMapping ("/getpools/{id}")
+//    public ResponseEntity<?> getPools (@PathVariable int userId) {
+//
+//       return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
 }
