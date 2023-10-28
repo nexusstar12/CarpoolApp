@@ -19,7 +19,7 @@ public class PoolController {
         poolService.addProfileToPool(poolId, profileId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    //might need to change parameter based on postInput
     @PostMapping("/create/{id}")
     public ResponseEntity<Pool> markVisibility(@RequestParam String status, @PathVariable int id) {
         if(status.equals("public")){
