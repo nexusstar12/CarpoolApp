@@ -22,10 +22,10 @@ public class PoolController {
 
     @PostMapping("/create/{id}")
     public ResponseEntity<Pool> markVisibility(@RequestParam String status, @PathVariable int id) {
-        if(status == "public"){
+        if(status.equals("public")){
             poolService.setProfileToPublic(true, id);
         }
-        else if(status == "private"){
+        else if(status.equals("private")){
             poolService.setProfileToPrivate(false, id);
         }
         else{
