@@ -102,7 +102,7 @@ public class PoolController {
             poolResponse.setStartLocation(pool.getStartLocation());
             poolResponse.setEndLocation(pool.getEndLocation());
             poolResponse.setStartTime(pool.getStartTime());
-
+            poolResponse.setDescription(pool.getDescription());
 
             //get the driver from profile -> userid -> driver
             CustomDriver customDriver = new CustomDriver();

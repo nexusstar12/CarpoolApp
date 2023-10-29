@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PoolResponse {
+
+    private String description;
     private int poolId;
     private String startLocation;
     private String endLocation;
@@ -19,6 +21,15 @@ public class PoolResponse {
 
     public PoolResponse() {
         passengers = new ArrayList<>();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    // Add the setter for the description field
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getPoolId() {
