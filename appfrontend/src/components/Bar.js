@@ -70,6 +70,39 @@ export default function Bar() {
               Home
             </Button>
           </Link>
+
+          {!isLoggedIn && (
+            <Link
+              to="/my-pools"
+              style={{ textDecoration: "none", margin: "0 8px" }}
+            >
+              <Button
+                sx={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                My Pools
+              </Button>
+            </Link>
+          )}
+
+          <Link
+            to="/my-crews"
+            style={{ textDecoration: "none", margin: "0 8px" }}
+          >
+            <Button
+              sx={{
+                color: "#fff",
+                fontWeight: "bold",
+                "&:hover": { background: "rgba(255,255,255,0.08)" },
+              }}
+            >
+              My Crews
+            </Button>
+          </Link>
+
           {isLoggedIn ? (
             <Typography>{userContext.userInfo.name}</Typography>
           ) : (
@@ -88,38 +121,7 @@ export default function Bar() {
               </Button>
             </Link>
           )}
-          {!isLoggedIn && (
-            <Link
-              to="/my-pools"
-              style={{ textDecoration: "none", margin: "0 8px" }}
-            >
-              <Button
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                My Pools
-              </Button>
-            </Link>
-          )}
-      
-            <Link
-              to="/my-crews"
-              style={{ textDecoration: "none", margin: "0 8px" }}
-            >
-              <Button
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                My Crews
-              </Button>
-            </Link>
-        
+
           {isLoggedIn ? (
             <Link style={{ textDecoration: "none", margin: "0 8px" }}>
               <Button

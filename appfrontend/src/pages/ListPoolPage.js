@@ -274,18 +274,24 @@ export default function ListPoolPage() {
         <>
           <Typography variant="h4">My Pools</Typography>
           <CardContainer>{getCards(data.myPools, "LEAVE POOL")}</CardContainer>
-          <Typography variant="h4">Available Pools</Typography>
-          <CardContainer>
-            {getCards(data.availablePools, "JOIN POOL")}
-          </CardContainer>
+        </>
+      ) : null}
+
+      {data?.availablePools?.length ? (
+        <>
           <Typography variant="h4">Past Pools</Typography>
           <CardContainer>
             {getCards(data.pastPool, "CREATE CREW")}
           </CardContainer>
         </>
-      ) : (
-        <Typography variant="h4">You are in no pool now.</Typography>
-      )}
+      ) : null}
+
+      {data?.pastPool?.length ? (
+        <>
+          <Typography variant="h4">Available Pools</Typography>
+          <CardContainer>{getCards(data.pastPool, "JOIN POOL")}</CardContainer>
+        </>
+      ) : null}
     </Box>
   );
 }

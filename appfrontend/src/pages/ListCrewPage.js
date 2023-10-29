@@ -4,65 +4,6 @@ import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
 
 export default function ListCrewPage() {
-  // const [data, setData] = useState(
-  //    [
-  //     {
-  //       crewId: 1,
-  //       name: "FirstCrew",
-  //       members: [
-  //         {
-  //           userId: 2,
-  //           name: "Xuan Duy Anh",
-  //         },
-  //         {
-  //           userId: 3,
-  //           name: "Kristian",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       crewId: 1,
-  //       name: "FirstCrew",
-  //       members: [
-  //         {
-  //           userId: 2,
-  //           name: "Xuan Duy Anh",
-  //         },
-  //         {
-  //           userId: 3,
-  //           name: "Kristian",
-  //         },
-  //       ],
-  //     },{
-  //       crewId: 1,
-  //       name: "FirstCrew",
-  //       members: [
-  //         {
-  //           userId: 2,
-  //           name: "Xuan Duy Anh",
-  //         },
-  //         {
-  //           userId: 3,
-  //           name: "Kristian",
-  //         },
-  //       ],
-  //     },{
-  //       crewId: 1,
-  //       name: "FirstCrew",
-  //       members: [
-  //         {
-  //           userId: 2,
-  //           name: "Xuan Duy Anh",
-  //         },
-  //         {
-  //           userId: 3,
-  //           name: "Kristian",
-  //         },
-  //       ],
-  //     },
-  //   ]
-  // );
-
   const [crews, setCrews] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -79,26 +20,12 @@ export default function ListCrewPage() {
 
     fetchData();
   }, []);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [disabledButtons, setDisabledButtons] = useState([]);
 
   const handleClick = (crewId, type) => {};
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axiosInstance.get(
-  //         "/searchbar?filter=endZip&value=94115"
-  //       );
-  //       setData(response.data);
-  //     } catch (err) {
-  //       setError(err);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   if (error) {
     return <div>Error: {error.message}</div>;
