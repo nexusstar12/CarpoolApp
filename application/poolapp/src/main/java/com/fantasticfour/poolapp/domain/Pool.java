@@ -44,9 +44,6 @@ public class Pool {
     private LocalDateTime startTime;
     private String startLocation;
     private String endLocation;
-    private Boolean recurring;
-    private int numberOfUsers;
-    private String poolList;
 
     //Test
     private String startStreet;
@@ -149,30 +146,6 @@ public class Pool {
 
     public void setEndLocation(String endLocation) {
         this.endLocation = endLocation;
-    }
-
-    public Boolean getRecurring() {
-        return recurring;
-    }
-
-    public void setRecurring(Boolean recurring) {
-        this.recurring = recurring;
-    }
-
-    public int getNumberOfUsers() {
-        return numberOfUsers;
-    }
-
-    public void setNumberOfUsers(int numberOfUsers) {
-        this.numberOfUsers = numberOfUsers;
-    }
-
-    public String getPoolList() {
-        return poolList;
-    }
-
-    public void setPoolList(String poolList) {
-        this.poolList = poolList;
     }
 
     public String getStartStreet() {
@@ -279,6 +252,7 @@ public class Pool {
         this.crew = crew;
     }
 
+    // 1 is public 0 is private
     public boolean isPublicOrPrivate() {
         return publicOrPrivate;
     }
@@ -302,9 +276,6 @@ public class Pool {
                 ", startTime=" + startTime +
                 ", startLocation='" + startLocation + '\'' +
                 ", endLocation='" + endLocation + '\'' +
-                ", recurring=" + recurring +
-                ", numberOfUsers=" + numberOfUsers +
-                ", poolList='" + poolList + '\'' +
                 ", startStreet='" + startStreet + '\'' +
                 ", startCity='" + startCity + '\'' +
                 ", startState='" + startState + '\'' +
