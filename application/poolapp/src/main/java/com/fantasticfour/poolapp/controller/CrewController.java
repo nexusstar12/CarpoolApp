@@ -36,7 +36,10 @@ public class CrewController {
         CrewListResponse crewListResponse = new CrewListResponse();
         List<CrewResponse> crewResponselist = new ArrayList<>();
 
-        List<Crew> crews = crewService.getCrewByUserId(userId).stream().filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        List<Crew> crews = crewService.getCrewByUserId(userId).stream()
+                                      .filter(Optional::isPresent)
+                                      .map(Optional::get)
+                                      .collect(Collectors.toList());
         if(!crews.isEmpty()){
             for (Crew crew: crews
                  ) {

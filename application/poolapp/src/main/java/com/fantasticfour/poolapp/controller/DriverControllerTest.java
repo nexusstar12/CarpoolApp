@@ -26,8 +26,8 @@ public class DriverControllerTest {
     @PostMapping({"", "/"})
     public ResponseEntity<Driver> addDriver(@RequestBody Driver driver){
         // Fetch the associated User first
-        Optional<User> userOpt = userRepository.findById((long) 1.0); // Better: Get this ID from the driver object or client request, not hardcoded
-
+       // Optional<User> userOpt = userRepository.findById((long) 1.0); // Better: Get this ID from the driver object or client request, not hardcoded
+        Optional<User> userOpt = userRepository.findById(1);
         if (!userOpt.isPresent()){
             System.out.println("User doesn't exist");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Return a 400 Bad Request if the user doesn't exist

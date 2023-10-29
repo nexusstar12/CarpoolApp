@@ -279,4 +279,45 @@ public class Pool {
         this.crew = crew;
     }
 
+    public boolean isPublicOrPrivate() {
+        return publicOrPrivate;
+    }
+
+    public void setPublicOrPrivate(boolean publicOrPrivate) {
+        this.publicOrPrivate = publicOrPrivate;
+    }
+
+    @Override
+    public String toString() {
+        return "Pool{" +
+                "poolId=" + poolId +
+                ", crew=" + crew +
+                ", profiles=" + profiles +
+                ", members=" + members +
+                ", member1=" + member1 +
+                ", member2=" + member2 +
+                ", member3=" + member3 +
+                ", creator=" + creator +
+                ", description='" + description + '\'' +
+                ", startTime=" + startTime +
+                ", startLocation='" + startLocation + '\'' +
+                ", endLocation='" + endLocation + '\'' +
+                ", recurring=" + recurring +
+                ", numberOfUsers=" + numberOfUsers +
+                ", poolList='" + poolList + '\'' +
+                ", startStreet='" + startStreet + '\'' +
+                ", startCity='" + startCity + '\'' +
+                ", startState='" + startState + '\'' +
+                ", startZip='" + startZip + '\'' +
+                ", startLatitude=" + startLatitude +
+                ", startLongitude=" + startLongitude +
+                ", endStreet='" + endStreet + '\'' +
+                ", endCity='" + endCity + '\'' +
+                ", endState='" + endState + '\'' +
+                ", endZip='" + endZip + '\'' +
+                ", endLatitude=" + endLatitude +
+                ", endLongitude=" + endLongitude +
+                ", publicOrPrivate=" + publicOrPrivate +
+                '}';
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CrewService {
@@ -41,5 +42,12 @@ public class CrewService {
 
     public Crew getCrewbyPoolId(int poolId){
         return crewRepository.findByPool_PoolId(poolId);
+    }
+
+    public List<Crew> getCrewsByUserID (int userId) {
+        return crewRepository.findByUser_UserId(userId).stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }

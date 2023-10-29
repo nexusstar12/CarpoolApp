@@ -1,6 +1,7 @@
 package com.fantasticfour.poolapp.repository;
 
 import com.fantasticfour.poolapp.domain.Profile;
+import com.fantasticfour.poolapp.domain.User;
 import jakarta.persistence.Column;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,10 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer> {
     List<Profile> findByCrew_CrewId(@Param("crewId") int crewId);
 
     Profile findByPassenger_PassengerId(@Param("passengerId")int passengerId);
+
+    Profile findByUserId ( User user);
+
+   Optional<Profile> findProfileByProfileId(int profileId);
 
 
 }
