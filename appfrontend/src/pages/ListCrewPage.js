@@ -4,79 +4,86 @@ import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
 
 export default function ListCrewPage() {
-  const [data, setData] = useState(
-     [
-      {
-        crewId: 1,
-        name: "FirstCrew",
-        members: [
-          {
-            userId: 2,
-            name: "Xuan Duy Anh",
-          },
-          {
-            userId: 3,
-            name: "Kristian",
-          },
-        ],
-      },
-      {
-        crewId: 1,
-        name: "FirstCrew",
-        members: [
-          {
-            userId: 2,
-            name: "Xuan Duy Anh",
-          },
-          {
-            userId: 3,
-            name: "Kristian",
-          },
-        ],
-      },{
-        crewId: 1,
-        name: "FirstCrew",
-        members: [
-          {
-            userId: 2,
-            name: "Xuan Duy Anh",
-          },
-          {
-            userId: 3,
-            name: "Kristian",
-          },
-        ],
-      },{
-        crewId: 1,
-        name: "FirstCrew",
-        members: [
-          {
-            userId: 2,
-            name: "Xuan Duy Anh",
-          },
-          {
-            userId: 3,
-            name: "Kristian",
-          },
-        ],
-      },
-    ]
-  );
+  // const [data, setData] = useState(
+  //    [
+  //     {
+  //       crewId: 1,
+  //       name: "FirstCrew",
+  //       members: [
+  //         {
+  //           userId: 2,
+  //           name: "Xuan Duy Anh",
+  //         },
+  //         {
+  //           userId: 3,
+  //           name: "Kristian",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       crewId: 1,
+  //       name: "FirstCrew",
+  //       members: [
+  //         {
+  //           userId: 2,
+  //           name: "Xuan Duy Anh",
+  //         },
+  //         {
+  //           userId: 3,
+  //           name: "Kristian",
+  //         },
+  //       ],
+  //     },{
+  //       crewId: 1,
+  //       name: "FirstCrew",
+  //       members: [
+  //         {
+  //           userId: 2,
+  //           name: "Xuan Duy Anh",
+  //         },
+  //         {
+  //           userId: 3,
+  //           name: "Kristian",
+  //         },
+  //       ],
+  //     },{
+  //       crewId: 1,
+  //       name: "FirstCrew",
+  //       members: [
+  //         {
+  //           userId: 2,
+  //           name: "Xuan Duy Anh",
+  //         },
+  //         {
+  //           userId: 3,
+  //           name: "Kristian",
+  //         },
+  //       ],
+  //     },
+  //   ]
+  // );
 
-console.log("data",data)
+  const [crews, setCrews] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // `/crew/${userContext?.userInfo?.userId}`
+        const { data } = await axiosInstance.get(`/crew/1121`);
+        setCrews(data);
+        console.log("crews", data);
+      } catch (error) {
+        console.log("error", error);
+        // setError(error.response.data.message);
+      }
+    };
+
+    fetchData();
+  }, []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [disabledButtons, setDisabledButtons] = useState([]);
 
-  const handleClick = (crewId, type) => {
-    console.log("type", type);
-    if (type === "LEAVE CREW") {
-      const updatedMyCrews = data.myCrews.filter(
-        (item) => item.crewId !==crewId
-      );
-      setData((prevData) => ({ ...prevData, myCrews: updatedMyCrews }));
-    }
-  };
+  const handleClick = (crewId, type) => {};
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -143,7 +150,6 @@ console.log("data",data)
     margin-bottom: 10px;
   `;
 
-
   const DetailsContainer = styled("div")`
     margin-bottom: 10px;
     font-size: 0.9em;
@@ -165,11 +171,11 @@ console.log("data",data)
       );
     }
     return data.map((dataRow) => (
-        // console.log("dataRow",dataRow)
+      // console.log("dataRow",dataRow)
       <StyledCard key={dataRow.crewId}>
         <StyledCardContent>
           {/* Title */}
-          <CardTitle>{dataRow?.name}</CardTitle>
+          <CardTitle>{dataRow?.description}</CardTitle>
 
           {dataRow.members.map((member) => {
             return (
@@ -186,8 +192,8 @@ console.log("data",data)
             variant="contained"
             onClick={() => handleClick(dataRow.crewId)}
             style={{
-                backgroundColor: "red"
-              }}
+              backgroundColor: "red",
+            }}
           >
             Leave Crew
           </JoinButton>
@@ -207,14 +213,18 @@ console.log("data",data)
         maxHeight: "80vh",
       }}
     >
-      {data.length ? (
-        <Typography variant="h4">My Crews</Typography>
-      ) : null}
-      <CardContainer>{getCards(data)}</CardContainer>
- 
+      {crews.length ? (
+        <>
+          <Typography variant="h4">My Crews</Typography>
+          <CardContainer>{getCards(crews)}</CardContainer>
+        </>
+      ) : (
+        <Typography variant="h4">You are in no crew now.</Typography>
+      )}
+
       {/* <div>
         {data.length === 0 ? (
-          <p>No results found.</p>
+         
         ) : (
           <CardContainer>{getCards()}</CardContainer>
         )}

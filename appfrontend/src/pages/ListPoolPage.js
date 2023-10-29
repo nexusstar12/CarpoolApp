@@ -270,23 +270,22 @@ export default function ListPoolPage() {
         maxHeight: "80vh",
       }}
     >
-      {data.myPools.length ? (
-        <Typography variant="h4">My Pools</Typography>
-      ) : null}
-      <CardContainer>{getCards(data.myPools, "LEAVE POOL")}</CardContainer>
-      <Typography variant="h4">Available Pools</Typography>
-      <CardContainer>
-        {getCards(data.availablePools, "JOIN POOL")}
-      </CardContainer>
-      <Typography variant="h4">Past Pools</Typography>
-      <CardContainer>{getCards(data.pastPool, "CREATE CREW")}</CardContainer>
-      {/* <div>
-        {data.length === 0 ? (
-          <p>No results found.</p>
-        ) : (
-          <CardContainer>{getCards()}</CardContainer>
-        )}
-      </div> */}
+      {data?.myPools?.length ? (
+        <>
+          <Typography variant="h4">My Pools</Typography>
+          <CardContainer>{getCards(data.myPools, "LEAVE POOL")}</CardContainer>
+          <Typography variant="h4">Available Pools</Typography>
+          <CardContainer>
+            {getCards(data.availablePools, "JOIN POOL")}
+          </CardContainer>
+          <Typography variant="h4">Past Pools</Typography>
+          <CardContainer>
+            {getCards(data.pastPool, "CREATE CREW")}
+          </CardContainer>
+        </>
+      ) : (
+        <Typography variant="h4">You are in no pool now.</Typography>
+      )}
     </Box>
   );
 }
