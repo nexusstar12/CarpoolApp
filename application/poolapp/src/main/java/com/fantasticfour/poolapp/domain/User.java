@@ -22,6 +22,8 @@ public class User {
 
     private String phoneNumber;
 
+    private boolean isDriver;
+
     // Standard getters and setters
 
     public int getUserId() {
@@ -68,5 +70,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean getIsDriver() {
+        return isDriver;
+    }
+
+    public void setIsDriver(boolean isDriver) {
+        this.isDriver = isDriver;
     }
 }

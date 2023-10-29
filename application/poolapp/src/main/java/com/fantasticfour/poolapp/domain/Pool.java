@@ -1,10 +1,11 @@
 package com.fantasticfour.poolapp.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.*;
+
 
 @Entity
 public class Pool {
@@ -13,16 +14,36 @@ public class Pool {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poolId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
+    private Crew crew;
+
+    @OneToMany(mappedBy = "pool", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Profile> profiles = new ArrayList<>();
+
+    @ManyToMany
+    private Set<Profile> members = new HashSet<>();//may not need
+
+    @ManyToOne
+    @JoinColumn(name = "member_1_id")
+    private Profile member1;
+
+    @ManyToOne
+    @JoinColumn(name = "member_2_id")
+    private Profile member2;
+
+    @ManyToOne
+    @JoinColumn(name = "member_3_id")
+    private Profile member3;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private Profile creator;
+
     private String description;
-    private String startTime;
-    private String endTime;
+    private LocalDateTime startTime;
     private String startLocation;
     private String endLocation;
-    private Boolean recurring;
-    private int numberOfUsers;
-    private String poolList;
-
-    // Standard getters and setters
 
     //Test
     private String startStreet;
@@ -42,36 +63,89 @@ public class Pool {
     private double endLatitude;
     private double endLongitude;
 
-    public double getStartLatitude() {
-        return startLatitude;
+    private boolean publicOrPrivate;
+
+    public Profile getMember1() {
+        return member1;
     }
 
-    public void setStartLatitude(double startLatitude) {
-        this.startLatitude = startLatitude;
+    public void setMember1(Profile member1) {
+        this.member1 = member1;
     }
 
-    public double getStartLongitude() {
-        return startLongitude;
+    public Profile getMember2() {
+        return member2;
     }
 
-    public void setStartLongitude(double startLongitude) {
-        this.startLongitude = startLongitude;
+    public void setMember2(Profile member2) {
+        this.member2 = member2;
     }
 
-    public double getEndLatitude() {
-        return endLatitude;
+    public Profile getMember3() {
+        return member3;
     }
 
-    public void setEndLatitude(double endLatitude) {
-        this.endLatitude = endLatitude;
+    public void setMember3(Profile member3) {
+        this.member3 = member3;
     }
 
-    public double getEndLongitude() {
-        return endLongitude;
+    public Profile getCreator() {
+        return creator;
     }
 
-    public void setEndLongitude(double endLongitude) {
-        this.endLongitude = endLongitude;
+    public void setCreator(Profile creator) {
+        this.creator = creator;
+    }
+
+    public void addProfile(Profile profile){
+        this.members.add(profile);
+    }
+    //Getters and Setters
+
+    public boolean getViewable(){
+        return publicOrPrivate;
+    }
+    public void setViewable(boolean status){
+        publicOrPrivate = status;
+    }
+    public int getPoolId() {
+        return poolId;
+    }
+
+    public void setPoolId(int poolId) {
+        this.poolId = poolId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getStartLocation() {
+        return startLocation;
+    }
+
+    public void setStartLocation(String startLocation) {
+        this.startLocation = startLocation;
+    }
+
+    public String getEndLocation() {
+        return endLocation;
+    }
+
+    public void setEndLocation(String endLocation) {
+        this.endLocation = endLocation;
     }
 
     public String getStartStreet() {
@@ -106,6 +180,22 @@ public class Pool {
         this.startZip = startZip;
     }
 
+    public double getStartLatitude() {
+        return startLatitude;
+    }
+
+    public void setStartLatitude(double startLatitude) {
+        this.startLatitude = startLatitude;
+    }
+
+    public double getStartLongitude() {
+        return startLongitude;
+    }
+
+    public void setStartLongitude(double startLongitude) {
+        this.startLongitude = startLongitude;
+    }
+
     public String getEndStreet() {
         return endStreet;
     }
@@ -138,76 +228,67 @@ public class Pool {
         this.endZip = endZip;
     }
 
-
-    public int getPoolId() {
-        return poolId;
+    public double getEndLatitude() {
+        return endLatitude;
     }
 
-    public void setPoolId(int poolId) {
-        this.poolId = poolId;
+    public void setEndLatitude(double endLatitude) {
+        this.endLatitude = endLatitude;
     }
 
-    public String getDescription() {
-        return description;
+    public double getEndLongitude() {
+        return endLongitude;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setEndLongitude(double endLongitude) {
+        this.endLongitude = endLongitude;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public Crew getCrew() {
+        return crew;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setCrew(Crew crew) {
+        this.crew = crew;
     }
 
-    public String getEndTime() {
-        return endTime;
+    // 1 is public 0 is private
+    public boolean isPublicOrPrivate() {
+        return publicOrPrivate;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setPublicOrPrivate(boolean publicOrPrivate) {
+        this.publicOrPrivate = publicOrPrivate;
     }
 
-    public String getStartLocation() {
-        return startLocation;
-    }
-
-    public void setStartLocation(String startLocation) {
-        this.startLocation = startLocation;
-    }
-
-    public String getEndLocation() {
-        return endLocation;
-    }
-
-    public void setEndLocation(String endLocation) {
-        this.endLocation = endLocation;
-    }
-
-    public Boolean getRecurring() {
-        return recurring;
-    }
-
-    public void setRecurring(Boolean recurring) {
-        this.recurring = recurring;
-    }
-
-    public int getNumberOfUsers() {
-        return numberOfUsers;
-    }
-
-    public void setNumberOfUsers(int numberOfUsers) {
-        this.numberOfUsers = numberOfUsers;
-    }
-
-    public String getPoolList() {
-        return poolList;
-    }
-
-    public void setPoolList(String poolList) {
-        this.poolList = poolList;
+    @Override
+    public String toString() {
+        return "Pool{" +
+                "poolId=" + poolId +
+                ", crew=" + crew +
+                ", profiles=" + profiles +
+                ", members=" + members +
+                ", member1=" + member1 +
+                ", member2=" + member2 +
+                ", member3=" + member3 +
+                ", creator=" + creator +
+                ", description='" + description + '\'' +
+                ", startTime=" + startTime +
+                ", startLocation='" + startLocation + '\'' +
+                ", endLocation='" + endLocation + '\'' +
+                ", startStreet='" + startStreet + '\'' +
+                ", startCity='" + startCity + '\'' +
+                ", startState='" + startState + '\'' +
+                ", startZip='" + startZip + '\'' +
+                ", startLatitude=" + startLatitude +
+                ", startLongitude=" + startLongitude +
+                ", endStreet='" + endStreet + '\'' +
+                ", endCity='" + endCity + '\'' +
+                ", endState='" + endState + '\'' +
+                ", endZip='" + endZip + '\'' +
+                ", endLatitude=" + endLatitude +
+                ", endLongitude=" + endLongitude +
+                ", publicOrPrivate=" + publicOrPrivate +
+                '}';
     }
 }

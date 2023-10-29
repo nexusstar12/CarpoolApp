@@ -1,15 +1,12 @@
 package com.fantasticfour.poolapp.controller;
 
-import com.fantasticfour.poolapp.domain.Account;
-import com.fantasticfour.poolapp.domain.Password;
-import com.fantasticfour.poolapp.domain.User;
+import com.fantasticfour.poolapp.domain.*;
 import com.fantasticfour.poolapp.repository.UserRepository;
-import com.fantasticfour.poolapp.services.AccountService;
-import com.fantasticfour.poolapp.services.PasswordService;
-import com.fantasticfour.poolapp.services.UserService;
+import com.fantasticfour.poolapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,25 +32,31 @@ public class SignUpUserController {
     @Autowired
     private UserRepository userRepository;
 
-//    @PostMapping("/")
-//    public ResponseEntity<User> addUser (@RequestBody User user) {
-//        User newUser = userServce.addUser(user);
-//
-//        //TODO: ADD VALIDATION USER IS ADDED
-//        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-//    }
+    @Autowired
+    private DriverService driverService;
 
-    @PostMapping("/")
+    @Autowired
+    private PassengerService passengerService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ProfileService profileService;
+
+
+    @PostMapping({"", "/"})
     public ResponseEntity<Map<String, Object>> addUser (@RequestBody Map<String, String> jsonMap) {
-        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
+//        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
-
+        //build custom json response body
+        Map<String, Object> responseMap = new HashMap<>();
 
         //create new user
         String firstName = jsonMap.get("firstName");
         String lastName = jsonMap.get("lastName");
         String name = firstName + " " + lastName;
-
+        String phoneNumber = jsonMap.get("phoneNumber");
 
 
         User newUser = new User();
@@ -61,21 +64,24 @@ public class SignUpUserController {
         newUser.setLastName(lastName);
         newUser.setEmail(jsonMap.get("email"));
         newUser.setName(name);
+        newUser.setPhoneNumber(phoneNumber);
+
+        if ("driver".equals(jsonMap.get("role"))) { //add user as driver
+            newUser.setIsDriver(true);
+        }
 
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
         if (existingUser.isPresent()) {
             // handle duplicate email
-            Map<String, Object> responseMap = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
             responseMap.put("message", "duplicate user email");
-            return new ResponseEntity<>(responseMap, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
 
 
-
-        //create new password
-        //TODO: HASH PASSWORD
+        //create new hashed password
         Password newPassword = new Password();
-        newPassword.setPassword(jsonMap.get("password"));
+        newPassword.setPassword(passwordEncoder.encode(jsonMap.get("password")));
 
         //create new account that links user and password
         Account newAccount = new Account();
@@ -88,14 +94,39 @@ public class SignUpUserController {
        Password addPassword = passwordService.addPassword(newPassword);
        Account addAccount = accountService.addAccount(newAccount);
 
-       //build custom json response body
-        Map<String, Object> responseMap = new HashMap<>();
+        //assign all users who sign up the pasenger role.
+        Passenger passenger = new Passenger();
+        passenger.setUser(addedUser);
+        passengerService.addPassenger(passenger);
+
+        //create user profile, and associate passenger id.
+        Profile profile = new Profile();
+        profile.setUserId(newUser); //associate user with passenger
+//        profile.setUserType("passenger"); //all user are automatically passengers.
+        profileService.addProfile(profile);
+
+
+        //allow user to assign the driver role to their existing account & profile
+        if ("driver".equals(jsonMap.get("role"))) {
+            Driver driver = new Driver();
+            driver.setUser(addedUser);
+            driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
+            driver.setDriversLicense(jsonMap.get("driversLicense"));
+            driverService.addDriver(driver);
+
+            profile.setUserType("driver");
+            responseMap.put("driver", driver);
+        }
+
         responseMap.put("user", addedUser);
         responseMap.put("password", addPassword);
         responseMap.put("account", addAccount);
+        responseMap.put("passenger", passenger);
+        responseMap.put("profile", profile);
+
 
         //returns a map of added user, account, and password
-        //TODO: ADD VALIDATION USER, account, and paswword are ADDED
+        //TODO: ADD VALIDATION USER, account, and password are ADDED
         return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
     }
 }
