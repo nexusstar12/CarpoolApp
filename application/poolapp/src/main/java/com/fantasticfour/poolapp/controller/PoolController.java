@@ -1,9 +1,6 @@
 package com.fantasticfour.poolapp.controller;
 
-import com.fantasticfour.poolapp.CustomResponse.CustomDriver;
-import com.fantasticfour.poolapp.CustomResponse.CustomPassenger;
-import com.fantasticfour.poolapp.CustomResponse.PoolResponse;
-import com.fantasticfour.poolapp.CustomResponse.PoolsByIdResponse;
+import com.fantasticfour.poolapp.CustomResponse.*;
 import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
@@ -66,6 +63,7 @@ public class PoolController {
     public ResponseEntity<?> getPools (@PathVariable int userId) {
         //response object
         PoolsByIdResponse poolsByIdResponse = new PoolsByIdResponse();
+//        CustomPoolResponse customPoolResponse = new CustomPoolResponse();
 
         //get user entity
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -95,6 +93,7 @@ public class PoolController {
                                   .filter(pool -> pool.getStartTime().isAfter(currentTime))
                                   .toList();
 
+//        poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(pools));
         //create custom response for my pools
         for (Pool pool : pools) {
             PoolResponse poolResponse = new PoolResponse();
@@ -145,6 +144,10 @@ public class PoolController {
             }
 
             poolsByIdResponse.addMyPoolsIndex(poolResponse);
+
+            //for testing make custom class.
+            poolsByIdResponse.addAvailablePoolsIndex(poolResponse);
+            poolsByIdResponse.addPastPoolsIndex(poolResponse);
 
         }//End For Each
 
