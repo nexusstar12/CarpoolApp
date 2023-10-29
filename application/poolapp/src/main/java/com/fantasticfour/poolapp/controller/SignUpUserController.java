@@ -41,27 +41,22 @@ public class SignUpUserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /*@Autowired
-    private ProfileService profileService;*/
+    @Autowired
+    private ProfileService profileService;
 
-//    @PostMapping("/")
-//    public ResponseEntity<User> addUser (@RequestBody User user) {
-//        User newUser = userServce.addUser(user);
-//
-//        //TODO: ADD VALIDATION USER IS ADDED
-//        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-//    }
 
     @PostMapping({"", "/"})
     public ResponseEntity<Map<String, Object>> addUser (@RequestBody Map<String, String> jsonMap) {
-        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
+//        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
-
+        //build custom json response body
+        Map<String, Object> responseMap = new HashMap<>();
 
         //create new user
         String firstName = jsonMap.get("firstName");
         String lastName = jsonMap.get("lastName");
         String name = firstName + " " + lastName;
+        String phoneNumber = jsonMap.get("phoneNumber");
 
 
         User newUser = new User();
@@ -69,14 +64,20 @@ public class SignUpUserController {
         newUser.setLastName(lastName);
         newUser.setEmail(jsonMap.get("email"));
         newUser.setName(name);
+        newUser.setPhoneNumber(phoneNumber);
+
+        if ("driver".equals(jsonMap.get("role"))) { //add user as driver
+            newUser.setIsDriver(true);
+        }
 
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
         if (existingUser.isPresent()) {
             // handle duplicate email
-            Map<String, Object> responseMap = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
             responseMap.put("message", "duplicate user email");
-            return new ResponseEntity<>(responseMap, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
+
 
         //create new hashed password
         Password newPassword = new Password();
@@ -93,36 +94,36 @@ public class SignUpUserController {
        Password addPassword = passwordService.addPassword(newPassword);
        Account addAccount = accountService.addAccount(newAccount);
 
-       //build custom json response body
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("user", addedUser);
-        responseMap.put("password", addPassword);
-        responseMap.put("account", addAccount);
+        //assign all users who sign up the pasenger role.
+        Passenger passenger = new Passenger();
+        passenger.setUser(addedUser);
+        passengerService.addPassenger(passenger);
+
+        //create user profile, and associate passenger id.
+        Profile profile = new Profile();
+        profile.setUserId(newUser); //associate user with passenger
+//        profile.setUserType("passenger"); //all user are automatically passengers.
+        profileService.addProfile(profile);
+
 
         //allow user to assign the driver role to their existing account & profile
-        if ("driver".equals(jsonMap.get("role"))){
+        if ("driver".equals(jsonMap.get("role"))) {
             Driver driver = new Driver();
             driver.setUser(addedUser);
             driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
             driver.setDriversLicense(jsonMap.get("driversLicense"));
             driverService.addDriver(driver);
 
-            Profile profile = new Profile();
             profile.setUserType("driver");
-            //profileService.addProfile(profile);
             responseMap.put("driver", driver);
-        } else if ("passenger".equals(jsonMap.get("role"))) {
-            Passenger passenger = new Passenger();
-            passenger.setUser(addedUser);
-            passengerService.addPassenger(passenger);
-
-            Profile profile = new Profile();
-            profile.setUserType("passenger");
-            //profileService.addProfile(profile);
-            responseMap.put("passenger", passenger);
-        } else {
-            // Unknown roles
         }
+
+        responseMap.put("user", addedUser);
+        responseMap.put("password", addPassword);
+        responseMap.put("account", addAccount);
+        responseMap.put("passenger", passenger);
+        responseMap.put("profile", profile);
+
 
         //returns a map of added user, account, and password
         //TODO: ADD VALIDATION USER, account, and password are ADDED
