@@ -1,23 +1,23 @@
 package com.fantasticfour.poolapp.CustomResponse;
 
 public class CustomPassenger {
-    private int userId;
+    private int passengerId;
     private String name;
 
     public CustomPassenger() {
     }
 
-    public CustomPassenger(int userId, String name) {
-        this.userId = userId;
+    public CustomPassenger(int passengerId, String name) {
+        this.passengerId = passengerId;
         this.name = name;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getPassengerId() {
+        return passengerId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setPassengerId(int passengerId) {
+        this.passengerId = passengerId;
     }
 
     public String getName() {
@@ -31,7 +31,7 @@ public class CustomPassenger {
     @Override
     public String toString() {
         return "CustomPassenger{" +
-                "userId=" + userId +
+                "userId=" + passengerId +
                 ", name='" + name + '\'' +
                 '}';
     }

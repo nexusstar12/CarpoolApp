@@ -125,18 +125,19 @@ public class PoolController {
                     } );
 
             //get passengers
-            CustomPassenger customPassenger = new CustomPassenger();
+
             List<Profile> memberList = new ArrayList<>();
              memberList.add(pool.getMember1());
             memberList.add(pool.getMember2());
             memberList.add(pool.getMember3());
 
             for (Profile member: memberList) {
+                CustomPassenger customPassenger = new CustomPassenger();
                 if (member != null) {
                       User userPassenger = member.getUserId();
                       passengerRepository.findPassengerByUserId(userPassenger.getUserId())
                               .ifPresent(passenger -> {
-                                  customPassenger.setUserId(passenger.getPassengerId());
+                                  customPassenger.setPassengerId(passenger.getPassengerId());
                                   customPassenger.setName(userPassenger.getName());
                                   poolResponse.addPassenger(customPassenger);
                               });
