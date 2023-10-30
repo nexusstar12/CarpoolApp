@@ -73,14 +73,15 @@ public class PoolController {
         }
         else {
             //no user found by user id
-            return new ResponseEntity<>("userId does not exist" , HttpStatus.NOT_FOUND);
+            System.out.println("/api/pool/getpools/{id} no user found with id");
+            return new ResponseEntity<>(null , HttpStatus.OK);
         }
 
         //get profile id using user id
         Profile profile = profileRepository.findByUserId(user);
         int profileId = profile.getProfileId();
 
-        //get pools where profile id is is a member or creator of a pool
+        //get pools where profile id  is a member or creator of a pool
         List<Pool> pools = poolRepository.findByProfileId(profileId).stream()
                                          .filter(Optional::isPresent)
                                          .map(Optional::get)

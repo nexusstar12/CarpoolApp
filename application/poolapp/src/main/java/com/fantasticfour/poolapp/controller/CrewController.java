@@ -66,7 +66,7 @@ public class CrewController {
             return new ResponseEntity<>(crewResponselist,HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null,HttpStatus.OK);
         }
     }
 
@@ -74,7 +74,7 @@ public class CrewController {
     public ResponseEntity<List<Crew>> getAllCrews() {
         List<Crew> crews = crewService.getAllCrews();
         if (crews.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
         return new ResponseEntity<>(crews, HttpStatus.OK);
     }
