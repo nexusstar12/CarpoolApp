@@ -2,7 +2,10 @@ import "./App.css";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import PoolCreationPage from "./pages/PoolCreationPage";
+import ListPoolPage from "./pages/ListPoolPage";
+import ListCrewPage from "./pages/ListCrewPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Bar from "./components/Bar";
 import { createContext, useState } from "react";
 
@@ -19,6 +22,10 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/signin" element={<SignInPage />} />
+            <Route path="/create-pool" element={<PoolCreationPage />} />
+            <Route path="/my-pools" element={<ListPoolPage />} />
+            <Route path="/my-crews" element={<ListCrewPage />} />
+
           </Routes>
         </Router>
       </div>
