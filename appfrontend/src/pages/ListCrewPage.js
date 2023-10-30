@@ -1,19 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "@emotion/styled";
 import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
+import { UserContext } from "../App";
+import { LoadingBackdrop } from "../components/LoadingData";
 
 export default function ListCrewPage() {
   const [crews, setCrews] = useState([]);
+  const userContext = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // `/crew/${userContext?.userInfo?.userId}`
-        const { data } = await axiosInstance.get(`/crew/1121`);
+        const { data } = await axiosInstance.get(
+          `/crew/${userContext?.userInfo?.userId}`
+        );
+        console.log("data", data);
         setCrews(data);
-        console.log("crews", data);
+        setIsLoading(false);
       } catch (error) {
         console.log("error", error);
+        setError(error);
+        setIsLoading(false);
+
         // setError(error.response.data.message);
       }
     };
@@ -21,15 +32,7 @@ export default function ListCrewPage() {
     fetchData();
   }, []);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [disabledButtons, setDisabledButtons] = useState([]);
-
   const handleClick = (crewId, type) => {};
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   const CardContainer = styled("div")`
     display: flex;
@@ -140,22 +143,20 @@ export default function ListCrewPage() {
         maxHeight: "80vh",
       }}
     >
-      {crews.length ? (
-        <>
-          <Typography variant="h4">My Crews</Typography>
-          <CardContainer>{getCards(crews)}</CardContainer>
-        </>
+      {isLoading ? (
+        <LoadingBackdrop />
       ) : (
-        <Typography variant="h4">You are in no crew now.</Typography>
+        <>
+          {crews.length ? (
+            <>
+              <Typography variant="h4">My Crews</Typography>
+              <CardContainer>{getCards(crews)}</CardContainer>
+            </>
+          ) : (
+            <Typography variant="h4">You are in no crew now.</Typography>
+          )}
+        </>
       )}
-
-      {/* <div>
-        {data.length === 0 ? (
-         
-        ) : (
-          <CardContainer>{getCards()}</CardContainer>
-        )}
-      </div> */}
     </Box>
   );
 }

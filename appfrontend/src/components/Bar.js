@@ -71,7 +71,7 @@ export default function Bar() {
             </Button>
           </Link>
 
-          {!isLoggedIn && (
+          {isLoggedIn && (
             <Link
               to="/my-pools"
               style={{ textDecoration: "none", margin: "0 8px" }}
