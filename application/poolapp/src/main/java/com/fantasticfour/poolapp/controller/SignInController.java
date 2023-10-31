@@ -1,11 +1,10 @@
 package com.fantasticfour.poolapp.controller;
 
+import com.fantasticfour.poolapp.CustomResponse.CustomSignInResponse;
 import com.fantasticfour.poolapp.domain.Account;
+import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
-import com.fantasticfour.poolapp.repository.AccountRepository;
-import com.fantasticfour.poolapp.repository.DriverRepository;
-import com.fantasticfour.poolapp.repository.PasswordRepository;
-import com.fantasticfour.poolapp.repository.UserRepository;
+import com.fantasticfour.poolapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,9 @@ public class SignInController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @PostMapping({"", "/"})
     public ResponseEntity<?> signInUser (@RequestBody Map<String, String> jsonMap) {
@@ -71,7 +73,23 @@ public class SignInController {
             boolean isDriver = driverRepository.findByUser_UserId(user.getUserId()).isPresent();
             user.setIsDriver(isDriver);
 
-            return new ResponseEntity<>(user, HttpStatus.OK);
+           Profile profile= profileRepository.findByUserId(user);
+
+
+            CustomSignInResponse customSignInResponse = new CustomSignInResponse();
+           customSignInResponse.setUserId(user.getUserId());
+           customSignInResponse.setEmail(user.getEmail());
+           customSignInResponse.setFirstName(user.getFirstName());
+           customSignInResponse.setLastName(user.getLastName());
+           customSignInResponse.setName(user.getName());
+           customSignInResponse.setPhoneNumber(user.getPhoneNumber());
+           customSignInResponse.setDriver(user.getIsDriver());
+           if (profile != null) {
+               customSignInResponse.setProfileId(profile.getProfileId());
+           }
+
+
+            return new ResponseEntity<>(customSignInResponse, HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Incorrect username or password", HttpStatus.UNAUTHORIZED);
