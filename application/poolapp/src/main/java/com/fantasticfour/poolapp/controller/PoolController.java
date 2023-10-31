@@ -8,12 +8,14 @@ import com.fantasticfour.poolapp.repository.*;
 import com.fantasticfour.poolapp.services.PoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -121,6 +123,48 @@ public class PoolController {
 
 
        return new ResponseEntity<>(poolsByIdResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletemember")
+    public ResponseEntity<?> deletePoolMember (@RequestBody Map<String, Object> jsonMap) {
+        //take in boyd poolId as int and profileId as int
+        if (jsonMap.isEmpty()){return new ResponseEntity<>("request body is empty", HttpStatus.OK);}
+
+        int poolId = (int)jsonMap.get("poolId");
+        int profileId = (int)jsonMap.get("profileId");
+
+       //delete member by profile id from a poool
+        Optional<Pool> optionalPool = poolRepository.findById(poolId);
+
+        if (optionalPool.isEmpty()) {
+            return new ResponseEntity<>("Pool not found", HttpStatus.OK);
+        }
+
+        Pool pool = optionalPool.get();
+
+        boolean isDeleted = false;
+
+        if (pool.getMember1() != null && pool.getMember1().getProfileId() == profileId) {
+            pool.setMember1(null);
+            isDeleted = true;
+        }
+
+        if (pool.getMember2() != null && pool.getMember2().getProfileId() == profileId) {
+            pool.setMember2(null);
+            isDeleted = true;
+        }
+
+        if (pool.getMember3() != null && pool.getMember3().getProfileId() == profileId) {
+            pool.setMember3(null);
+            isDeleted = true;
+        }
+
+        if (isDeleted) {
+            poolRepository.save(pool);
+            return new ResponseEntity<>("Member successfully removed from pool", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Member with given profile ID not found in pool", HttpStatus.OK);
+        }
     }
 
 }
