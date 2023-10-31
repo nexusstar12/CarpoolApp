@@ -1,5 +1,6 @@
 package com.fantasticfour.poolapp.CustomResponse;
 
+import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ public class CrewResponse {
 
     private int crewId;
     private String description;
-    List<User> members;
+    List<Profile> members;
 
     public CrewResponse() {
         this.members = new ArrayList<>();
@@ -33,14 +34,14 @@ public class CrewResponse {
 
 
 
-    public List<User> getMembers() {
+    public List<Profile> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(List<Profile> members) {
         this.members = members;
     }
-    public void setOneMember(User member){
+    public void setOneMember(Profile member){
         this.members.add(member);
     }
 }

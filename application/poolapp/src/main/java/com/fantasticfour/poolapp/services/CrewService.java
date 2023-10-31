@@ -19,8 +19,8 @@ public class CrewService {
         return crewRepository.save(crew);
     }
 
-    public List<Optional<Crew>> getCrewByUserId(int id) {
-        return crewRepository.findByUser_UserId(id);
+    public List<Optional<Crew>> getCrewByProfileId(int id) {
+        return crewRepository.findByProfile_ProfileId(id);
     }
 
     public Optional<Crew> getCrewById(int id) {return crewRepository.findById(id);}
@@ -44,15 +44,10 @@ public class CrewService {
         return crewRepository.findByPool_PoolId(poolId);
     }
 
-    public List<Crew> getCrewsByUserID (int userId) {
-        return crewRepository.findByUser_UserId(userId).stream()
+    public List<Crew> getCrewsByUserID (int profileId) {
+        return crewRepository.findByProfile_ProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-    }
-
-    public void deleteUser(int crewId,int profileId) {
-        System.out.println("service :)");
-        crewRepository.deleteByProfile_ProfileId(crewId,profileId);
     }
 }

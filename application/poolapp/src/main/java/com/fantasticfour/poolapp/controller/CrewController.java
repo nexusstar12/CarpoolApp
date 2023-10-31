@@ -4,6 +4,7 @@ import com.fantasticfour.poolapp.CustomResponse.CrewListResponse;
 import com.fantasticfour.poolapp.CustomResponse.CrewResponse;
 import com.fantasticfour.poolapp.domain.Crew;
 import com.fantasticfour.poolapp.services.CrewService;
+import com.fantasticfour.poolapp.repository.CrewRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,9 @@ public class CrewController {
     @Autowired
     private CrewService crewService;
 
+    @Autowired
+    private CrewRepository crewRepository;
+
     @PostMapping({"", "/"})
     public ResponseEntity<Crew> addCrew(@RequestBody Crew crew) {
         Crew newCrew = crewService.addCrew(crew);
@@ -31,12 +36,12 @@ public class CrewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<CrewResponse>> getCrewById(@PathVariable("id") int userId) {
+    public ResponseEntity<List<CrewResponse>> getCrewById(@PathVariable("id") int profileId) {
 
         CrewListResponse crewListResponse = new CrewListResponse();
         List<CrewResponse> crewResponselist = new ArrayList<>();
 
-        List<Crew> crews = crewService.getCrewByUserId(userId).stream()
+        List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                                       .filter(Optional::isPresent)
                                       .map(Optional::get)
                                       .collect(Collectors.toList());
@@ -96,9 +101,48 @@ public class CrewController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @DeleteMapping("/removemember")
-    public ResponseEntity<Void> deleteUser(@PathVariable("crewId") int crewId, @PathVariable("profileId") int profileId) {
-        System.out.println("controller");
-        crewService.deleteUser(crewId, profileId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, Object> jsonMap) {
+
+        if(jsonMap.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        int profileId = (int)jsonMap.get("profileId");
+        int crewId = (int)jsonMap.get("crewId");
+
+        Optional<Crew> optionalCrew = crewRepository.findById(crewId);
+
+        if(!optionalCrew.isPresent()){
+            return new ResponseEntity<>("Crew not found", HttpStatus.NOT_FOUND);
+        }
+
+        Crew crew = optionalCrew.get();
+
+        boolean isDeleted = false;
+
+        if(crew.getMember1() != null && crew.getMember1().getProfileId() == profileId){
+            crew.setMember1(null);
+            isDeleted = true;
+        }
+        if(crew.getMember2() != null && crew.getMember2().getProfileId() == profileId){
+            crew.setMember2(null);
+            isDeleted = true;
+        }
+        if(crew.getMember3() != null && crew.getMember3().getProfileId() == profileId){
+            crew.setMember3(null);
+            isDeleted = true;
+        }
+        if(crew.getMember4() != null && crew.getMember4().getProfileId() == profileId){
+            crew.setMember4(null);
+            isDeleted = true;
+        }
+
+        if(isDeleted){
+            crewRepository.save(crew);
+            return new ResponseEntity<>("Profile with id" + profileId + "removed from crew", HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Profile with id" + profileId + "not found", HttpStatus.NOT_FOUND);
+        }
     }
 }

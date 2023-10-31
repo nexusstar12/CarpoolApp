@@ -13,18 +13,22 @@ public class Crew {
 
     @Column(name = "description")
     private String description;
+    //TODO need to change user_id to profile_id and then change in database crew table
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "member1_id", referencedColumnName = "profileId")
+    private Profile member1;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member1_id", referencedColumnName = "user_id")
-    private User member1;
+    @JoinColumn(name = "member2_id", referencedColumnName = "profileId")
+    private Profile member2;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member2_id", referencedColumnName = "user_id")
-    private User member2;
+    @JoinColumn(name = "member3_id", referencedColumnName = "profileId")
+    private Profile member3;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member3_id", referencedColumnName = "user_id")
-    private User member3;
+    @JoinColumn(name = "member4_id", referencedColumnName = "profileId")
+    private Profile member4;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Pool pool;
@@ -46,28 +50,44 @@ public class Crew {
         this.description = description;
     }
 
-    public User getMember1() {
+    public Profile getMember1() {
         return member1;
     }
 
-    public void setMember1(User member1) {
+    public void setMember1(Profile member1) {
         this.member1 = member1;
     }
 
-    public User getMember2() {
+    public Profile getMember2() {
         return member2;
     }
 
-    public void setMember2(User member2) {
+    public void setMember2(Profile member2) {
         this.member2 = member2;
     }
 
-    public User getMember3() {
+    public Profile getMember3() {
         return member3;
     }
 
-    public void setMember3(User member3) {
+    public void setMember3(Profile member3) {
         this.member3 = member3;
+    }
+
+    public Profile getMember4() {
+        return member4;
+    }
+
+    public void setMember4(Profile member4) {
+        this.member4 = member4;
+    }
+
+    public Pool getPool() {
+        return pool;
+    }
+
+    public void setPool(Pool pool) {
+        this.pool = pool;
     }
 
     @Override
