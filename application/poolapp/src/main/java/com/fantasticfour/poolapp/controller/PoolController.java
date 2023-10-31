@@ -8,12 +8,14 @@ import com.fantasticfour.poolapp.repository.*;
 import com.fantasticfour.poolapp.services.PoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +39,9 @@ public class PoolController {
 
     @Autowired
     private PassengerRepository passengerRepository;
+
+    @Autowired
+    private CustomPoolResponse customPoolResponse;
 
     @PostMapping("/join/{poolId}")
     public ResponseEntity<?> joinPool(@PathVariable int poolId, @RequestBody int profileId){
@@ -73,14 +78,15 @@ public class PoolController {
         }
         else {
             //no user found by user id
-            return new ResponseEntity<>("userId does not exist" , HttpStatus.NOT_FOUND);
+            System.out.println("/api/pool/getpools/{id} no user found with id");
+            return new ResponseEntity<>(null , HttpStatus.OK);
         }
 
         //get profile id using user id
         Profile profile = profileRepository.findByUserId(user);
         int profileId = profile.getProfileId();
 
-        //get pools where profile id is is a member or creator of a pool
+        //get pools where profile id  is a member or creator of a pool
         List<Pool> pools = poolRepository.findByProfileId(profileId).stream()
                                          .filter(Optional::isPresent)
                                          .map(Optional::get)
@@ -93,78 +99,72 @@ public class PoolController {
                                   .filter(pool -> pool.getStartTime().isAfter(currentTime))
                                   .toList();
 
-//        poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(pools));
-        //create custom response for my pools
-        for (Pool pool : pools) {
-            PoolResponse poolResponse = new PoolResponse();
-
-            poolResponse.setPoolId(pool.getPoolId());
-            poolResponse.setStartLocation(pool.getStartLocation());
-            poolResponse.setEndLocation(pool.getEndLocation());
-            poolResponse.setStartTime(pool.getStartTime());
-            poolResponse.setDescription(pool.getDescription());
-
-            //get the driver from profile -> userid -> driver
-            CustomDriver customDriver = new CustomDriver();
-
-            int creatorProfileId = pool.getCreator().getProfileId();
-            //add driver to response
-            profileRepository.findProfileByProfileId(creatorProfileId)
-                    .ifPresent(driverProfile -> {
-
-                        User userDriver = driverProfile.getUserId();
-
-                        driverRepository.findByUser_UserId(userDriver.getUserId())
-                                .ifPresent(driver -> {
-                                    customDriver.setDriverId(driver.getDriverId());
-                                    customDriver.setName(userDriver.getName());
-                                    poolResponse.setDriver(customDriver);
-                                });
-
-                    } );
-
-            //get passengers
-
-            List<Profile> memberList = new ArrayList<>();
-             memberList.add(pool.getMember1());
-            memberList.add(pool.getMember2());
-            memberList.add(pool.getMember3());
-
-            for (Profile member: memberList) {
-                CustomPassenger customPassenger = new CustomPassenger();
-                if (member != null) {
-                      User userPassenger = member.getUserId();
-                      passengerRepository.findPassengerByUserId(userPassenger.getUserId())
-                              .ifPresent(passenger -> {
-                                  customPassenger.setPassengerId(passenger.getPassengerId());
-                                  customPassenger.setName(userPassenger.getName());
-                                  poolResponse.addPassenger(customPassenger);
-                              });
-                }
-            }
-
-            poolsByIdResponse.addMyPoolsIndex(poolResponse);
-
-            //for testing make custom class.
-            poolsByIdResponse.addAvailablePoolsIndex(poolResponse);
-            poolsByIdResponse.addPastPoolsIndex(poolResponse);
-
-        }//End For Each
+        //build custom response
+        poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(myPools));
 
         //available pools -  private pools they are a member of
         List<Pool> availablePools = poolRepository.findByProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(pool -> pool.getStartTime().isAfter(currentTime))
                 .filter(Pool::isPublicOrPrivate)
                 .toList();
+
+        //add to custom response
+        poolsByIdResponse.setAvailablePools(customPoolResponse.buildPoolResponseList(availablePools));
 
         //past pools
         List<Pool> pastPools = pools.stream()
                 .filter(pool -> pool.getStartTime().isBefore(currentTime))
                 .toList();
 
+        //add to custom response
+        poolsByIdResponse.setPastPools(customPoolResponse.buildPoolResponseList(pastPools));
+
 
        return new ResponseEntity<>(poolsByIdResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletemember")
+    public ResponseEntity<?> deletePoolMember (@RequestBody Map<String, Object> jsonMap) {
+        //take in boyd poolId as int and profileId as int
+        if (jsonMap.isEmpty()){return new ResponseEntity<>("request body is empty", HttpStatus.OK);}
+
+        int poolId = (int)jsonMap.get("poolId");
+        int profileId = (int)jsonMap.get("profileId");
+
+       //delete member by profile id from a poool
+        Optional<Pool> optionalPool = poolRepository.findById(poolId);
+
+        if (optionalPool.isEmpty()) {
+            return new ResponseEntity<>("Pool not found", HttpStatus.OK);
+        }
+
+        Pool pool = optionalPool.get();
+
+        boolean isDeleted = false;
+
+        if (pool.getMember1() != null && pool.getMember1().getProfileId() == profileId) {
+            pool.setMember1(null);
+            isDeleted = true;
+        }
+
+        if (pool.getMember2() != null && pool.getMember2().getProfileId() == profileId) {
+            pool.setMember2(null);
+            isDeleted = true;
+        }
+
+        if (pool.getMember3() != null && pool.getMember3().getProfileId() == profileId) {
+            pool.setMember3(null);
+            isDeleted = true;
+        }
+
+        if (isDeleted) {
+            poolRepository.save(pool);
+            return new ResponseEntity<>("Member successfully removed from pool", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Member with given profile ID not found in pool", HttpStatus.OK);
+        }
     }
 
 }

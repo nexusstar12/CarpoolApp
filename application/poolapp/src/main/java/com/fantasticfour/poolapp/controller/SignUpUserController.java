@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +45,11 @@ public class SignUpUserController {
     @Autowired
     private ProfileService profileService;
 
+    @Autowired
+    private UserRegistrationService userRegistrationService;
 
     @PostMapping({"", "/"})
+    @Transactional
     public ResponseEntity<Map<String, Object>> addUser (@RequestBody Map<String, String> jsonMap) {
 //        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
@@ -90,40 +94,57 @@ public class SignUpUserController {
 
         //add users and password to DB table
         //and add users and password to the account table
-       User addedUser = userService.addUser(newUser);
-       Password addPassword = passwordService.addPassword(newPassword);
-       Account addAccount = accountService.addAccount(newAccount);
+        User addedUser = userService.addUser(newUser);
 
-        //assign all users who sign up the pasenger role.
+        // Register the user and get the updated information
+        boolean isDriver = "driver".equals(jsonMap.get("role"));
+        User registeredUser = userRegistrationService.registerUser(addedUser, isDriver);
+
+        Password addedPassword = passwordService.addPassword(newPassword);
+
+        newAccount.setUser(registeredUser);
+        newAccount.setPassword(addedPassword);
+
+        // Add account to DB
+        Account addedAccount = accountService.addAccount(newAccount);
+
+        //assign all users who sign up the passenger role.
         Passenger passenger = new Passenger();
-        passenger.setUser(addedUser);
-        passengerService.addPassenger(passenger);
+        passenger.setUser(registeredUser);
+        passenger = passengerService.addPassenger(passenger);
 
         //create user profile, and associate passenger id.
         Profile profile = new Profile();
-        profile.setUserId(newUser); //associate user with passenger
-//        profile.setUserType("passenger"); //all user are automatically passengers.
-        profileService.addProfile(profile);
-
+        profile.setUserId(registeredUser);//associate user with passenger
 
         //allow user to assign the driver role to their existing account & profile
+        Driver driver = null;
         if ("driver".equals(jsonMap.get("role"))) {
-            Driver driver = new Driver();
-            driver.setUser(addedUser);
+            driver = new Driver();
+            driver.setUser(registeredUser);
             driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
             driver.setDriversLicense(jsonMap.get("driversLicense"));
-            driverService.addDriver(driver);
+            driver = driverService.addDriver(driver);
 
             profile.setUserType("driver");
-            responseMap.put("driver", driver);
         }
 
-        responseMap.put("user", addedUser);
-        responseMap.put("password", addPassword);
-        responseMap.put("account", addAccount);
+        // Set the passenger and/or driver ID in the profile as necessary
+        if (passenger != null) {
+            profile.setPassenger(passenger);
+        }
+        if (driver != null) {
+            profile.setDriver(driver);
+        }
+
+        // Now, save the profile
+        profile = profileService.addProfile(profile);
+
+        responseMap.put("user", registeredUser);
+        responseMap.put("password", addedPassword);
+        responseMap.put("account", addedAccount);
         responseMap.put("passenger", passenger);
         responseMap.put("profile", profile);
-
 
         //returns a map of added user, account, and password
         //TODO: ADD VALIDATION USER, account, and password are ADDED
