@@ -95,4 +95,10 @@ public class CrewController {
         crewService.deleteCrew(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @DeleteMapping("/removemember")
+    public ResponseEntity<Void> deleteUser(@PathVariable("crewId") int crewId, @PathVariable("profileId") int profileId) {
+        System.out.println("controller");
+        crewService.deleteUser(crewId, profileId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
