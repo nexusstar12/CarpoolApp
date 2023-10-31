@@ -3,8 +3,11 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
 import PoolCreationPage from "./pages/PoolCreationPage";
+import PassengerProfilePage from "./pages/PassengerProfilePage";
+import DriverProfilePage from "./pages/DriverProfilePage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Bar from "./components/Bar";
+
 import { createContext, useState } from "react";
 
 export const UserContext = createContext(null);
@@ -21,6 +24,11 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/create-pool" element={<PoolCreationPage />} />
+            <Route
+              path="/passenger-profile"
+              element={<PassengerProfilePage />}
+            />
+            <Route path="/driver-profile" element={<DriverProfilePage />} />
           </Routes>
         </Router>
       </div>
