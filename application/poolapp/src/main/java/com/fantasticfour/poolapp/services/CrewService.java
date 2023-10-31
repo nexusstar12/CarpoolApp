@@ -50,4 +50,9 @@ public class CrewService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+
+    public void deleteUser(int crewId,int profileId) {
+        System.out.println("service :)");
+        crewRepository.deleteByProfile_ProfileId(crewId,profileId);
+    }
 }

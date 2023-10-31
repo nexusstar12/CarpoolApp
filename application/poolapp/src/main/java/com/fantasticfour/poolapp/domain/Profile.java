@@ -14,14 +14,6 @@ public class Profile {
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pool_id", referencedColumnName = "poolId")
-    private Pool pool;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
-    private Crew crew;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
     private Passenger passenger;
 
@@ -47,21 +39,6 @@ public class Profile {
 
     public void setUserId(User userId) {
         this.userId = userId;
-    }
-
-    public Pool getPool() {
-        return pool;
-    }
-
-    public void setPool(Pool pool) {
-        this.pool = pool;
-    }
-    public Crew getCrew() {
-        return crew;
-    }
-
-    public void setCrew(Crew crew) {
-        this.crew = crew;
     }
 
     public String getUserType() {
