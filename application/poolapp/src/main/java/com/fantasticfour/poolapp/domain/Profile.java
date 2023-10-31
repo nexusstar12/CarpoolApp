@@ -14,7 +14,8 @@ public class Profile {
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
+    @OneToOne
+    @JoinColumn(name = "passenger_id")
     private Passenger passenger;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -14,9 +14,6 @@ public class Passenger {
     @JoinColumn(name = "userId", referencedColumnName = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
 
     //Getters and Setters
     public int getPassengerId() {
@@ -35,11 +32,4 @@ public class Passenger {
         this.user = user;
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
 }
