@@ -7,6 +7,8 @@ import com.fantasticfour.poolapp.repository.PoolRepository;
 import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.repository.ZipDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +31,7 @@ public class SearchBarController {
 
     @GetMapping("/api/searchbar")
 //    List<Map<String, Object>>
-    public List<Object> searchBar (@RequestParam String filter, @RequestParam String value) {
+    public ResponseEntity<List<Object>> searchBar (@RequestParam String filter, @RequestParam String value) {
         //http://localhost:8080/api/searchbar?filter=[columnNameInDB]&value=[stringTobesearched]
 
 //        Map<String, Object>
@@ -58,19 +60,13 @@ public class SearchBarController {
                 fixlonglat(regex,results);
          }
 
-        return results;
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
 //    List<Map<String, Object>>
     private void matchByUserName (String regex, List<Object> results) {
         List<User> userList =  userRepository.findByNameMatchesRegex(regex);
         results.addAll(userList);
-
-//        //hash map for each user that will be returned in a list
-//        for(User user : userList) {
-//            Map<String, Object> userMap = new HashMap<>();
-//            userMap.put("User", user);
-//            results.add(userMap);
         }
 
 
@@ -93,12 +89,11 @@ public class SearchBarController {
         if (zipOptionalEnity.isPresent()) {
             zipDataEntity = zipOptionalEnity.get();
             // Now you can manipulate the entity object as needed.
-
-            //        $iDistance = 20;
-//        $iRadius = 6371; // earth radius in km
-//        $iRadius = 3958; // earth radius in miles
-//        $fLat = x.y; // Your position latitude
-//        $fLon = x.y; // Your position longitude
+            // Distance = 20;
+  //        Radius = 6371; // earth radius in km
+//          Radius = 3958; // earth radius in miles
+//          Lat = x.y; // Your position latitude
+//          Lon = x.y; // Your position longitude
             double longitude = zipDataEntity.getLongitude();
             double latitude = zipDataEntity.getLatitude();
             double radius = 3958.00; //earth radius in miles

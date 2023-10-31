@@ -19,6 +19,9 @@ public class Driver {
     @Column(nullable = false)
     private String driversLicense;
 
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
+    private Profile profile;
+
     // Getters and setters
 
     public int getDriverId() {
@@ -53,5 +56,13 @@ public class Driver {
 
     public void setDriversLicense(String driversLicense) {
         this.driversLicense = driversLicense;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }

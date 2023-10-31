@@ -9,11 +9,12 @@ import com.fantasticfour.poolapp.repository.PassengerRepository;
 import com.fantasticfour.poolapp.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class CustomPoolResponse {
 
     @Autowired
@@ -23,7 +24,6 @@ public class CustomPoolResponse {
 
     @Autowired
     private PassengerRepository passengerRepository;
-
 
 
     public  List<PoolResponse> buildPoolResponseList (List<Pool> pools) {
@@ -36,6 +36,7 @@ public class CustomPoolResponse {
             poolResponse.setStartLocation(pool.getStartLocation());
             poolResponse.setEndLocation(pool.getEndLocation());
             poolResponse.setStartTime(pool.getStartTime());
+            poolResponse.setDescription(pool.getDescription());
 
 
             //get the driver from profile -> userid -> driver
@@ -44,17 +45,21 @@ public class CustomPoolResponse {
             int creatorProfileId = pool.getCreator().getProfileId();
             //add driver to response
             profileRepository.findProfileByProfileId(creatorProfileId)
-                    .ifPresent(driverProfile -> {
+                    .ifPresentOrElse(driverProfile -> {
 
                         User userDriver = driverProfile.getUserId();
 
                         driverRepository.findByUser_UserId(userDriver.getUserId())
-                                .ifPresent(driver -> {
+                                .ifPresentOrElse(driver -> {
                                     customDriver.setDriverId(driver.getDriverId());
                                     customDriver.setName(userDriver.getName());
                                     poolResponse.setDriver(customDriver);
-                                });
+                                }, () -> {
+                                    System.out.println("creator profile id = " + creatorProfileId);
+                                } );
 
+                    }, () -> {
+                        System.out.println("creator profile id = " + creatorProfileId);
                     } );
 
             //get passengers
@@ -69,11 +74,14 @@ public class CustomPoolResponse {
                 if (member != null) {
                     User userPassenger = member.getUserId();
                     passengerRepository.findPassengerByUserId(userPassenger.getUserId())
-                            .ifPresent(passenger -> {
+                            .ifPresentOrElse(passenger -> {
                                 customPassenger.setPassengerId(passenger.getPassengerId());
                                 customPassenger.setName(userPassenger.getName());
                                 poolResponse.addPassenger(customPassenger);
-                            });
+                            }, () -> {
+                                System.out.println("passenger userId not found = " + userPassenger.getUserId()
+                                + " poolid: " + pool.getPoolId());
+                            } );
                 }
             }
              poolResponseList.add(poolResponse);

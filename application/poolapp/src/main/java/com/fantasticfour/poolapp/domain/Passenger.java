@@ -14,6 +14,8 @@ public class Passenger {
     @JoinColumn(name = "userId", referencedColumnName = "user_id", nullable = false)
     private User user;
 
+
+    //Getters and Setters
     public int getPassengerId() {
         return passengerId;
     }
@@ -29,4 +31,5 @@ public class Passenger {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

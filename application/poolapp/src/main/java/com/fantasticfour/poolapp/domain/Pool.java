@@ -18,12 +18,6 @@ public class Pool {
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Crew crew;
 
-    @OneToMany(mappedBy = "pool", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Profile> profiles = new ArrayList<>();
-
-    @ManyToMany
-    private Set<Profile> members = new HashSet<>();//may not need
-
     @ManyToOne
     @JoinColumn(name = "member_1_id")
     private Profile member1;
@@ -95,10 +89,6 @@ public class Pool {
 
     public void setCreator(Profile creator) {
         this.creator = creator;
-    }
-
-    public void addProfile(Profile profile){
-        this.members.add(profile);
     }
     //Getters and Setters
 
@@ -266,8 +256,6 @@ public class Pool {
         return "Pool{" +
                 "poolId=" + poolId +
                 ", crew=" + crew +
-                ", profiles=" + profiles +
-                ", members=" + members +
                 ", member1=" + member1 +
                 ", member2=" + member2 +
                 ", member3=" + member3 +

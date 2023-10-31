@@ -33,7 +33,15 @@ public class PoolService {
         if(poolOptional.isPresent() && profileOptional.isPresent()) {
             Pool pool = poolOptional.get();
             Profile profile = profileOptional.get();
-            pool.addProfile(profile);
+            if(pool.getMember1() == null){
+                pool.setMember1(profile);
+            }
+            else if(pool.getMember2() == null){
+                pool.setMember2(profile);
+            }
+            else if(pool.getMember3() == null){
+                pool.setMember3(profile);
+            }
             poolRepository.save(pool);
         }
     }
