@@ -35,6 +35,7 @@ export default function ListCrewPage() {
   const handleClick = (crewId, type) => {};
 
   const CardContainer = styled("div")`
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

@@ -20,6 +20,7 @@ export default function ListPoolPage() {
         const response = await axiosInstance.delete(
           `/pool/deletemember/${profileId}`
         );
+
         setData(response.data);
         setIsLoading(false);
       } catch (err) {
@@ -40,6 +41,10 @@ export default function ListPoolPage() {
       try {
         setIsLoading(true);
         const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+        console.log("profileId", profileId);
+
+        console.log("response", response.data);
+
         setData(response.data);
         setIsLoading(false);
       } catch (err) {
@@ -56,18 +61,18 @@ export default function ListPoolPage() {
   }
 
   const CardContainer = styled("div")`
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   `;
 
   const StyledCard = styled(Card)`
-    flex: 0 0 calc(70% - 40px);
+    flex: 0 0 calc(50% - 40px);
     margin: 25px;
     padding: 30px;
-    width: 600px;
     height: auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
@@ -118,17 +123,7 @@ export default function ListPoolPage() {
   const getCards = (data, type) => {
     console.log("datadata", data);
     if (!data) {
-      return (
-        <StyledCard>
-          <StyledCardContent>
-            <DetailsContainer>
-              <Typography variant="body2" color="textSecondary">
-                <strong>Starting Location: </strong>
-              </Typography>
-            </DetailsContainer>
-          </StyledCardContent>
-        </StyledCard>
-      );
+      return null;
     }
     return data.map((dataRow) => (
       <StyledCard key={dataRow.poolId}>

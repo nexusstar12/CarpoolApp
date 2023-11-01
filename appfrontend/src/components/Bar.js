@@ -55,41 +55,6 @@ export default function Bar({ isDriver }) {
             </Button>
           </Link>
 
-          <Popup
-            trigger={
-              <Button
-                color="inherit"
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                Join a pool
-              </Button>
-            }
-            position="right center"
-            contentStyle={popupContentStyle}
-          >
-            <div color="red">Feature coming soon</div>
-          </Popup>
-
-          <Popup
-            trigger={
-              <Button
-                color="inherit"
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                How it works
-              </Button>
-            }
-            position="right center"
-            contentStyle={popupContentStyle}
-          >
-            <div color="red">Feature coming soon</div>
-          </Popup>
           <Link to="/" style={{ textDecoration: "none", margin: "0 8px" }}>
             <Button
               color="inherit"
@@ -154,34 +119,41 @@ export default function Bar({ isDriver }) {
 
           {isLoggedIn ? (
             <div>
-              <Button
-                color="inherit"
-                aria-controls="profile-menu"
-                aria-haspopup="true"
-                onClick={handleOpenMenu}
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
+              <Link
+                to="/passenger-profile"
+                style={{ textDecoration: "none", margin: "0 8px" }}
               >
-                View Profile
-              </Button>
-              <Menu
-                id="profile-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleCloseMenu}
-              >
-                <MenuItem>
-                  <Link
-                    to="/passenger-profile"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    Passenger Profile
-                  </Link>
-                </MenuItem>
-                {isDriver && (
+                <Button
+                  color="inherit"
+                  aria-controls="profile-menu"
+                  aria-haspopup="true"
+                  onClick={handleOpenMenu}
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#fff",
+                    "&:hover": { background: "rgba(255,255,255,0.08)" },
+                  }}
+                >
+                  My Profile
+                </Button>
+              </Link>
+
+              {isDriver && (
+                <Menu
+                  id="profile-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleCloseMenu}
+                >
+                  <MenuItem>
+                    <Link
+                      to="/passenger-profile"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      Passenger Profile
+                    </Link>
+                  </MenuItem>
                   <MenuItem>
                     <Link
                       to="/driver-profile"
@@ -190,8 +162,8 @@ export default function Bar({ isDriver }) {
                       Driver Profile
                     </Link>
                   </MenuItem>
-                )}
-              </Menu>
+                </Menu>
+              )}
             </div>
           ) : (
             <Link

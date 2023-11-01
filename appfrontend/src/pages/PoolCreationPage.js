@@ -248,11 +248,12 @@ export default function PostPool() {
                 displayEmpty // This prop allows us to display an empty item
               >
                 <MenuItem value="">Please select a crew</MenuItem>
-                {crews.map((crew) => (
-                  <MenuItem key={crew.crewId} value={crew.crewId}>
-                    {crew.description}
-                  </MenuItem>
-                ))}
+                {crews.length &&
+                  crews.map((crew) => (
+                    <MenuItem key={crew.crewId} value={crew.crewId}>
+                      {crew.description}
+                    </MenuItem>
+                  ))}
               </Select>
             )}
           </AccordionDetails>
