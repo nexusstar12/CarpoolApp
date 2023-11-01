@@ -1,10 +1,10 @@
 package com.fantasticfour.poolapp.services;
 import java.util.Optional;
 
-import com.fantasticfour.poolapp.domain.Crew;
 import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.Profile;
-import com.fantasticfour.poolapp.services.CrewService;
+import com.fantasticfour.poolapp.domain.User;
+import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.repository.PoolRepository;
 import com.fantasticfour.poolapp.repository.CrewRepository;
 import com.fantasticfour.poolapp.repository.ProfileRepository;
@@ -18,13 +18,15 @@ public class PoolService {
     private final ProfileRepository profileRepository;
     private final CrewRepository crewRepository;
     private final CrewService crewService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PoolService(PoolRepository poolRepository, ProfileRepository profileRepository, CrewRepository crewRepository, CrewService crewService){
+    public PoolService(PoolRepository poolRepository, ProfileRepository profileRepository, CrewRepository crewRepository, CrewService crewService, UserRepository userRepository){
         this.poolRepository = poolRepository;
         this.profileRepository = profileRepository;
         this.crewRepository = crewRepository;
         this.crewService = crewService;
+        this.userRepository = userRepository;
     }
 
     public void addProfileToPool(int poolId, int profileId){
@@ -66,5 +68,40 @@ public class PoolService {
         }
     }
 
+    public String addUserToPool(int poolId, int userId) throws Exception {
+        Optional<Pool> poolOptional = poolRepository.findById(poolId);
+        Optional<User> userOptional = userRepository.findById(userId);
 
+        if(!poolOptional.isPresent()) {
+            throw new Exception("Pool not found");
+        }
+        if(!userOptional.isPresent()) {
+            throw new Exception("User not found");
+        }
+
+        Pool pool = poolOptional.get();
+        User user = userOptional.get();
+
+        Profile profile = profileRepository.findByUserId(user);
+        if(profile == null) {
+            throw new Exception("Profile not found for user");
+        }
+
+        if(pool.getMember1() != null && pool.getMember2() != null && pool.getMember3() != null) {
+            throw new Exception("Pool is already full");
+        }
+
+        if(pool.getMember1() == null) {
+            pool.setMember1(profile);
+        }
+        else if(pool.getMember2() == null) {
+            pool.setMember2(profile);
+        }
+        else if(pool.getMember3() == null) {
+            pool.setMember3(profile);
+        }
+
+        poolRepository.save(pool);
+        return "User successfully added to the pool";
+    }
 }
