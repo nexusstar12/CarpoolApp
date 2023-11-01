@@ -22,10 +22,6 @@ public class Profile {
     @JoinColumn(name = "driver_id", referencedColumnName = "driverId")
     private Driver driver;
 
-    private String userType;
-    // Here, you might want to use an enum or another mechanism to distinguish between passenger and driver.
-    // For simplicity, let's use a String. Depending on your actual data model, this might change.
-
     public int getProfileId() {
         return profileId;
     }
@@ -42,13 +38,6 @@ public class Profile {
         this.userId = userId;
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
 
     public Passenger getPassenger() {
         return passenger;

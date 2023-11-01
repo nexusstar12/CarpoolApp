@@ -55,7 +55,6 @@ public class UserRegistrationService {
             // Create a unified profile entry linking to the User's ID
             Profile profile = new Profile();
             profile.setUserId(savedUser);
-            profile.setUserType(isDriver ? "driver" : "passenger");
             profileService.addProfile(profile);
             log.info("Unified profile added for user ID: {}", savedUser.getUserId());
 

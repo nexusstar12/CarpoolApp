@@ -130,8 +130,6 @@ public class SignUpUserController {
             driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
             driver.setDriversLicense(jsonMap.get("driversLicense"));
             driver = driverService.addDriver(driver);
-
-            profile.setUserType("driver");
         }
 
         // Set the passenger and/or driver ID in the profile as necessary
