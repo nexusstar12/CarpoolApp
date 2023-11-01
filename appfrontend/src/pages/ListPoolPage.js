@@ -8,14 +8,24 @@ import { LoadingBackdrop } from "../components/LoadingData";
 export default function ListPoolPage() {
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
   const userContext = useContext(UserContext);
-
+  const { profileId, userId } = userContext.userInfo;
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleClick = (poolId, type) => {
-    console.log("type", type);
+  const handleClick = async (poolId, type) => {
     if (type === "LEAVE POOL") {
+      try {
+        setIsLoading(true);
+        const response = await axiosInstance.delete(
+          `/pool/deletemember/${profileId}`
+        );
+        setData(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
     }
     if (type === "JOIN POOL") {
     }
@@ -29,9 +39,7 @@ export default function ListPoolPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(
-          `/pool/getpools/${userContext?.userInfo?.userId}`
-        );
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
         setData(response.data);
         setIsLoading(false);
       } catch (err) {
@@ -56,9 +64,11 @@ export default function ListPoolPage() {
   `;
 
   const StyledCard = styled(Card)`
-    flex: 0 0 calc(50% - 40px);
+    flex: 0 0 calc(70% - 40px);
     margin: 25px;
-    padding: 20px;
+    padding: 30px;
+    width: 600px;
+    height: auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
     transition: 0.3s;
@@ -124,7 +134,7 @@ export default function ListPoolPage() {
       <StyledCard key={dataRow.poolId}>
         <StyledCardContent>
           {/* Title */}
-          <CardTitle>{dataRow?.name}</CardTitle>
+          <CardTitle>{dataRow?.description}</CardTitle>
           {/* Time */}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">

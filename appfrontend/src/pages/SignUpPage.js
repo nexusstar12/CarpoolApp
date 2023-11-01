@@ -198,7 +198,7 @@ export default function SignUp() {
                       <TextField
                         required
                         sx={{ width: "70%" }}
-                        name="driverLicense"
+                        name="driversLicense"
                         label="Driver's License"
                         error={!!licenseError}
                         helperText={licenseError}
