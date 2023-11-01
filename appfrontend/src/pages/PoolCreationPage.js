@@ -21,11 +21,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { UserContext } from "../App";
+import axiosInstance from "../config/axios.config";
 
 export default function PostPool() {
   const userContext = useContext(UserContext);
   const [selectedDate, setSelectedDate] = useState(null);
   const [privacy, setPrivacy] = useState("");
+  const [crews, setCrews] = useState([]);
+  const [selectedCrewId, setSelectedCrewId] = useState("");
 
   console.log("userContext", userContext.userInfo);
   const handleSubmit = (event) => {
@@ -61,22 +64,47 @@ export default function PostPool() {
     };
     console.log("requestBody", requestBody);
   };
-  if (!userContext?.userInfo?.isDrive) {
-    return (
-      <Box
-        sx={{
-          mt: 5,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          Only drivers can create a pool.
-        </Typography>
-      </Box>
-    );
-  }
+
+  const handlePrivacyChange = async (e) => {
+    const privacy = e.target.value;
+    setPrivacy(privacy);
+
+    if (privacy === "private") {
+      try {
+        // `/crew/${userContext?.userInfo?.userId}`
+        const { data } = await axiosInstance.get(`/crew/112`);
+        setCrews(data);
+        console.log("crews", data);
+        // if (response.status === 201) {
+        //   history("/signin");
+        // }
+      } catch (error) {
+        // setError(error.response.data.message);
+      }
+    }
+  };
+
+  const handleSelectChange = async (e) => {
+    const crew = e.target.value;
+
+    setSelectedCrewId(crew);
+  };
+  // if (!userContext?.userInfo?.isDrive) {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         mt: 5,
+  //         display: "flex",
+  //         flexDirection: "column",
+  //         alignItems: "center",
+  //       }}
+  //     >
+  //       <Typography variant="h6" color="error">
+  //         Only drivers can create a pool.
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
   return (
     <Box
       component="form"
@@ -198,10 +226,7 @@ export default function PostPool() {
             Privacy Settings
           </AccordionSummary>
           <AccordionDetails>
-            <RadioGroup
-              value={privacy}
-              onChange={(e) => setPrivacy(e.target.value)}
-            >
+            <RadioGroup value={privacy} onChange={handlePrivacyChange}>
               <FormControlLabel
                 value="public"
                 control={<Radio />}
@@ -215,9 +240,21 @@ export default function PostPool() {
                 label="Private"
               />
             </RadioGroup>
-            <Select fullWidth value="Private Pools">
-              <MenuItem value="Private Pools">Private Pools</MenuItem>
-            </Select>
+            {privacy === "private" && (
+              <Select
+                fullWidth
+                value={selectedCrewId}
+                onChange={handleSelectChange}
+                displayEmpty // This prop allows us to display an empty item
+              >
+                <MenuItem value="">Please select a crew</MenuItem>
+                {crews.map((crew) => (
+                  <MenuItem key={crew.crewId} value={crew.crewId}>
+                    {crew.description}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
           </AccordionDetails>
         </Accordion>
 

@@ -1,50 +1,22 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import Modal from "@mui/material/Modal";
 
-export const SearchResult = ({ result, itemsPerPage }) => {
-  // const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setModalOpen] = useState(false);
+export const SearchResult = ({ result }) => {
+  console.log("result", result);
   const [disabledButtons, setDisabledButtons] = useState([]);
-  console.log("disabledButtons", disabledButtons);
-  const handleJoinPoolClick = (poolId) => {
-    setModalOpen(true);
 
+  const handleJoinPoolClick = (poolId) => {
     setDisabledButtons((prevState) => {
       const newState = [...prevState];
-      newState[poolId] = true;
+      if (newState[poolId]) {
+        newState[poolId] = false;
+      } else {
+        newState[poolId] = true;
+      }
       return newState;
     });
   };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
-
-  const renderModal = () => (
-    <Modal open={isModalOpen} onClose={handleCloseModal}>
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          backgroundColor: "white",
-          padding: "1em",
-          border: "1px solid #ccc",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h2>Join Pool Coming Soon</h2>
-        <button onClick={handleCloseModal}>Close</button>
-      </div>
-    </Modal>
-  );
-
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = result.slice(indexOfFirstItem, indexOfLastItem);
 
   const CardContainer = styled("div")`
     display: flex;
@@ -92,7 +64,7 @@ export const SearchResult = ({ result, itemsPerPage }) => {
   const TimeContainer = styled("div")`
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 3px;
     font-size: 0.9em;
   `;
 
@@ -102,7 +74,7 @@ export const SearchResult = ({ result, itemsPerPage }) => {
   `;
 
   const getCards = () => {
-    return result.map((data, index) => (
+    return result.map((data) => (
       <StyledCard key={data.poolId}>
         <StyledCardContent>
           {/* Title */}
@@ -132,26 +104,19 @@ export const SearchResult = ({ result, itemsPerPage }) => {
           <JoinButton
             variant="contained"
             onClick={() => handleJoinPoolClick(data.poolId)}
-            disabled={disabledButtons[data.poolId]}
+            style={{
+              backgroundColor: disabledButtons[data.poolId] ? "red" : "green",
+            }}
           >
-            {disabledButtons[data.poolId] ? "JOINED" : "JOIN POOL"}
+            {disabledButtons[data.poolId] ? "LEAVE POOL" : "JOIN POOL"}
           </JoinButton>
         </StyledCardContent>
       </StyledCard>
     ));
   };
 
-  // const paginate = (pageNumber) => {
-  //   setCurrentPage(pageNumber);
-  // };
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(result.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
-  }
   return (
     <>
-      {/* {renderModal()} */}
       <CardContainer>{getCards()}</CardContainer>
 
       <div>

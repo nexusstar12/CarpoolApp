@@ -1,0 +1,240 @@
+import React, { useState, useEffect, useContext } from "react";
+import styled from "@emotion/styled";
+import { Button, Card, CardContent, Typography, Box } from "@mui/material";
+import axiosInstance from "../config/axios.config";
+import { UserContext } from "../App";
+import { LoadingBackdrop } from "../components/LoadingData";
+
+export default function ListPoolPage() {
+  const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
+  const userContext = useContext(UserContext);
+  const { profileId, userId } = userContext.userInfo;
+  const [data, setData] = useState({});
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleClick = async (poolId, type) => {
+    if (type === "LEAVE POOL") {
+      try {
+        setIsLoading(true);
+        const response = await axiosInstance.delete(
+          `/pool/deletemember/${profileId}`
+        );
+        setData(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    }
+    if (type === "JOIN POOL") {
+    }
+
+    if (type === "CREATE CREW") {
+      setCrewCreatedPoolId(poolId);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const CardContainer = styled("div")`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  `;
+
+  const StyledCard = styled(Card)`
+    flex: 0 0 calc(70% - 40px);
+    margin: 25px;
+    padding: 30px;
+    width: 600px;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    transition: 0.3s;
+    &:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+  `;
+
+  const StyledCardContent = styled(CardContent)`
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; // This will horizontally center-align the child elements
+  `;
+
+  const JoinButton = styled(Button)`
+    background-color: #4caf50;
+    color: white;
+    margin-top: 12px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    width: 150px; // Set a fixed width for the button
+    border-radius: 25px; // Increase border-radius for a more rounded appearance
+    &:hover {
+      background-color: #45a049;
+    }
+  `;
+
+  const CardTitle = styled("div")`
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  `;
+
+  const TimeContainer = styled("div")`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+  `;
+
+  const DetailsContainer = styled("div")`
+    margin-bottom: 10px;
+    font-size: 0.9em;
+  `;
+
+  const getCards = (data, type) => {
+    console.log("datadata", data);
+    if (!data) {
+      return (
+        <StyledCard>
+          <StyledCardContent>
+            <DetailsContainer>
+              <Typography variant="body2" color="textSecondary">
+                <strong>Starting Location: </strong>
+              </Typography>
+            </DetailsContainer>
+          </StyledCardContent>
+        </StyledCard>
+      );
+    }
+    return data.map((dataRow) => (
+      <StyledCard key={dataRow.poolId}>
+        <StyledCardContent>
+          {/* Title */}
+          <CardTitle>{dataRow?.description}</CardTitle>
+          {/* Time */}
+          <CardContainer>
+            <Typography variant="body2" color="textSecondary">
+              <strong>Starting Time: </strong> {dataRow.startTime || "N/A"}
+            </Typography>
+          </CardContainer>
+          <CardContainer>
+            <Typography variant="body2" color="textSecondary">
+              <strong>Starting Location: </strong> {dataRow.startLocation}
+            </Typography>
+          </CardContainer>
+          <CardContainer>
+            <Typography variant="body2" color="textSecondary">
+              <strong>Ending Location: </strong> {dataRow.endLocation}
+            </Typography>
+          </CardContainer>
+          {dataRow.passengers.map((passenger) => {
+            return (
+              <CardContainer id={passenger.passengerId}>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>Passenger: </strong> {passenger.name}
+                </Typography>
+              </CardContainer>
+            );
+          })}
+          <CardContainer>
+            <Typography variant="body2" color="textSecondary">
+              <strong>Driver: </strong> {dataRow.driver.name}
+            </Typography>
+          </CardContainer>
+          {/* Button */}
+
+          {dataRow.poolId === crewCreatedPoolId && type === "CREATE CREW" ? (
+            <Typography variant="h6" color="black">
+              Crew Created!
+            </Typography>
+          ) : (
+            <JoinButton
+              variant="contained"
+              onClick={() => handleClick(dataRow.poolId, type)}
+              style={{
+                backgroundColor:
+                  type === "LEAVE POOL"
+                    ? "red"
+                    : type === "JOIN POOL"
+                    ? "green"
+                    : "blue",
+              }}
+            >
+              {type}
+            </JoinButton>
+          )}
+        </StyledCardContent>
+      </StyledCard>
+    ));
+  };
+
+  return (
+    <Box
+      sx={{
+        mt: 5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        overflowY: "auto",
+        maxHeight: "80vh",
+      }}
+    >
+      {isLoading ? (
+        <LoadingBackdrop />
+      ) : (
+        <>
+          {data?.myPools?.length ? (
+            <>
+              <Typography variant="h4">My Pools</Typography>
+              <CardContainer>
+                {getCards(data.myPools, "LEAVE POOL")}
+              </CardContainer>
+            </>
+          ) : null}
+
+          {data?.availablePools?.length ? (
+            <>
+              <Typography variant="h4">Available Pools</Typography>
+              <CardContainer>
+                {getCards(data.availablePools, "JOIN POOL")}
+              </CardContainer>
+            </>
+          ) : null}
+
+          {data?.pastPools?.length ? (
+            <>
+              <Typography variant="h4">Past Pools</Typography>
+              <CardContainer>
+                {getCards(data.pastPools, "CREATE CREW")}
+              </CardContainer>
+            </>
+          ) : null}
+        </>
+      )}
+    </Box>
+  );
+}

@@ -90,6 +90,18 @@ export default function Bar({ isDriver }) {
           >
             <div color="red">Feature coming soon</div>
           </Popup>
+          <Link to="/" style={{ textDecoration: "none", margin: "0 8px" }}>
+            <Button
+              color="inherit"
+              sx={{
+                fontWeight: "bold",
+                color: "#fff",
+                "&:hover": { background: "rgba(255,255,255,0.08)" },
+              }}
+            >
+              Join a pool
+            </Button>
+          </Link>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Pool
@@ -106,20 +118,54 @@ export default function Bar({ isDriver }) {
               Home
             </Button>
           </Link>
+
+          {isLoggedIn && (
+            <Link
+              to="/my-pools"
+              style={{ textDecoration: "none", margin: "0 8px" }}
+            >
+              <Button
+                sx={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                My Pools
+              </Button>
+            </Link>
+          )}
+          {isLoggedIn && (
+            <Link
+              to="/my-crews"
+              style={{ textDecoration: "none", margin: "0 8px" }}
+            >
+              <Button
+                sx={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                My Crews
+              </Button>
+            </Link>
+          )}
+
           {isLoggedIn ? (
             <div>
-       <Button
-  color="inherit"
-  aria-controls="profile-menu"
-  aria-haspopup="true"
-  onClick={handleOpenMenu}
-  sx={{
-    fontWeight: "bold",
-    "&:hover": { background: "rgba(255,255,255,0.08)" },
-  }}
->
-  View Profile
-</Button>
+              <Button
+                color="inherit"
+                aria-controls="profile-menu"
+                aria-haspopup="true"
+                onClick={handleOpenMenu}
+                sx={{
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                View Profile
+              </Button>
               <Menu
                 id="profile-menu"
                 anchorEl={anchorEl}
