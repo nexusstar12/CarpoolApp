@@ -108,18 +108,18 @@ export default function Bar({ isDriver }) {
           </Link>
           {isLoggedIn ? (
             <div>
-              <Button
-                color="inherit"
-                aria-controls="profile-menu"
-                aria-haspopup="true"
-                onClick={handleOpenMenu}
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": { background: "rgba(255,255,255,0.08)" },
-                }}
-              >
-                View Profile
-              </Button>
+       <Button
+  color="inherit"
+  aria-controls="profile-menu"
+  aria-haspopup="true"
+  onClick={handleOpenMenu}
+  sx={{
+    fontWeight: "bold",
+    "&:hover": { background: "rgba(255,255,255,0.08)" },
+  }}
+>
+  View Profile
+</Button>
               <Menu
                 id="profile-menu"
                 anchorEl={anchorEl}
