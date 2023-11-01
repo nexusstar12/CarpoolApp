@@ -166,11 +166,12 @@ public class PoolController {
         }
     }
 
-    @PostMapping("/addUserToPool/{poolId}")
-    public ResponseEntity<String> addUserToPool(@PathVariable int poolId, @RequestBody Map<String, Integer> body) {
+    @PostMapping("/addUserToPool")
+    public ResponseEntity<String> addUserToPool(@RequestBody Map<String, Integer> body) {
         try {
-            int userId = body.get("userId");
-            String resultMessage = poolService.addUserToPool(poolId, userId);
+            int poolId = body.get("poolId");
+            int profileId = body.get("profileId");
+            String resultMessage = poolService.addUserToPool(poolId, profileId);
             return new ResponseEntity<>(resultMessage, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

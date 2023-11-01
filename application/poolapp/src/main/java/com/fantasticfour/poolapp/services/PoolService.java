@@ -68,24 +68,18 @@ public class PoolService {
         }
     }
 
-    public String addUserToPool(int poolId, int userId) throws Exception {
+    public String addUserToPool(int poolId, int profileId) throws Exception {
         Optional<Pool> poolOptional = poolRepository.findById(poolId);
-        Optional<User> userOptional = userRepository.findById(userId);
+        Profile profile = profileRepository.findById(profileId).orElse(null); // Assuming profileId is the primary key in the Profile table
 
         if(!poolOptional.isPresent()) {
             throw new Exception("Pool not found");
         }
-        if(!userOptional.isPresent()) {
-            throw new Exception("User not found");
+        if(profile == null) {
+            throw new Exception("Profile not found");
         }
 
         Pool pool = poolOptional.get();
-        User user = userOptional.get();
-
-        Profile profile = profileRepository.findByUserId(user);
-        if(profile == null) {
-            throw new Exception("Profile not found for user");
-        }
 
         if(pool.getMember1() != null && pool.getMember2() != null && pool.getMember3() != null) {
             throw new Exception("Pool is already full");
@@ -102,6 +96,6 @@ public class PoolService {
         }
 
         poolRepository.save(pool);
-        return "User successfully added to the pool";
+        return "Profile successfully added to the pool";
     }
 }
