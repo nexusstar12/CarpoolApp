@@ -166,7 +166,7 @@ public class PoolController {
         }
     }
 
-    @PostMapping("/addUserToPool")
+    @PutMapping("/addUserToPool")
     public ResponseEntity<String> addUserToPool(@RequestBody Map<String, Integer> body) {
         try {
             int poolId = body.get("poolId");
