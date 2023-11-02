@@ -21,17 +21,20 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
+
 import axiosInstance from "../config/axios.config";
 
 export default function PostPool() {
   const userContext = useContext(UserContext);
+  const history = useNavigate();
+  const { profileId } = userContext.userInfo;
   const [selectedDate, setSelectedDate] = useState(null);
   const [privacy, setPrivacy] = useState("");
   const [crews, setCrews] = useState([]);
   const [selectedCrewId, setSelectedCrewId] = useState("");
 
-  console.log("userContext", userContext.userInfo);
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const name = data.get("name");
@@ -43,68 +46,58 @@ export default function PostPool() {
     const endZip = data.get("endZip");
     const endCity = data.get("endCity");
     const endState = data.get("endState");
-    const formattedDate = selectedDate?.format("YYYY-MM-DD HH:mm:ss");
+    const formattedDate = selectedDate?.format("YYYY-MM-DDTHH:mm:ss");
 
     const requestBody = {
       name,
-      start: {
-        startStreet,
-        startCity,
-        startZip,
-        startState,
-        date: formattedDate,
-      },
-      end: {
-        endStreet,
-        endZip,
-        endCity,
-        endState,
-      },
-      privacy,
+      startStreet,
+      startCity,
+      startZip,
+      startState,
+      startTime: formattedDate,
+      endStreet,
+      endZip,
+      endCity,
+      endState,
+      crewId: selectedCrewId,
+      creatorId: profileId,
+      privacy: privacy === "public" ? true : false,
     };
+
     console.log("requestBody", requestBody);
+
+    try {
+      const response = await axiosInstance.post(
+        `/pool/createpool`,
+        requestBody
+      );
+      console.log("response", response);
+      if (response.status === 201) {
+        history("/my-pools");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const handlePrivacyChange = async (e) => {
     const privacy = e.target.value;
+    console.log("privacy", privacy);
     setPrivacy(privacy);
 
     if (privacy === "private") {
       try {
-        // `/crew/${userContext?.userInfo?.userId}`
-        const { data } = await axiosInstance.get(`/crew/112`);
+        const { data } = await axiosInstance.get(`/crew/${profileId}`);
         setCrews(data);
-        console.log("crews", data);
-        // if (response.status === 201) {
-        //   history("/signin");
-        // }
-      } catch (error) {
-        // setError(error.response.data.message);
-      }
+      } catch (error) {}
     }
   };
 
   const handleSelectChange = async (e) => {
     const crew = e.target.value;
-
     setSelectedCrewId(crew);
   };
-  // if (!userContext?.userInfo?.isDrive) {
-  //   return (
-  //     <Box
-  //       sx={{
-  //         mt: 5,
-  //         display: "flex",
-  //         flexDirection: "column",
-  //         alignItems: "center",
-  //       }}
-  //     >
-  //       <Typography variant="h6" color="error">
-  //         Only drivers can create a pool.
-  //       </Typography>
-  //     </Box>
-  //   );
-  // }
+
   return (
     <Box
       component="form"
@@ -128,7 +121,7 @@ export default function PostPool() {
         }}
       >
         <Typography variant="h5" align="center" mb={3}>
-          PoolApp
+          Post a Pool
         </Typography>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -148,25 +141,25 @@ export default function PostPool() {
             <TextField
               fullWidth
               name="startStreet"
-              label="startStreet"
+              label="Street address"
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="startCity"
-              label="startCity"
+              label="Start city"
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="startZip"
-              label="startZip"
+              label="Start zip code"
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="startState"
-              label="startState"
+              label="Start state"
               sx={{ mb: 2 }}
             />
           </AccordionDetails>
@@ -181,20 +174,20 @@ export default function PostPool() {
             <TextField
               fullWidth
               name="endStreet"
-              label="endStreet"
+              label="Street address"
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="endCity"
-              label="endCity"
+              label="End city"
               sx={{ mb: 2 }}
             />
-            <TextField fullWidth name="endZip" label="endZip" sx={{ mb: 2 }} />
+            <TextField fullWidth name="endZip" label="End zip" sx={{ mb: 2 }} />
             <TextField
               fullWidth
               name="endState"
-              label="endState"
+              label="End state"
               sx={{ mb: 2 }}
             />
           </AccordionDetails>
@@ -211,7 +204,7 @@ export default function PostPool() {
                 <DateTimePicker
                   required
                   error={"Wrong"}
-                  label="Basic date time picker"
+                  label="Start date and time"
                   value={selectedDate}
                   onChange={(newValue) => setSelectedDate(newValue)}
                 />
@@ -248,11 +241,12 @@ export default function PostPool() {
                 displayEmpty // This prop allows us to display an empty item
               >
                 <MenuItem value="">Please select a crew</MenuItem>
-                {crews.map((crew) => (
-                  <MenuItem key={crew.crewId} value={crew.crewId}>
-                    {crew.description}
-                  </MenuItem>
-                ))}
+                {crews.length &&
+                  crews.map((crew) => (
+                    <MenuItem key={crew.crewId} value={crew.crewId}>
+                      {crew.description}
+                    </MenuItem>
+                  ))}
               </Select>
             )}
           </AccordionDetails>
