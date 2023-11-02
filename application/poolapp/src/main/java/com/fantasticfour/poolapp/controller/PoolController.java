@@ -166,6 +166,12 @@ public class PoolController {
         }
     }
 
+    @DeleteMapping("/deletepool/{poolId}")
+    public ResponseEntity<?> deletePoolMember (@PathVariable int poolId) {
+        poolRepository.deleteById(poolId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/addUserToPool")
     public ResponseEntity<String> addUserToPool(@RequestBody Map<String, Integer> body) {
         try {
