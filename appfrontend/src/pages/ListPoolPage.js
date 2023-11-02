@@ -8,16 +8,43 @@ import { LoadingBackdrop } from "../components/LoadingData";
 export default function ListPoolPage() {
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
   const userContext = useContext(UserContext);
-
+  const { profileId, userId } = userContext.userInfo;
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleClick = (poolId, type) => {
-    console.log("type", type);
-    if (type === "LEAVE POOL") {
+  const handleClick = async (poolId, type) => {
+    if (type === "DELETE POOL") {
+      try {
+        setIsLoading(true);
+        await axiosInstance.delete(`/pool/deletepool/${poolId}`);
+
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+
+        setData(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
     }
-    if (type === "JOIN POOL") {
+    if (type === "LEAVE POOL") {
+      try {
+        setIsLoading(true);
+        const requestBody = { profileId, poolId };
+        const config = {
+          data: requestBody,
+        };
+        await axiosInstance.delete(`/pool/deletemember`, config);
+
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+
+        setData(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
     }
 
     if (type === "CREATE CREW") {
@@ -29,9 +56,8 @@ export default function ListPoolPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(
-          `/pool/getpools/${userContext?.userInfo?.userId}`
-        );
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+
         setData(response.data);
         setIsLoading(false);
       } catch (err) {
@@ -48,17 +74,19 @@ export default function ListPoolPage() {
   }
 
   const CardContainer = styled("div")`
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   `;
 
   const StyledCard = styled(Card)`
     flex: 0 0 calc(50% - 40px);
     margin: 25px;
-    padding: 20px;
+    padding: 30px;
+    height: auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
     transition: 0.3s;
@@ -106,25 +134,14 @@ export default function ListPoolPage() {
   `;
 
   const getCards = (data, type) => {
-    console.log("datadata", data);
     if (!data) {
-      return (
-        <StyledCard>
-          <StyledCardContent>
-            <DetailsContainer>
-              <Typography variant="body2" color="textSecondary">
-                <strong>Starting Location: </strong>
-              </Typography>
-            </DetailsContainer>
-          </StyledCardContent>
-        </StyledCard>
-      );
+      return null;
     }
     return data.map((dataRow) => (
       <StyledCard key={dataRow.poolId}>
         <StyledCardContent>
           {/* Title */}
-          <CardTitle>{dataRow?.name}</CardTitle>
+          <CardTitle>{dataRow?.description}</CardTitle>
           {/* Time */}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
@@ -145,14 +162,14 @@ export default function ListPoolPage() {
             return (
               <CardContainer id={passenger.passengerId}>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Passenger: </strong> {passenger.name}
+                  <strong>Passenger: </strong> {passenger?.name || ""}
                 </Typography>
               </CardContainer>
             );
           })}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
-              <strong>Driver: </strong> {dataRow.driver.name}
+              <strong>Driver: </strong> {dataRow.driver?.name || ""}
             </Typography>
           </CardContainer>
           {/* Button */}
@@ -166,12 +183,7 @@ export default function ListPoolPage() {
               variant="contained"
               onClick={() => handleClick(dataRow.poolId, type)}
               style={{
-                backgroundColor:
-                  type === "LEAVE POOL"
-                    ? "red"
-                    : type === "JOIN POOL"
-                    ? "green"
-                    : "blue",
+                backgroundColor: type === "CREATE CREW" ? "green" : "red",
               }}
             >
               {type}
@@ -201,7 +213,7 @@ export default function ListPoolPage() {
             <>
               <Typography variant="h4">My Pools</Typography>
               <CardContainer>
-                {getCards(data.myPools, "LEAVE POOL")}
+                {getCards(data.myPools, "DELETE POOL")}
               </CardContainer>
             </>
           ) : null}
@@ -210,7 +222,7 @@ export default function ListPoolPage() {
             <>
               <Typography variant="h4">Available Pools</Typography>
               <CardContainer>
-                {getCards(data.availablePools, "JOIN POOL")}
+                {getCards(data.availablePools, "LEAVE POOL")}
               </CardContainer>
             </>
           ) : null}

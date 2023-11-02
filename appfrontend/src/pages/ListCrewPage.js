@@ -8,16 +8,13 @@ import { LoadingBackdrop } from "../components/LoadingData";
 export default function ListCrewPage() {
   const [crews, setCrews] = useState([]);
   const userContext = useContext(UserContext);
+  const { profileId } = userContext.userInfo;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axiosInstance.get(
-          `/crew/${userContext?.userInfo?.userId}`
-        );
-        console.log("data", data);
+        const { data } = await axiosInstance.get(`/crew/${profileId}`);
         setCrews(data);
         setIsLoading(false);
       } catch (error) {
@@ -35,6 +32,7 @@ export default function ListCrewPage() {
   const handleClick = (crewId, type) => {};
 
   const CardContainer = styled("div")`
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -86,7 +84,6 @@ export default function ListCrewPage() {
   `;
 
   const getCards = (data) => {
-    console.log("datadata", data);
     if (!data) {
       return (
         <StyledCard>
@@ -101,7 +98,6 @@ export default function ListCrewPage() {
       );
     }
     return data.map((dataRow) => (
-      // console.log("dataRow",dataRow)
       <StyledCard key={dataRow.crewId}>
         <StyledCardContent>
           {/* Title */}
@@ -111,7 +107,7 @@ export default function ListCrewPage() {
             return (
               <CardContainer>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Members: </strong> {member.name}
+                  <strong>Members: </strong> {member.userId.name}
                 </Typography>
               </CardContainer>
             );
