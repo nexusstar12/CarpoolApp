@@ -4,14 +4,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fantasticfour.poolapp.domain.Crew;
-import com.fantasticfour.poolapp.domain.Pool;
-import com.fantasticfour.poolapp.domain.Profile;
-import com.fantasticfour.poolapp.domain.User;
-import com.fantasticfour.poolapp.repository.UserRepository;
-import com.fantasticfour.poolapp.repository.PoolRepository;
-import com.fantasticfour.poolapp.repository.CrewRepository;
-import com.fantasticfour.poolapp.repository.ProfileRepository;
+import com.fantasticfour.poolapp.domain.*;
+import com.fantasticfour.poolapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +18,16 @@ public class PoolService {
     private final CrewService crewService;
     private final UserRepository userRepository;
 
+    private final ZipDataRepository zipDataRepository;
+
     @Autowired
-    public PoolService(PoolRepository poolRepository, ProfileRepository profileRepository, CrewRepository crewRepository, CrewService crewService, UserRepository userRepository){
+    public PoolService(PoolRepository poolRepository, ProfileRepository profileRepository, CrewRepository crewRepository, CrewService crewService, UserRepository userRepository, ZipDataRepository zipDataRepository){
         this.poolRepository = poolRepository;
         this.profileRepository = profileRepository;
         this.crewRepository = crewRepository;
         this.crewService = crewService;
         this.userRepository = userRepository;
+        this.zipDataRepository = zipDataRepository;
     }
 
     public void addProfileToPool(int poolId, int profileId){
@@ -169,6 +166,21 @@ public class PoolService {
         pool.setPublicOrPrivate(publicOrPrivate);
         pool.setCrew(crewEntity);
         pool.setStartTime(startTime);
+
+        //add long and lat data
+        Optional<ZipData> optionalStartZip=  zipDataRepository.findById(pool.getStartZip());
+        Optional<ZipData> optionalEndZip=  zipDataRepository.findById(pool.getEndZip());
+
+        if(optionalStartZip.isPresent()) {
+            ZipData zipData = optionalStartZip.get();
+            pool.setStartLatitude(zipData.getLatitude());
+            pool.setStartLongitude(zipData.getLongitude());
+        }
+        if(optionalEndZip.isPresent()) {
+            ZipData zipData =optionalEndZip.get();
+            pool.setEndLatitude(zipData.getLatitude());
+            pool.setEndLongitude(zipData.getLongitude());
+        }
 
         poolRepository.save(pool);
     }
