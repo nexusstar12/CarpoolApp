@@ -1,20 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "@emotion/styled";
 import { Button, Card, CardContent, Typography } from "@mui/material";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export const SearchResult = ({ result }) => {
   const [disabledButtons, setDisabledButtons] = useState([]);
+  const userContext = useContext(UserContext);
+  const history = useNavigate();
 
   const handleJoinPoolClick = (poolId) => {
-    setDisabledButtons((prevState) => {
-      const newState = [...prevState];
-      if (newState[poolId]) {
-        newState[poolId] = false;
-      } else {
-        newState[poolId] = true;
-      }
-      return newState;
-    });
+    if (!userContext?.userInfo) {
+      history("/signup");
+    } else {
+      setDisabledButtons((prevState) => {
+        const newState = [...prevState];
+        if (newState[poolId]) {
+          newState[poolId] = false;
+        } else {
+          newState[poolId] = true;
+        }
+        return newState;
+      });
+    }
   };
 
   const CardContainer = styled("div")`
@@ -22,7 +30,6 @@ export const SearchResult = ({ result }) => {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
   `;
 
   const StyledCard = styled(Card)`
@@ -83,9 +90,6 @@ export const SearchResult = ({ result }) => {
           <TimeContainer>
             <Typography variant="body2" color="textSecondary">
               <strong>Starts: </strong> {data.startTime || "N/A"}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              <strong>Ends: </strong> {data.endTime || "N/A"}
             </Typography>
           </TimeContainer>
 

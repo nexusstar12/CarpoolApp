@@ -10,9 +10,9 @@ import Typography from "@mui/material/Typography";
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState("");
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [error, setError] = useState(false);
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -23,6 +23,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       if (!filterOption) {
         setError(true);
       } else {
+        setHasSearched(true);
         onSearch({ searchQuery, filterOption });
       }
     }
@@ -43,29 +44,24 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
     if (!filterOption) {
       setError(true);
     } else {
+      setHasSearched(true);
       onSearch({ searchQuery, filterOption });
     }
   };
 
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
-
   return (
-    <div style={{ marginTop: "100px", textAlign: "center" }}>
+    <div
+      style={{
+        marginTop: hasSearched ? "0px" : "100px",
+        textAlign: "center",
+        transition: "margin-top 0.5s",
+      }}
+    >
       <h2>Find a carpool in your area. </h2>
       <div
         className="search-bar"
         style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
       >
-        <Popup
-          open={isPopupOpen}
-          onClose={closePopup}
-          position="bottom center"
-          arrow={false}
-        >
-          Please select an option before searching.
-        </Popup>
         <TextField
           label={searchPlaceholder}
           variant="outlined"
@@ -99,9 +95,11 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       >
         Search
       </Button>
-      <Typography color="error" variant="body2">
-        {error && "Please select an option before searching."}
-      </Typography>
+      {error && (
+        <Typography color="error" variant="body2">
+          {error && "Please select an option before searching."}
+        </Typography>
+      )}
     </div>
   );
 };

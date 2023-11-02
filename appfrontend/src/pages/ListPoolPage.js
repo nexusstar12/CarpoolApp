@@ -17,13 +17,11 @@ export default function ListPoolPage() {
     if (type === "DELETE POOL") {
       try {
         setIsLoading(true);
-        const requestBody = { profileId, poolId };
-        const config = {
-          data: requestBody,
-        };
-        await axiosInstance.delete(`/pool/deletemember`, config);
+        await axiosInstance.delete(`/pool/deletepool/${poolId}`);
 
-        // setData(response.data);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+
+        setData(response.data);
         setIsLoading(false);
       } catch (err) {
         setError(err);
