@@ -3,10 +3,8 @@ import { Paper, Typography, Box } from "@mui/material";
 import { UserContext } from "../App";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 
-
 const DriverProfile = () => {
   const userContext = useContext(UserContext);
-  console.log("haha", userContext.userInfo);
 
   const containerStyle = {
     display: "flex",
@@ -27,15 +25,17 @@ const DriverProfile = () => {
     fontSize: "36px",
   };
 
-  const isFastTrakVerified = userContext.userInfo.isFastTrakVerified ? "Yes" : "No";
+  const isFastTrakVerified = userContext.userInfo.isFastTrakVerified
+    ? "Yes"
+    : "No";
 
   return (
     <Box sx={containerStyle}>
       <DirectionsCarIcon
-        fontSize="x-large"
-        sx={{ color: "#0b7bc7" }}
+        fontSize="large"
+        sx={{ color: "#0b7bc7", fontSize: "100px" }}
       />
-       <Typography variant="h6" gutterBottom sx={nameStyle}>
+      <Typography variant="h6" gutterBottom sx={nameStyle}>
         Driver Profile
       </Typography>
 
@@ -58,7 +58,3 @@ const DriverProfile = () => {
 };
 
 export default DriverProfile;
-
-
-
-

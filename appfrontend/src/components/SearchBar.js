@@ -3,11 +3,15 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Popup from "reactjs-popup";
+import SearchIcon from "@mui/icons-material/Search";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
 
   const handleSearchInputChange = (event) => {
@@ -17,7 +21,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       if (!filterOption) {
-        setIsPopupOpen(true);
+        setError(true);
       } else {
         onSearch({ searchQuery, filterOption });
       }
@@ -35,12 +39,20 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
     }
   };
 
+  const handleClick = () => {
+    if (!filterOption) {
+      setError(true);
+    } else {
+      onSearch({ searchQuery, filterOption });
+    }
+  };
+
   const closePopup = () => {
     setIsPopupOpen(false);
   };
 
   return (
-    <div style={{ marginTop: "100px" }}>
+    <div style={{ marginTop: "100px", textAlign: "center" }}>
       <h2>Find a carpool in your area. </h2>
       <div
         className="search-bar"
@@ -67,13 +79,29 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
           variant="outlined"
           value={filterOption}
           onChange={handleFilterChange}
+          displayEmpty
           style={{ minWidth: "120px" }}
         >
+          <MenuItem value="" disabled>
+            Select
+          </MenuItem>
           <MenuItem value="startZip">Starting Zipcode</MenuItem>
           <MenuItem value="endZip">Ending Zipcode</MenuItem>
           <MenuItem value="city">City</MenuItem>
         </Select>
       </div>
+      <Button
+        variant="contained"
+        color="primary"
+        endIcon={<SearchIcon />}
+        onClick={handleClick}
+        style={{ marginTop: "10px", marginBottom: "10px" }}
+      >
+        Search
+      </Button>
+      <Typography color="error" variant="body2">
+        {error && "Please select an option before searching."}
+      </Typography>
     </div>
   );
 };

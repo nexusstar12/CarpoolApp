@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { Button, Card, CardContent, Typography } from "@mui/material";
 
 export const SearchResult = ({ result }) => {
-  console.log("result", result);
   const [disabledButtons, setDisabledButtons] = useState([]);
 
   const handleJoinPoolClick = (poolId) => {

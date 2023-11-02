@@ -30,7 +30,6 @@ export default function PostPool() {
   const [crews, setCrews] = useState([]);
   const [selectedCrewId, setSelectedCrewId] = useState("");
 
-  console.log("userContext", userContext.userInfo);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -62,7 +61,6 @@ export default function PostPool() {
       },
       privacy,
     };
-    console.log("requestBody", requestBody);
   };
 
   const handlePrivacyChange = async (e) => {
@@ -74,7 +72,6 @@ export default function PostPool() {
         // `/crew/${userContext?.userInfo?.userId}`
         const { data } = await axiosInstance.get(`/crew/112`);
         setCrews(data);
-        console.log("crews", data);
         // if (response.status === 201) {
         //   history("/signin");
         // }

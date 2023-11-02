@@ -75,7 +75,6 @@ export default function SignUp() {
     }
 
     try {
-      console.log("requestBody", requestBody);
       const response = await axiosInstance.post("/signup", requestBody);
 
       if (response.status === 201) {

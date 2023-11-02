@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import { Paper, Typography, Box } from "@mui/material";
 import { UserContext } from "../App";
-import HailIcon from '@mui/icons-material/Hail';
-import PersonIcon from '@mui/icons-material/Person';
+import HailIcon from "@mui/icons-material/Hail";
+import PersonIcon from "@mui/icons-material/Person";
 import Hail from "@mui/icons-material/Hail";
 
 const PassengerProfile = () => {
   const userContext = useContext(UserContext);
-  console.log("haha", userContext.userInfo)
 
   const containerStyle = {
     display: "flex",
@@ -19,26 +18,23 @@ const PassengerProfile = () => {
 
   const profileStyle = {
     border: "1px solid #ddd",
-    padding: "70px", 
+    padding: "70px",
     boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
     textAlign: "center",
   };
 
   const iconStyle = {
-    fontSize: "100px", 
+    fontSize: "100px",
   };
 
   const nameStyle = {
-    fontSize: "36px", 
+    fontSize: "36px",
   };
 
   return (
     <Box sx={containerStyle}>
-      <Hail
-          fontSize="x-large" 
-          sx={{ color: "#0b7bc7", ...iconStyle }}
-        />
-         <Typography variant="h6" gutterBottom sx={nameStyle}>
+      <Hail fontSize="small" sx={{ color: "#0b7bc7", ...iconStyle }} />
+      <Typography variant="h6" gutterBottom sx={nameStyle}>
         Passenger Profile
       </Typography>
 
@@ -58,6 +54,3 @@ const PassengerProfile = () => {
 };
 
 export default PassengerProfile;
-
-
-

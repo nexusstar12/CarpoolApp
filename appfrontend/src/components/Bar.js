@@ -16,9 +16,10 @@ const popupContentStyle = {
   background: "rgb(242, 243, 245)",
 };
 
-export default function Bar({ isDriver }) {
+export default function Bar() {
   const history = useNavigate();
   const userContext = useContext(UserContext);
+  const isDriver = userContext.userInfo?.driver;
   const isLoggedIn = userContext.userInfo?.email;
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -39,21 +40,23 @@ export default function Bar({ isDriver }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Link
-            to="/create-pool"
-            style={{ textDecoration: "none", margin: "0 8px" }}
-          >
-            <Button
-              sx={{
-                color: "#fff",
-                backgroundColor: "transparent",
-                fontWeight: "bold",
-                "&:hover": { background: "rgba(255,255,255,0.08)" },
-              }}
+          {isDriver && (
+            <Link
+              to="/create-pool"
+              style={{ textDecoration: "none", margin: "0 8px" }}
             >
-              Post a pool
-            </Button>
-          </Link>
+              <Button
+                sx={{
+                  color: "#fff",
+                  backgroundColor: "transparent",
+                  fontWeight: "bold",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                Post a pool
+              </Button>
+            </Link>
+          )}
 
           <Link to="/" style={{ textDecoration: "none", margin: "0 8px" }}>
             <Button

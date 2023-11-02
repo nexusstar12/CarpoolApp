@@ -14,12 +14,32 @@ export default function ListPoolPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleClick = async (poolId, type) => {
+    if (type === "DELETE POOL") {
+      try {
+        setIsLoading(true);
+        const requestBody = { profileId, poolId };
+        const config = {
+          data: requestBody,
+        };
+        await axiosInstance.delete(`/pool/deletemember`, config);
+
+        // setData(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    }
     if (type === "LEAVE POOL") {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.delete(
-          `/pool/deletemember/${profileId}`
-        );
+        const requestBody = { profileId, poolId };
+        const config = {
+          data: requestBody,
+        };
+        await axiosInstance.delete(`/pool/deletemember`, config);
+
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
 
         setData(response.data);
         setIsLoading(false);
@@ -27,8 +47,6 @@ export default function ListPoolPage() {
         setError(err);
         setIsLoading(false);
       }
-    }
-    if (type === "JOIN POOL") {
     }
 
     if (type === "CREATE CREW") {
@@ -41,9 +59,6 @@ export default function ListPoolPage() {
       try {
         setIsLoading(true);
         const response = await axiosInstance.get(`/pool/getpools/${userId}`);
-        console.log("profileId", profileId);
-
-        console.log("response", response.data);
 
         setData(response.data);
         setIsLoading(false);
@@ -121,7 +136,6 @@ export default function ListPoolPage() {
   `;
 
   const getCards = (data, type) => {
-    console.log("datadata", data);
     if (!data) {
       return null;
     }
@@ -150,14 +164,14 @@ export default function ListPoolPage() {
             return (
               <CardContainer id={passenger.passengerId}>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Passenger: </strong> {passenger.name}
+                  <strong>Passenger: </strong> {passenger?.name || ""}
                 </Typography>
               </CardContainer>
             );
           })}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
-              <strong>Driver: </strong> {dataRow.driver.name}
+              <strong>Driver: </strong> {dataRow.driver?.name || ""}
             </Typography>
           </CardContainer>
           {/* Button */}
@@ -171,12 +185,7 @@ export default function ListPoolPage() {
               variant="contained"
               onClick={() => handleClick(dataRow.poolId, type)}
               style={{
-                backgroundColor:
-                  type === "LEAVE POOL"
-                    ? "red"
-                    : type === "JOIN POOL"
-                    ? "green"
-                    : "blue",
+                backgroundColor: type === "CREATE CREW" ? "green" : "red",
               }}
             >
               {type}
@@ -206,7 +215,7 @@ export default function ListPoolPage() {
             <>
               <Typography variant="h4">My Pools</Typography>
               <CardContainer>
-                {getCards(data.myPools, "LEAVE POOL")}
+                {getCards(data.myPools, "DELETE POOL")}
               </CardContainer>
             </>
           ) : null}
@@ -215,7 +224,7 @@ export default function ListPoolPage() {
             <>
               <Typography variant="h4">Available Pools</Typography>
               <CardContainer>
-                {getCards(data.availablePools, "JOIN POOL")}
+                {getCards(data.availablePools, "LEAVE POOL")}
               </CardContainer>
             </>
           ) : null}
