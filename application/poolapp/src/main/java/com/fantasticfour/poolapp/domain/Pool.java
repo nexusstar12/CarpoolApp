@@ -58,7 +58,9 @@ public class Pool {
     private double endLongitude;
 
     private boolean publicOrPrivate;
+    @Transient
     private String startAddress;
+    @Transient
     private String endAddress;
 
     public Profile getMember1() {
