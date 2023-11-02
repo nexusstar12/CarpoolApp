@@ -58,6 +58,8 @@ public class Pool {
     private double endLongitude;
 
     private boolean publicOrPrivate;
+    private String startAddress;
+    private String endAddress;
 
     public Profile getMember1() {
         return member1;
@@ -123,8 +125,7 @@ public class Pool {
     }
 
     public String getStartLocation() {
-        return this.getStartStreet() + ", " + this.getStartCity() + ", " +
-                this.getStartState() + ", " + this.getStartZip();
+        return startLocation;
     }
 
     public void setStartLocation(String startLocation) {
@@ -132,8 +133,7 @@ public class Pool {
     }
 
     public String getEndLocation() {
-        return this.getEndStreet() + ", " + this.getEndCity() + ", " +
-                this.getEndState() + ", " + this.getEndZip();
+        return endLocation;
     }
 
     public void setEndLocation(String endLocation) {
@@ -251,6 +251,22 @@ public class Pool {
 
     public void setPublicOrPrivate(boolean publicOrPrivate) {
         this.publicOrPrivate = publicOrPrivate;
+    }
+
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
     }
 
     @Override

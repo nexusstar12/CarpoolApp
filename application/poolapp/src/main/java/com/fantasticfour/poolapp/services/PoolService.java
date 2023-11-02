@@ -100,6 +100,9 @@ public class PoolService {
         return "Profile successfully added to the pool";
     }
 
+    private String formatAddress(String street, String city, String state, String zip) {
+        return String.format("%s, %s, %s, %s", street, city, state, zip);
+    }
     public void createPool(Map<String, Object> poolData) {
         String description = (String) poolData.get("description");
         String startStreet = (String) poolData.get("start_street");
@@ -113,6 +116,8 @@ public class PoolService {
         Integer creatorId = (Integer) poolData.get("creator_id");
         Boolean publicOrPrivate = (Boolean) poolData.get("public_or_private");
         Integer crewId = (Integer) poolData.get("crew_id");
+        String startAddress = formatAddress(startStreet, startCity, startState, startZip);
+        String endAddress = formatAddress(endStreet, endCity, endState, endZip);
         LocalDateTime startTime = null;
         try {
             startTime = LocalDateTime.parse((String) poolData.get("start_time"));
@@ -166,6 +171,12 @@ public class PoolService {
         pool.setPublicOrPrivate(publicOrPrivate);
         pool.setCrew(crewEntity);
         pool.setStartTime(startTime);
+
+        pool.setStartLocation(startAddress);
+        pool.setEndLocation(endAddress);
+
+
+
 
         //add long and lat data
         Optional<ZipData> optionalStartZip=  zipDataRepository.findById(pool.getStartZip());
