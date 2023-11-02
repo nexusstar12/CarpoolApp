@@ -3,25 +3,43 @@ import styled from "@emotion/styled";
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../config/axios.config";
 
 export const SearchResult = ({ result }) => {
   const [disabledButtons, setDisabledButtons] = useState([]);
+  const [errorPoolId, setErrorPoolId] = useState("");
   const userContext = useContext(UserContext);
   const history = useNavigate();
 
-  const handleJoinPoolClick = (poolId) => {
+  const handleJoinPoolClick = async (poolId) => {
     if (!userContext?.userInfo) {
       history("/signup");
     } else {
-      setDisabledButtons((prevState) => {
-        const newState = [...prevState];
-        if (newState[poolId]) {
-          newState[poolId] = false;
-        } else {
-          newState[poolId] = true;
+      try {
+        const requestBody = {
+          profileId: userContext?.userInfo.profileId,
+          poolId,
+        };
+
+        const response = await axiosInstance.put(
+          `/pool/addUserToPool`,
+          requestBody
+        );
+        if (response.status === 200) {
+          setDisabledButtons((prevState) => {
+            const newState = [...prevState];
+            if (newState[poolId]) {
+              newState[poolId] = false;
+            } else {
+              newState[poolId] = true;
+            }
+            return newState;
+          });
+          history("/my-pools");
         }
-        return newState;
-      });
+      } catch (err) {
+        setErrorPoolId(poolId);
+      }
     }
   };
 
@@ -113,6 +131,11 @@ export const SearchResult = ({ result }) => {
           >
             {disabledButtons[data.poolId] ? "LEAVE POOL" : "JOIN POOL"}
           </JoinButton>
+          {errorPoolId === data.poolId && (
+            <Typography color="error" variant="body2" marginTop={"10px"}>
+              Pool is full
+            </Typography>
+          )}
         </StyledCardContent>
       </StyledCard>
     ));
