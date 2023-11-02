@@ -1,14 +1,19 @@
 package com.fantasticfour.poolapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "profile")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "profileId")
 public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int profileId;
+
 
     @OneToOne
     @JoinColumn(name = "user_id")
