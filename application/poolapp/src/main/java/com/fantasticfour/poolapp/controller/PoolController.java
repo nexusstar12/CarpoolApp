@@ -177,4 +177,16 @@ public class PoolController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/createpool")
+    public ResponseEntity<?> createPool(@RequestBody Map<String, Object> poolData) {
+        try {
+            poolService.createPool(poolData);
+            return new ResponseEntity<>("Pool successfully created", HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch(Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

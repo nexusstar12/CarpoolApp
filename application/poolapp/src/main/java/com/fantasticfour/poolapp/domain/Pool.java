@@ -14,8 +14,8 @@ public class Pool {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poolId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "crew_id")
     private Crew crew;
 
     @ManyToOne
@@ -123,7 +123,8 @@ public class Pool {
     }
 
     public String getStartLocation() {
-        return startLocation;
+        return this.getStartStreet() + ", " + this.getStartCity() + ", " +
+                this.getStartState() + ", " + this.getStartZip();
     }
 
     public void setStartLocation(String startLocation) {
@@ -131,7 +132,8 @@ public class Pool {
     }
 
     public String getEndLocation() {
-        return endLocation;
+        return this.getEndStreet() + ", " + this.getEndCity() + ", " +
+                this.getEndState() + ", " + this.getEndZip();
     }
 
     public void setEndLocation(String endLocation) {
