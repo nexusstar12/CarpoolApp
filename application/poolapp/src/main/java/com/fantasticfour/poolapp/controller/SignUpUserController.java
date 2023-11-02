@@ -49,7 +49,6 @@ public class SignUpUserController {
     private UserRegistrationService userRegistrationService;
 
     @PostMapping({"", "/"})
-    @Transactional
     public ResponseEntity<Map<String, Object>> addUser (@RequestBody Map<String, String> jsonMap) {
 //        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
@@ -74,11 +73,12 @@ public class SignUpUserController {
             newUser.setIsDriver(true);
         }
 
+        //checking for duplicate email
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
         if (existingUser.isPresent()) {
             // handle duplicate email
             Map<String, Object> response = new HashMap<>();
-            responseMap.put("message", "duplicate user email");
+            response.put("message", "duplicate user email");
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
 
@@ -97,36 +97,39 @@ public class SignUpUserController {
         User addedUser = userService.addUser(newUser);
 
         // Register the user and get the updated information
-        boolean isDriver = "driver".equals(jsonMap.get("role"));
-        User registeredUser = userRegistrationService.registerUser(addedUser, isDriver);
+        //boolean isDriver = "driver".equals(jsonMap.get("role"));
+        //User registeredUser = userRegistrationService.registerUser(addedUser, isDriver);
 
+        //saving password db
         Password addedPassword = passwordService.addPassword(newPassword);
 
-        newAccount.setUser(registeredUser);
-        newAccount.setPassword(addedPassword);
+//        newAccount.setUser(registeredUser);
+//        newAccount.setPassword(addedPassword);
 
         // Add account to DB
         Account addedAccount = accountService.addAccount(newAccount);
 
         //assign all users who sign up the passenger role.
         Passenger passenger = new Passenger();
-        passenger.setUser(registeredUser);
+//        passenger.setUser(registeredUser);
+        passenger.setUser(newUser); //added after next today
         passenger = passengerService.addPassenger(passenger);
 
         //create user profile, and associate passenger id.
         Profile profile = new Profile();
-        profile.setUserId(registeredUser);//associate user with passenger
+//        profile.setUserId(registeredUser);//associate user with passenger
+        profile.setUserId(newUser);
 
         //allow user to assign the driver role to their existing account & profile
         Driver driver = null;
         if ("driver".equals(jsonMap.get("role"))) {
             driver = new Driver();
-            driver.setUser(registeredUser);
+//            driver.setUser(registeredUser);
+            driver.setUser(newUser);
+            //unfamiliar syntax
             driver.setFastrakVerification(Boolean.parseBoolean(jsonMap.get("fastrakVerification")));
             driver.setDriversLicense(jsonMap.get("driversLicense"));
             driver = driverService.addDriver(driver);
-
-            profile.setUserType("driver");
         }
 
         // Set the passenger and/or driver ID in the profile as necessary
@@ -140,7 +143,8 @@ public class SignUpUserController {
         // Now, save the profile
         profile = profileService.addProfile(profile);
 
-        responseMap.put("user", registeredUser);
+//        responseMap.put("user", registeredUser);
+        responseMap.put("user", newUser);
         responseMap.put("password", addedPassword);
         responseMap.put("account", addedAccount);
         responseMap.put("passenger", passenger);

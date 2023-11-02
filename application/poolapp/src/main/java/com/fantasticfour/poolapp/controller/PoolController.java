@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/pool")
@@ -92,12 +89,15 @@ public class PoolController {
                                          .map(Optional::get)
                                          .toList();
 
+
         //mypools- user created pools occuring today or in the future.
         LocalDateTime currentTime = LocalDateTime.now();
         List<Pool> myPools = pools.stream()
                                   .filter(pool -> pool.getCreator().getProfileId() == profileId)
                                   .filter(pool -> pool.getStartTime().isAfter(currentTime))
                                   .toList();
+
+        System.out.println(Arrays.toString(myPools.toArray()));
 
         //build custom response
         poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(myPools));
@@ -106,8 +106,7 @@ public class PoolController {
         List<Pool> availablePools = poolRepository.findByProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(pool -> pool.getStartTime().isAfter(currentTime))
-                .filter(Pool::isPublicOrPrivate)
+                .filter(pool -> pool.getStartTime().isAfter(currentTime)) //.filter(Pool::isPublicOrPrivate)
                 .toList();
 
         //add to custom response
@@ -167,4 +166,33 @@ public class PoolController {
         }
     }
 
+    @DeleteMapping("/deletepool/{poolId}")
+    public ResponseEntity<?> deletePoolMember (@PathVariable int poolId) {
+        poolRepository.deleteById(poolId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/addUserToPool")
+    public ResponseEntity<String> addUserToPool(@RequestBody Map<String, Integer> body) {
+        try {
+            int poolId = body.get("poolId");
+            int profileId = body.get("profileId");
+            String resultMessage = poolService.addUserToPool(poolId, profileId);
+            return new ResponseEntity<>(resultMessage, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/createpool")
+    public ResponseEntity<?> createPool(@RequestBody Map<String, Object> poolData) {
+        try {
+            poolService.createPool(poolData);
+            return new ResponseEntity<>("Pool successfully created", HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch(Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
