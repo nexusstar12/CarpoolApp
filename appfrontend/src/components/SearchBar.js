@@ -23,6 +23,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       if (!filterOption) {
         setError(true);
       } else {
+        setError(false);
         setHasSearched(true);
         onSearch({ searchQuery, filterOption });
       }
@@ -44,6 +45,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
     if (!filterOption) {
       setError(true);
     } else {
+      setError(false);
       setHasSearched(true);
       onSearch({ searchQuery, filterOption });
     }
