@@ -1,14 +1,19 @@
 package com.fantasticfour.poolapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "profile")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "profileId")
 public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int profileId;
+
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -21,10 +26,6 @@ public class Profile {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "driver_id", referencedColumnName = "driverId")
     private Driver driver;
-
-    private String userType;
-    // Here, you might want to use an enum or another mechanism to distinguish between passenger and driver.
-    // For simplicity, let's use a String. Depending on your actual data model, this might change.
 
     public int getProfileId() {
         return profileId;
@@ -42,13 +43,6 @@ public class Profile {
         this.userId = userId;
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
 
     public Passenger getPassenger() {
         return passenger;

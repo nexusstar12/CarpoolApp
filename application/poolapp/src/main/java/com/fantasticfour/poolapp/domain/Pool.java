@@ -14,8 +14,8 @@ public class Pool {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poolId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "crew_id")
     private Crew crew;
 
     @ManyToOne
@@ -58,6 +58,10 @@ public class Pool {
     private double endLongitude;
 
     private boolean publicOrPrivate;
+    @Transient
+    private String startAddress;
+    @Transient
+    private String endAddress;
 
     public Profile getMember1() {
         return member1;
@@ -249,6 +253,22 @@ public class Pool {
 
     public void setPublicOrPrivate(boolean publicOrPrivate) {
         this.publicOrPrivate = publicOrPrivate;
+    }
+
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
     }
 
     @Override

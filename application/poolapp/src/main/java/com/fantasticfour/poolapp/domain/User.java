@@ -1,8 +1,11 @@
 package com.fantasticfour.poolapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="DTYPE", discriminatorType = DiscriminatorType.STRING)
 public class User {

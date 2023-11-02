@@ -1,14 +1,21 @@
 package com.fantasticfour.poolapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
+
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "driverId")
+
 public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int driverId;
 
+    //added to fix infinit serialization
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
     @OneToOne
     @JoinColumn(name = "userId", referencedColumnName = "user_id", nullable = false)
     private User user;

@@ -13,7 +13,6 @@ public class Crew {
 
     @Column(name = "description")
     private String description;
-    //TODO need to change user_id to profile_id and then change in database crew table
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member1_id", referencedColumnName = "profileId")
     private Profile member1;
@@ -27,8 +26,8 @@ public class Crew {
     private Profile member3;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member4_id", referencedColumnName = "profileId")
-    private Profile member4;
+    @JoinColumn(name = "creator_id", referencedColumnName = "profileId")
+    private Profile creator;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Pool pool;
@@ -74,12 +73,12 @@ public class Crew {
         this.member3 = member3;
     }
 
-    public Profile getMember4() {
-        return member4;
+    public Profile getCreator() {
+        return creator;
     }
 
-    public void setMember4(Profile member4) {
-        this.member4 = member4;
+    public void setCreator(Profile creator) {
+        this.creator = creator;
     }
 
     public Pool getPool() {
