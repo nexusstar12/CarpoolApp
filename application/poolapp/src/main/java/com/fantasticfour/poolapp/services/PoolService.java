@@ -104,23 +104,23 @@ public class PoolService {
         return String.format("%s, %s, %s, %s", street, city, state, zip);
     }
     public void createPool(Map<String, Object> poolData) {
-        String description = (String) poolData.get("description");
-        String startStreet = (String) poolData.get("start_street");
-        String startCity = (String) poolData.get("start_city");
-        String startZip = (String) poolData.get("start_zip");
-        String startState = (String) poolData.get("start_state");
-        String endStreet = (String) poolData.get("end_street");
-        String endCity = (String) poolData.get("end_city");
-        String endZip = (String) poolData.get("end_zip");
-        String endState = (String) poolData.get("end_state");
-        Integer creatorId = (Integer) poolData.get("creator_id");
-        Boolean publicOrPrivate = (Boolean) poolData.get("public_or_private");
-        Integer crewId = (Integer) poolData.get("crew_id");
+        String description = (String) poolData.get("name");
+        String startStreet = (String) poolData.get("startStreet");
+        String startCity = (String) poolData.get("startCity");
+        String startZip = (String) poolData.get("startZip");
+        String startState = (String) poolData.get("startState");
+        String endStreet = (String) poolData.get("endStreet");
+        String endCity = (String) poolData.get("endCity");
+        String endZip = (String) poolData.get("endZip");
+        String endState = (String) poolData.get("endState");
+        Integer creatorId = (Integer) poolData.get("creatorId");
+        Boolean publicOrPrivate = (Boolean) poolData.get("privacy");
+        Integer crewId = (Integer) poolData.get("crewId");
         String startAddress = formatAddress(startStreet, startCity, startState, startZip);
         String endAddress = formatAddress(endStreet, endCity, endState, endZip);
         LocalDateTime startTime = null;
         try {
-            startTime = LocalDateTime.parse((String) poolData.get("start_time"));
+            startTime = LocalDateTime.parse((String) poolData.get("startTime"));
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date-time format for start_time", e);
         }
