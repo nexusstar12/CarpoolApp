@@ -16,9 +16,9 @@ technology stack or if their step-by-step descriptions are not clear enough. You
 <br>*SSH Instructions*
 <br>1. Download the [.pem](guest_ssh_key.pem) file from this credentials folder.
 <br>2. Open the command line on your device. (Use Git Bash if running on a Windows OS device)
-<br>3. Run this command: `ssh-keygen -R 35.227.145.220`
+<br>3. Run this command: `ssh-keygen -R 104.196.253.114`
 <br>4. Then, run this command:
-`ssh -i [path to pem file] guest@35.227.145.220`
+`ssh -i [path to pem file] guest@104.196.253.114`
 <br>5. Enter `yes` if prompted. (You may not be prompted)
 <br>6. The command was successful if you see something like this after running it:</br>
 <br><img src="successful ssh.png"></br>
@@ -27,7 +27,7 @@ technology stack or if their step-by-step descriptions are not clear enough. You
 <br> 2. Click the + icon next to MySQL Connections
 <br> 3. Provide a Connection Name (i.e. “pool-app”)
 <br> 4. Keep `Standard (TCP/IP)` set as the Connection Method
-<br> 5. Enter `35.230.60.237` as the Hostname
+<br> 5. Enter `35.227.145.220` as the Hostname
 <br> 6. Enter `3306` for the Port if it is not pre-filled. 
 <br> 7. Enter `root` for the username.
 <br>Your setup should now look like this:
