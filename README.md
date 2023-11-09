@@ -27,8 +27,10 @@
 
 5. Please when ready, add your application's name and URL or IP to the following table. It is the responsibility of the team lead to keep this up to date
 
-| Name of the Project |     URL of the Project      |
-| :-----------------: | :-------------------------: |
-|        Pool         | https://www.carpoolwith.me/ |
+=======
+| Name of the Project |     URL of the Project      | 
+|:-------------------:|:---------------------------:|
+|        Pool         | https://carpoolwith.me      |
+ 
 
 ## NO code needs to be stored in the root of your repository. You may rename the application folder if you like to your team's application name. But all source code related to your team's application should be stored inside the application folder.
