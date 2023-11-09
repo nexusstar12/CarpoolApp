@@ -3,12 +3,16 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Popup from "reactjs-popup";
+import SearchIcon from "@mui/icons-material/Search";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState("");
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -17,8 +21,10 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       if (!filterOption) {
-        setIsPopupOpen(true);
+        setError(true);
       } else {
+        setError(false);
+        setHasSearched(true);
         onSearch({ searchQuery, filterOption });
       }
     }
@@ -35,25 +41,29 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
     }
   };
 
-  const closePopup = () => {
-    setIsPopupOpen(false);
+  const handleClick = () => {
+    if (!filterOption) {
+      setError(true);
+    } else {
+      setError(false);
+      setHasSearched(true);
+      onSearch({ searchQuery, filterOption });
+    }
   };
 
   return (
-    <div style={{ marginTop: "100px" }}>
+    <div
+      style={{
+        marginTop: hasSearched ? "0px" : "100px",
+        textAlign: "center",
+        transition: "margin-top 0.5s",
+      }}
+    >
       <h2>Find a carpool in your area. </h2>
       <div
         className="search-bar"
         style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
       >
-        <Popup
-          open={isPopupOpen}
-          onClose={closePopup}
-          position="bottom center"
-          arrow={false}
-        >
-          Please select an option before searching.
-        </Popup>
         <TextField
           label={searchPlaceholder}
           variant="outlined"
@@ -67,13 +77,31 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
           variant="outlined"
           value={filterOption}
           onChange={handleFilterChange}
+          displayEmpty
           style={{ minWidth: "120px" }}
         >
+          <MenuItem value="" disabled>
+            Select
+          </MenuItem>
           <MenuItem value="startZip">Starting Zipcode</MenuItem>
           <MenuItem value="endZip">Ending Zipcode</MenuItem>
           <MenuItem value="city">City</MenuItem>
         </Select>
       </div>
+      <Button
+        variant="contained"
+        color="primary"
+        endIcon={<SearchIcon />}
+        onClick={handleClick}
+        style={{ marginTop: "10px", marginBottom: "10px" }}
+      >
+        Search
+      </Button>
+      {error && (
+        <Typography color="error" variant="body2">
+          {error && "Please select an option before searching."}
+        </Typography>
+      )}
     </div>
   );
 };
