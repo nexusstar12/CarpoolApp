@@ -87,16 +87,28 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ minHeight: "100vh" }}>
+      <Grid
+        container
+        component="main"
+        direction={"row"}
+        sx={{ height: "100vh" }}
+      >
         <CssBaseline />
         <Grid
           item
           xs={12}
-          sm={10}
-          md={5}
+          sm={12}
+          md={6}
+          lg={6}
           component={Paper}
           elevation={6}
           square
+          sx={{
+            height: "90vh",
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           <Box
             sx={{
@@ -238,9 +250,10 @@ export default function SignUp() {
         </Grid>
         <Grid
           item
-          xs={false}
-          sm={4}
-          md={7}
+          sm={0}
+          md={6}
+          lg={6}
+          elevation={6}
           sx={{
             backgroundImage: "url(signup_poolapp.jpg)",
             backgroundRepeat: "no-repeat",
@@ -250,6 +263,7 @@ export default function SignUp() {
                 : t.palette.grey[900],
             backgroundSize: "cover",
             backgroundPosition: "center",
+            display: { xs: "none", sm: "none", md: "block" },
           }}
         />
       </Grid>
