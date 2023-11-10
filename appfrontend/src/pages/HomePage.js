@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import axiosInstance from "../config/axios.config";
 import { SearchResult } from "../components/SearchResult";
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const defaultTheme = createTheme();
 
 function HomePage() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
 
@@ -69,8 +72,17 @@ function HomePage() {
         >
           <div className="home-page-container">
             <div className="search-container">
-              <h1 style={{ fontSize: "50px" }}>Get there, together.</h1>
-              <SearchBar onSearch={handleSearchSubmit} />
+              {!isMobile && (
+                <h1 style={{ fontSize: "50px", textAlign: "center" }}>
+                  Get there, together.
+                </h1>
+              )}{" "}
+              <Grid item xs={12} sm={8} md={6} lg={12}>
+                <SearchBar
+                  onSearch={handleSearchSubmit}
+                  style={{ width: isMobile ? "100%" : "auto" }}
+                />
+              </Grid>
               {result.length > 0 ? (
                 <div className="search-results-container">
                   <SearchResult
