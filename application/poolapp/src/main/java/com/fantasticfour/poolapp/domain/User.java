@@ -1,8 +1,11 @@
 package com.fantasticfour.poolapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="DTYPE", discriminatorType = DiscriminatorType.STRING)
 public class User {
@@ -21,6 +24,8 @@ public class User {
     private String name;
 
     private String phoneNumber;
+
+    private boolean isDriver;
 
     // Standard getters and setters
 
@@ -68,5 +73,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean getIsDriver() {
+        return isDriver;
+    }
+
+    public void setIsDriver(boolean isDriver) {
+        this.isDriver = isDriver;
     }
 }

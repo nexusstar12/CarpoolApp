@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
         //Searches for a users by name matching regex supplied.
         @Query(value = "SELECT * FROM user WHERE name REGEXP ?1", nativeQuery = true)

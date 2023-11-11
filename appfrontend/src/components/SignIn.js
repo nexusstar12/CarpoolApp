@@ -43,15 +43,22 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid
+        container
+        component="main"
+        direction={"row"}
+        sx={{ height: "100vh" }}
+      >
         <CssBaseline />
         <Grid
           item
-          xs={false}
-          sm={4}
-          md={7}
+          sm={0}
+          md={6}
+          lg={6}
+          elevation={6}
           sx={{
-            backgroundImage: "url(login_poolapp.jpg)",
+            // Use an object for media queries
+            backgroundImage: { xs: "url(login_poolapp.jpg)" },
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -59,9 +66,26 @@ export default function SignIn() {
                 : t.palette.grey[900],
             backgroundSize: "cover",
             backgroundPosition: "center",
+            display: { xs: "none", sm: "none", md: "block" },
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          lg={6}
+          component={Paper}
+          elevation={6}
+          square
+          sx={{
+            width: "100%",
+            margin: 0,
+            display: "block",
+            justifyContent: "center",
+          }}
+        >
           <Box
             sx={{
               my: 8,

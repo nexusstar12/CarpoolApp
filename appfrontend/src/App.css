@@ -56,9 +56,10 @@ html {
 }
 
 .search-results-container {
-  max-height: 500px; /* Set the maximum height for the search results container */
-  max-width: 1300px; /* Set the maximum height for the search results container */
-  overflow-y: auto; /* Enable vertical scrolling if the content overflows */
+  max-height: 700px;
+  max-width: 1300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
 }
 
 .home-page-container {
@@ -82,5 +83,16 @@ html {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+/* CSS */
+.searchBar {
+  width: 100%; /* Full width on mobile devices */
+  margin: 0 auto; /* Center the search bar */
+}
+
+@media (min-width: 600px) {
+  .searchBar {
+    width: 80%; /* Adjust width for larger screens */
   }
 }
