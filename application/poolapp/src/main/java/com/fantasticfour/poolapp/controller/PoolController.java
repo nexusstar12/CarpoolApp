@@ -106,7 +106,7 @@ public class PoolController {
         List<Pool> availablePools = poolRepository.findByProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(pool -> pool.getStartTime().isAfter(currentTime)) //.filter(Pool::isPublicOrPrivate)
+                .filter(pool -> pool.getStartTime().isAfter(currentTime)) //.filter(Pool::isPrivacy)
                 .toList();
 
         //add to custom response
