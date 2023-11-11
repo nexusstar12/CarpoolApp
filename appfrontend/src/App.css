@@ -96,3 +96,8 @@ html {
     width: 80%; /* Adjust width for larger screens */
   }
 }
+
+.scrollable-container {
+  max-height: 100vh; /* Adjust the value as needed */
+  overflow-y: auto;
+}
