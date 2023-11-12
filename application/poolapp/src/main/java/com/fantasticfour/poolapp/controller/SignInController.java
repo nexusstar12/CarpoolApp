@@ -7,6 +7,7 @@ import com.fantasticfour.poolapp.domain.Account;
 import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.repository.*;
+import com.fantasticfour.poolapp.services.CustomUserDetails;
 import com.fantasticfour.poolapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,7 @@ public class SignInController {
 
     @Autowired
     private JwtHelper jwtHelper;
+
 
     @PostMapping({"", "/"})
     public ResponseEntity<?> signInUser (@RequestBody Map<String, String> jsonMap) {
@@ -111,8 +113,18 @@ public class SignInController {
             //jwt logic Start
             doAuthenticate(user.getEmail(), inputPassword);
             UserDetails userDetails=userDetailsService.loadUserByUsername(user.getEmail());
-            String token = jwtHelper.generateToken(userDetails);
-            customSignInResponse.setJwtToken(token);
+//            String token = jwtHelper.generateToken(userDetails);
+//            customSignInResponse.setJwtToken(token);
+            // Cast to CustomUserDetails
+            if (userDetails instanceof CustomUserDetails) {
+                CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+                String token = jwtHelper.generateToken(customUserDetails);
+                customSignInResponse.setJwtToken(token);
+            } else {
+                // Handle the case where userDetails is not an instance of CustomUserDetails
+//                 String token = jwtHelper.generateToken(userDetails);
+//                 customSignInResponse.setJwtToken(token);
+            }
             //JwtResponse response = JwtResponse.builder().jwtToken(token).userName(userDetails.getUsername()).build();
             //jwt logic end
 

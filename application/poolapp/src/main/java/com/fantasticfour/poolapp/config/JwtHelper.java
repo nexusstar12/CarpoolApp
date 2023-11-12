@@ -1,5 +1,6 @@
 package com.fantasticfour.poolapp.config;
 
+import com.fantasticfour.poolapp.services.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -48,13 +49,22 @@ public class JwtHelper {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+//    public String generateToken(UserDetails userDetails) {
+//
+//        Map<String,Object> claims=new HashMap<>();
+//
+//
+//        return generateJwtToken(claims,userDetails.getUsername());
+//
+//    }
+public String generateToken(CustomUserDetails userDetails) {
 
-        Map<String,Object> claims=new HashMap<>();
+    Map<String,Object> claims=new HashMap<>();
+    claims.put("userId", userDetails.getUser().getUserId());
 
-        return generateJwtToken(claims,userDetails.getUsername());
+    return generateJwtToken(claims,userDetails.getUsername());
 
-    }
+}
 
     private String generateJwtToken(Map<String,Object> claims,String subject) {
 
