@@ -13,6 +13,19 @@ public class CustomSignInResponse {
     private boolean isDriver;
     private int profileId;
 
+    //jwt token start;
+    private String jwtToken;
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    //jwt token end
+
     public int getUserId() {
         return userId;
     }
