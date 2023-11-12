@@ -59,7 +59,7 @@ export default function PostPool() {
       endZip,
       endCity,
       endState,
-      crewId: selectedCrewId,
+      crewId: selectedCrewId ? parseInt(selectedCrewId) : null,
       creatorId: profileId,
       privacy: privacy === "public" ? true : false,
     };
