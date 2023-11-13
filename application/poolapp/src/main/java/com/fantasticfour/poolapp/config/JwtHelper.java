@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtHelper {
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 24; //TOKEN VALID FOR  5HRS.
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 24; //TOKEN VALID FOR  5 days.
 
     public String getUserNameFromJwtToken(String token) {
         return getClaimFromJwtToken(token,Claims::getSubject);
