@@ -35,7 +35,7 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                         .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").authenticated()
-                        .requestMatchers("/api/signin/", "/api/searchbar**", "/api/signup/" ).permitAll()
+                        .requestMatchers("/api/signin**", "/api/searchbar**", "/api/signup**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
