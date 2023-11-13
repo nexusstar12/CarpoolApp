@@ -32,6 +32,7 @@ public class Crew {
     @JoinColumn(name = "crew_id", referencedColumnName = "crew_id")
     private Pool pool;
 
+
     // Constructors, getters, setters, etc.
     public int getCrewId() {
         return crewId;

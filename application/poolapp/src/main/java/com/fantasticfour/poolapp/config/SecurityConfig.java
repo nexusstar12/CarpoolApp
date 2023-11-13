@@ -29,13 +29,13 @@ public class SecurityConfig {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
-
+//, "/api/**"
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
                         .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").authenticated()
-                        .requestMatchers("/api/signin/", "/api/searchbar**", "/api/signup/" ).permitAll()
+                        .requestMatchers("/api/signin/", "/api/searchbar**", "/api/signup/","/api/**" ).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

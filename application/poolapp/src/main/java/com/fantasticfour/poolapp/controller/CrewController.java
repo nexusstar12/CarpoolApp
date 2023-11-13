@@ -3,7 +3,9 @@ package com.fantasticfour.poolapp.controller;
 import com.fantasticfour.poolapp.CustomResponse.CrewListResponse;
 import com.fantasticfour.poolapp.CustomResponse.CrewResponse;
 import com.fantasticfour.poolapp.domain.Crew;
+import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.Profile;
+import com.fantasticfour.poolapp.repository.PoolRepository;
 import com.fantasticfour.poolapp.repository.ProfileRepository;
 import com.fantasticfour.poolapp.services.CrewService;
 import com.fantasticfour.poolapp.repository.CrewRepository;
@@ -34,6 +36,9 @@ public class CrewController {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @Autowired
+    private PoolRepository poolRepository;
 
     @PostMapping({"", "/"})
     public ResponseEntity<Crew> addCrew(@RequestBody Crew crew) {
@@ -166,9 +171,20 @@ public class CrewController {
         Profile member1_id;
         Profile member2_id;
         Profile member3_id;
+        int originPoolId;
 
         Crew crew = new Crew();
         crew.setDescription(description);
+
+        if(jsonMap.get("origin_pool_id") != null){
+            originPoolId = (int)jsonMap.get("origin_pool_id");
+            Optional<Pool> optionalPool = poolRepository.findPoolByPoolId(originPoolId);
+            if(optionalPool.isPresent()){
+                Pool pool = optionalPool.get();
+                pool.setCrewCreated(true);
+                poolRepository.save(pool);
+            }
+        }
 
         //checks for existing profileId
         if(jsonMap.get("creator_id") != null){
