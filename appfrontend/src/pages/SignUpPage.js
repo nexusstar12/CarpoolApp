@@ -24,8 +24,10 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
+  const [agreeTermsError, setAgreeTermsError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -72,6 +74,13 @@ export default function SignUp() {
       return;
     } else {
       setEmailError(false);
+    }
+
+    if (!agreeTerms) {
+      setAgreeTermsError("You must agree to the Terms and Conditions to continue.");
+      return;
+    } else {
+      setAgreeTermsError(null);
     }
 
     try {
@@ -235,6 +244,10 @@ export default function SignUp() {
               >
                 Sign Up
               </Button>
+              <Typography variant="body2" color="textSecondary" align="center">
+                By signing up, you agree to Pool's{" "}
+                <Link href="/terms-and-conditions">terms and conditions</Link>.
+              </Typography>
               <Typography color="error" variant="body2">
                 {error}
               </Typography>

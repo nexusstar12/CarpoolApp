@@ -33,7 +33,7 @@ export default function SignIn() {
     try {
       const response = await axiosInstance.post("/signin", requestBody);
       if (response.status === 200) {
-        userContext.setUserInfo(response.data);
+        localStorage.setItem('userInfo', JSON.stringify(response.data));
         history("/");
       }
     } catch (error) {
