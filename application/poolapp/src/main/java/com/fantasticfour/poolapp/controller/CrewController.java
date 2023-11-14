@@ -168,9 +168,6 @@ public class CrewController {
         String description = (String)jsonMap.get("description");
         boolean profileExists = false;
         Profile creator_id;
-        Profile member1_id;
-        Profile member2_id;
-        Profile member3_id;
         int originPoolId;
 
         Crew crew = new Crew();
@@ -196,6 +193,10 @@ public class CrewController {
                 profileExists = true;
             }
         }
+        /*
+        Profile member1_id;
+        Profile member2_id;
+        Profile member3_id;
         if(jsonMap.get("member1_id") != null){
             Optional<Profile> member_1 = profileRepository.findProfileByProfileId((int)jsonMap.get("member1_id"));
             if(member_1.isPresent()){
@@ -219,7 +220,7 @@ public class CrewController {
                 crew.setMember3(member3_id);
                 profileExists = true;
             }
-        }
+        }*/
 
         if(profileExists){
             crewRepository.save(crew);
