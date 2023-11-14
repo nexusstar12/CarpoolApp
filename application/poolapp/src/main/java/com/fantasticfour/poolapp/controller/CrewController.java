@@ -165,19 +165,22 @@ public class CrewController {
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>("Nothing in Json Body", HttpStatus.NO_CONTENT);
         }
-        String description = (String)jsonMap.get("description");
         boolean profileExists = false;
         Profile creator_id;
+        Profile member1_id;
+        Profile member2_id;
+        Profile member3_id;
         int originPoolId;
 
         Crew crew = new Crew();
-        crew.setDescription(description);
+        Pool pool = new Pool();
+
 
         if(jsonMap.get("origin_pool_id") != null){
             originPoolId = (int)jsonMap.get("origin_pool_id");
             Optional<Pool> optionalPool = poolRepository.findPoolByPoolId(originPoolId);
             if(optionalPool.isPresent()){
-                Pool pool = optionalPool.get();
+                pool = optionalPool.get();
                 pool.setCrewCreated(true);
                 poolRepository.save(pool);
             }
@@ -193,18 +196,27 @@ public class CrewController {
                 profileExists = true;
             }
         }
-        /*
-        Profile member1_id;
-        Profile member2_id;
-        Profile member3_id;
-        if(jsonMap.get("member1_id") != null){
-            Optional<Profile> member_1 = profileRepository.findProfileByProfileId((int)jsonMap.get("member1_id"));
-            if(member_1.isPresent()){
-                member1_id = member_1.get();
-                crew.setMember1(member1_id);
-                profileExists = true;
-            }
+
+        if(pool.getMember1() != null){
+            member1_id = pool.getMember1();
+            crew.setMember1(member1_id);
+            profileExists = true;
         }
+        if(pool.getMember2() != null){
+            member2_id = pool.getMember1();
+            crew.setMember2(member2_id);
+            profileExists = true;
+        }
+        if(pool.getMember3() != null){
+            member3_id = pool.getMember1();
+            crew.setMember3(member3_id);
+            profileExists = true;
+        }
+        crew.setDescription(pool.getDescription());
+
+
+
+        /*
         if(jsonMap.get("member2_id") != null){
             Optional<Profile> member_2 = profileRepository.findProfileByProfileId((int)jsonMap.get("member2_id"));
             if(member_2.isPresent()){
