@@ -78,7 +78,7 @@ function HomePage() {
                   Get there, together.
                 </h1>
               )}{" "}
-              <Grid item xs={12} sm={8} md={6} lg={12}>
+              <Grid item xs={12} sm={8} md={6} lg={12} style={{ display: 'block', justifyContent: 'center', margin: 'auto'}} className="search-input">
                 <SearchBar
                   onSearch={handleSearchSubmit}
                   style={{ width: isMobile ? "100%" : "auto" }}

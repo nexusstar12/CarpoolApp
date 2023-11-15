@@ -46,9 +46,9 @@ html {
 }
 
 .search-container {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
   height: 100vh;
 }
 .search-bar {
@@ -56,10 +56,8 @@ html {
 }
 
 .search-results-container {
-  max-height: 700px;
-  max-width: 1300px;
+  height: 520px;
   overflow-y: auto;
-  margin-bottom: 20px;
 }
 
 .home-page-container {
@@ -100,4 +98,10 @@ html {
 .scrollable-container {
   max-height: 100vh; /* Adjust the value as needed */
   overflow-y: auto;
+}
+
+@media only screen and (min-width: 768px)  {
+  .search-input {
+    display: flex !important;
+  }
 }
