@@ -8,7 +8,7 @@ import { LoadingBackdrop } from "../components/LoadingData";
 export default function ListPoolPage() {
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
   const userContext = useContext(UserContext);
-  const { profileId, userId } = userContext.userInfo;
+  const { profileId, userId, jwtToken } = userContext.userInfo;
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,9 +31,9 @@ export default function ListPoolPage() {
     if (type === "LEAVE POOL") {
       try {
         setIsLoading(true);
-        const requestBody = { profileId, poolId };
+        // const requestBody = { profileId, poolId };
         const config = {
-          data: requestBody,
+          // data: requestBody,
         };
         await axiosInstance.delete(`/pool/deletemember`, config);
 
@@ -48,7 +48,20 @@ export default function ListPoolPage() {
     }
 
     if (type === "CREATE CREW") {
-      setCrewCreatedPoolId(poolId);
+      const requestBody = {
+        origin_pool_id: poolId,
+        creatorId: profileId,
+      };
+      await axiosInstance.post(`/crew/createcrew`, requestBody, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      setIsLoading(true);
+      const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+
+      setData(response.data);
+      setIsLoading(false);
     }
   };
 
@@ -56,7 +69,12 @@ export default function ListPoolPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
         setData(response.data);
         setIsLoading(false);
@@ -174,7 +192,7 @@ export default function ListPoolPage() {
           </CardContainer>
           {/* Button */}
 
-          {dataRow.poolId === crewCreatedPoolId && type === "CREATE CREW" ? (
+          {dataRow.crewCreated && type === "CREATE CREW" ? (
             <Typography variant="h6" color="black">
               Crew Created!
             </Typography>

@@ -33,8 +33,9 @@ export default function SignIn() {
     try {
       const response = await axiosInstance.post("/signin", requestBody);
       if (response.status === 200) {
-        localStorage.setItem('userInfo', JSON.stringify(response.data));
-        history("/");
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+        userContext.setUserInfo(response.data);
+        history("/", { replace: true });
       }
     } catch (error) {
       setError(error.response.data);
@@ -57,7 +58,6 @@ export default function SignIn() {
           lg={6}
           elevation={6}
           sx={{
-            // Use an object for media queries
             backgroundImage: { xs: "url(login_poolapp.jpg)" },
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>

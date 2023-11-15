@@ -11,12 +11,16 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Bar from "./components/Bar";
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext(null);
 
 function App() {
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState(() => {
+    const storedUserInfo = localStorage.getItem("userInfo");
+    return storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  });
+
   return (
     <UserContext.Provider value={{ userInfo, setUserInfo }}>
       <div className="App">
@@ -27,7 +31,10 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/create-pool" element={<PoolCreationPage />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route
+              path="/terms-and-conditions"
+              element={<TermsAndConditions />}
+            />
             <Route
               path="/passenger-profile"
               element={<PassengerProfilePage />}

@@ -28,7 +28,7 @@ import axiosInstance from "../config/axios.config";
 export default function PostPool() {
   const userContext = useContext(UserContext);
   const history = useNavigate();
-  const { profileId } = userContext.userInfo;
+  const { profileId, jwtToken } = userContext.userInfo;
   const [selectedDate, setSelectedDate] = useState(null);
   const [privacy, setPrivacy] = useState("");
   const [crews, setCrews] = useState([]);
@@ -69,7 +69,12 @@ export default function PostPool() {
     try {
       const response = await axiosInstance.post(
         `/pool/createpool`,
-        requestBody
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
       );
       console.log("response", response);
       if (response.status === 201) {

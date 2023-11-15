@@ -52,7 +52,9 @@ const CookieConsent = () => {
             We use cookies to improve your experience on our site.
           </Typography>
           <Typography component="div" variant="body2" sx={{ mt: 1 }}>
-            <StyledLink href="/privacy-policy">Terms and Conditions</StyledLink>
+            <StyledLink href="/terms-and-conditions">
+              Terms and Conditions
+            </StyledLink>
           </Typography>
         </React.Fragment>
       }

@@ -27,7 +27,6 @@ export default function Bar() {
   const isLoggedIn = userInfo?.email;
   const [anchorEl, setAnchorEl] = useState(null);
 
-  console.log("isMobile", isMobile);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,6 +36,7 @@ export default function Bar() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("userInfo");
     setUserInfo(null);
     history("/");
   };
