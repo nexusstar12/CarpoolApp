@@ -10,6 +10,17 @@ export const SearchResult = ({ result }) => {
   const [errorPoolId, setErrorPoolId] = useState("");
   const userContext = useContext(UserContext);
   const history = useNavigate();
+  const getFormattedStartTime = (startTime) => {
+    if (!startTime) {
+      return "N/A";
+    }
+  
+    const date = new Date(startTime);
+    const dateString = date.toLocaleDateString();
+    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  
+    return `${dateString} ${timeString}`;
+  };
 
   const handleJoinPoolClick = async (poolId) => {
     if (!userContext?.userInfo) {
@@ -86,9 +97,7 @@ export const SearchResult = ({ result }) => {
   `;
 
   const TimeContainer = styled("div")`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 3px;
+  margin-bottom: 10px;
     font-size: 0.9em;
   `;
 
@@ -103,14 +112,14 @@ export const SearchResult = ({ result }) => {
         <StyledCardContent>
           {/* Title */}
           <CardTitle>{data.description || "No Description"}</CardTitle>
-
+  
           {/* Time */}
           <TimeContainer>
             <Typography variant="body2" color="textSecondary">
-              <strong>Starts: </strong> {data.startTime || "N/A"}
+              <strong>Starts: </strong> {getFormattedStartTime(data.startTime)}
             </Typography>
           </TimeContainer>
-
+  
           {/* Details */}
           <DetailsContainer>
             <Typography variant="body2" color="textSecondary">
@@ -120,7 +129,7 @@ export const SearchResult = ({ result }) => {
               <strong>Ending Location: </strong> {data.endLocation}
             </Typography>
           </DetailsContainer>
-
+  
           {/* Button */}
           <JoinButton
             variant="contained"
@@ -140,6 +149,7 @@ export const SearchResult = ({ result }) => {
       </StyledCard>
     ));
   };
+  
 
   return (
     <>
