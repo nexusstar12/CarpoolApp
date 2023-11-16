@@ -139,6 +139,17 @@ public class CrewController {
         boolean isDeleted = false;
         if(crew.getCreator() != null && profileId == crew.getCreator().getProfileId()){
             deleteCrew(crew.getCrewId());
+
+            //set pool created to 0 after creator is deleted. because crew is deleted when creator deletes a crew.
+            Optional<Pool> optionalPool = poolRepository.findById(crew.getOriginPoolId());
+            if (optionalPool.isPresent()) {
+                Pool originalPool = optionalPool.get();
+                originalPool.setCrewCreated(false);
+                poolRepository.save(originalPool);
+            }else {
+                System.out.println("origin pool id does not exist to toggle crew_created field");
+            }
+
             return new ResponseEntity<>("Crew deleted", HttpStatus.OK);
         }
 
@@ -200,6 +211,7 @@ public class CrewController {
                 pool = optionalPool.get();
                 pool.setCrewCreated(true);
                 poolRepository.save(pool);
+                crew.setOriginPoolId((int)jsonMap.get("origin_pool_id"));
             }
         }
 

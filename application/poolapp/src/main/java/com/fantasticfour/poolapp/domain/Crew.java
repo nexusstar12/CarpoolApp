@@ -33,6 +33,17 @@ public class Crew {
     private Pool pool;
 
 
+    //added origin_pool_id missing column
+    @Column(name = "origin_pool_id")
+    private int originPoolId;
+
+    public int getOriginPoolId() {
+        return originPoolId;
+    }
+    public void setOriginPoolId(int originPoolId) {
+        this.originPoolId = originPoolId;
+    }
+
     // Constructors, getters, setters, etc.
     public int getCrewId() {
         return crewId;
