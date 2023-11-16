@@ -110,21 +110,18 @@ public class CrewController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCrew(@PathVariable("id") int id) {
-        crewService.deleteCrew(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-    @DeleteMapping("/removemember")
+
+    @DeleteMapping("/remove/member")
     public ResponseEntity<?> deleteUser(@RequestBody Map<String, Object> jsonMap) {
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-
+        System.out.println("we are in the remove memver function");
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        int profileId = (int)jsonMap.get("profile_id");
+        int profileId = (int)jsonMap.get("profileId");
         int crewId = (int)jsonMap.get("crew_id");
+
 
         Optional<Crew> optionalCrew = crewRepository.findById(crewId);
 
@@ -140,7 +137,7 @@ public class CrewController {
         //if not, remove profile from crew
 
         boolean isDeleted = false;
-        if(profileId == crew.getCreator().getProfileId()){
+        if(crew.getCreator() != null && profileId == crew.getCreator().getProfileId()){
             deleteCrew(crew.getCrewId());
             return new ResponseEntity<>("Crew deleted", HttpStatus.OK);
         }
@@ -170,6 +167,13 @@ public class CrewController {
             return new ResponseEntity<>("Profile with id" + profileId + "not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @DeleteMapping("/{id:[\\d]+}") //"/{id}"
+    public ResponseEntity<Void> deleteCrew(@PathVariable("id") int id) {
+        crewService.deleteCrew(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
     @PostMapping("/createcrew")
     public ResponseEntity<?> createCrew(@RequestBody Map<String,Object> jsonMap){
