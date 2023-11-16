@@ -51,7 +51,6 @@ public class CrewController {
 
         CrewListResponse crewListResponse = new CrewListResponse();
         List<CrewResponse> crewResponselist = new ArrayList<>();
-
         List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                                       .filter(Optional::isPresent)
                                       .map(Optional::get)
@@ -74,6 +73,11 @@ public class CrewController {
                 }
                 if ((crew.getMember3() != null)) {
                     crewResponse.setOneMember(crew.getMember3());
+                } else {
+                    System.out.println("User does not Exist");
+                }
+                if((crew.getCreator() != null)) {
+                    crewResponse.setOneMember(crew.getCreator());
                 } else {
                     System.out.println("User does not Exist");
                 }
@@ -119,8 +123,8 @@ public class CrewController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        int profileId = (int)jsonMap.get("profileId");
-        int crewId = (int)jsonMap.get("crewId");
+        int profileId = (int)jsonMap.get("profile_id");
+        int crewId = (int)jsonMap.get("crew_id");
 
         Optional<Crew> optionalCrew = crewRepository.findById(crewId);
 
@@ -130,7 +134,16 @@ public class CrewController {
 
         Crew crew = optionalCrew.get();
 
+        //passing in profileId,crewId
+
+        //if profileId called is the creator, delete the entire crew
+        //if not, remove profile from crew
+
         boolean isDeleted = false;
+        if(profileId == crew.getCreator().getProfileId()){
+            deleteCrew(crew.getCrewId());
+            return new ResponseEntity<>("Crew deleted", HttpStatus.OK);
+        }
 
         if(crew.getMember1() != null && crew.getMember1().getProfileId() == profileId){
             crew.setMember1(null);
