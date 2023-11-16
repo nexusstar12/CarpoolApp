@@ -56,7 +56,7 @@ html {
 }
 
 .search-results-container {
-  height: 520px;
+  height: 50%;
   overflow-y: auto;
 }
 
@@ -100,8 +100,15 @@ html {
   overflow-y: auto;
 }
 
-@media only screen and (min-width: 768px)  {
+@media only screen and (min-width: 450px) {
   .search-input {
     display: flex !important;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .search-results-container {
+    height: 70%;
+    overflow-y: auto;
   }
 }

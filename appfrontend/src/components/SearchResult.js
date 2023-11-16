@@ -63,10 +63,16 @@ export const SearchResult = ({ result }) => {
   `;
 
   const StyledCardContent = styled(CardContent)`
+    height: 250px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    @media (max-width: 768px) {
+      height: 350px;
+      padding: 5px;
+    }
   `;
 
   const JoinButton = styled(Button)`
