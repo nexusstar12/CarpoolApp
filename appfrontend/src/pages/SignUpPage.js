@@ -24,8 +24,10 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
+  const [agreeTermsError, setAgreeTermsError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -74,6 +76,13 @@ export default function SignUp() {
       setEmailError(false);
     }
 
+    if (!agreeTerms) {
+      setAgreeTermsError("You must agree to the Terms and Conditions to continue.");
+      return;
+    } else {
+      setAgreeTermsError(null);
+    }
+
     try {
       const response = await axiosInstance.post("/signup", requestBody);
 
@@ -87,16 +96,28 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ minHeight: "100vh" }}>
+      <Grid
+        container
+        component="main"
+        direction={"row"}
+        sx={{ height: "100vh" }}
+      >
         <CssBaseline />
         <Grid
           item
           xs={12}
-          sm={10}
-          md={5}
+          sm={12}
+          md={6}
+          lg={6}
           component={Paper}
           elevation={6}
           square
+          sx={{
+            height: "90vh",
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           <Box
             sx={{
@@ -223,6 +244,10 @@ export default function SignUp() {
               >
                 Sign Up
               </Button>
+              <Typography variant="body2" color="textSecondary" align="center">
+                By signing up, you agree to Pool's{" "}
+                <Link href="/terms-and-conditions">terms and conditions</Link>.
+              </Typography>
               <Typography color="error" variant="body2">
                 {error}
               </Typography>
@@ -238,9 +263,10 @@ export default function SignUp() {
         </Grid>
         <Grid
           item
-          xs={false}
-          sm={4}
-          md={7}
+          sm={0}
+          md={6}
+          lg={6}
+          elevation={6}
           sx={{
             backgroundImage: "url(signup_poolapp.jpg)",
             backgroundRepeat: "no-repeat",
@@ -250,6 +276,7 @@ export default function SignUp() {
                 : t.palette.grey[900],
             backgroundSize: "cover",
             backgroundPosition: "center",
+            display: { xs: "none", sm: "none", md: "block" },
           }}
         />
       </Grid>

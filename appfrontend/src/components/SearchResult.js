@@ -6,24 +6,44 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../config/axios.config";
 
 export const SearchResult = ({ result }) => {
+  const userContext = useContext(UserContext);
   const [disabledButtons, setDisabledButtons] = useState([]);
   const [errorPoolId, setErrorPoolId] = useState("");
-  const userContext = useContext(UserContext);
   const history = useNavigate();
+  const getFormattedStartTime = (startTime) => {
+    if (!startTime) {
+      return "N/A";
+    }
+
+    const date = new Date(startTime);
+    const dateString = date.toLocaleDateString();
+    const timeString = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return `${dateString} ${timeString}`;
+  };
 
   const handleJoinPoolClick = async (poolId) => {
     if (!userContext?.userInfo) {
       history("/signup");
     } else {
+      const { profileId, jwtToken } = userContext.userInfo;
       try {
         const requestBody = {
-          profileId: userContext?.userInfo.profileId,
+          profileId,
           poolId,
         };
 
         const response = await axiosInstance.put(
           `/pool/addUserToPool`,
-          requestBody
+          requestBody,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          }
         );
         if (response.status === 200) {
           setDisabledButtons((prevState) => {
@@ -63,10 +83,16 @@ export const SearchResult = ({ result }) => {
   `;
 
   const StyledCardContent = styled(CardContent)`
+    height: 250px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    @media (max-width: 768px) {
+      height: 350px;
+      padding: 5px;
+    }
   `;
 
   const JoinButton = styled(Button)`
@@ -86,9 +112,7 @@ export const SearchResult = ({ result }) => {
   `;
 
   const TimeContainer = styled("div")`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
     font-size: 0.9em;
   `;
 
@@ -107,7 +131,7 @@ export const SearchResult = ({ result }) => {
           {/* Time */}
           <TimeContainer>
             <Typography variant="body2" color="textSecondary">
-              <strong>Starts: </strong> {data.startTime || "N/A"}
+              <strong>Starts: </strong> {getFormattedStartTime(data.startTime)}
             </Typography>
           </TimeContainer>
 
