@@ -7,7 +7,6 @@ import axiosInstance from "../config/axios.config";
 
 export const SearchResult = ({ result }) => {
   const userContext = useContext(UserContext);
-  const { profileId, jwtToken } = userContext.userInfo;
   const [disabledButtons, setDisabledButtons] = useState([]);
   const [errorPoolId, setErrorPoolId] = useState("");
   const history = useNavigate();
@@ -15,11 +14,14 @@ export const SearchResult = ({ result }) => {
     if (!startTime) {
       return "N/A";
     }
-  
+
     const date = new Date(startTime);
     const dateString = date.toLocaleDateString();
-    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  
+    const timeString = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
     return `${dateString} ${timeString}`;
   };
 
@@ -27,6 +29,7 @@ export const SearchResult = ({ result }) => {
     if (!userContext?.userInfo) {
       history("/signup");
     } else {
+      const { profileId, jwtToken } = userContext.userInfo;
       try {
         const requestBody = {
           profileId,
@@ -109,7 +112,7 @@ export const SearchResult = ({ result }) => {
   `;
 
   const TimeContainer = styled("div")`
-  margin-bottom: 10px;
+    margin-bottom: 10px;
     font-size: 0.9em;
   `;
 
@@ -124,14 +127,14 @@ export const SearchResult = ({ result }) => {
         <StyledCardContent>
           {/* Title */}
           <CardTitle>{data.description || "No Description"}</CardTitle>
-  
+
           {/* Time */}
           <TimeContainer>
             <Typography variant="body2" color="textSecondary">
               <strong>Starts: </strong> {getFormattedStartTime(data.startTime)}
             </Typography>
           </TimeContainer>
-  
+
           {/* Details */}
           <DetailsContainer>
             <Typography variant="body2" color="textSecondary">
@@ -141,7 +144,7 @@ export const SearchResult = ({ result }) => {
               <strong>Ending Location: </strong> {data.endLocation}
             </Typography>
           </DetailsContainer>
-  
+
           {/* Button */}
           <JoinButton
             variant="contained"
@@ -161,7 +164,6 @@ export const SearchResult = ({ result }) => {
       </StyledCard>
     ));
   };
-  
 
   return (
     <>
