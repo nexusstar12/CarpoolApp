@@ -1,13 +1,22 @@
 package com.fantasticfour.poolapp.controller;
 
 import com.fantasticfour.poolapp.CustomResponse.CustomSignInResponse;
+import com.fantasticfour.poolapp.CustomResponse.JwtResponse;
+import com.fantasticfour.poolapp.config.JwtHelper;
 import com.fantasticfour.poolapp.domain.Account;
 import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.repository.*;
+import com.fantasticfour.poolapp.services.CustomUserDetails;
+import com.fantasticfour.poolapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +45,19 @@ public class SignInController {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtHelper jwtHelper;
+
 
     @PostMapping({"", "/"})
     public ResponseEntity<?> signInUser (@RequestBody Map<String, String> jsonMap) {
@@ -76,7 +98,7 @@ public class SignInController {
            Profile profile= profileRepository.findByUserId(user);
 
 
-            CustomSignInResponse customSignInResponse = new CustomSignInResponse();
+           CustomSignInResponse customSignInResponse = new CustomSignInResponse();
            customSignInResponse.setUserId(user.getUserId());
            customSignInResponse.setEmail(user.getEmail());
            customSignInResponse.setFirstName(user.getFirstName());
@@ -88,10 +110,44 @@ public class SignInController {
                customSignInResponse.setProfileId(profile.getProfileId());
            }
 
+            //jwt logic Start
+            doAuthenticate(user.getEmail(), inputPassword);
+            UserDetails userDetails=userDetailsService.loadUserByUsername(user.getEmail());
+//            String token = jwtHelper.generateToken(userDetails);
+//            customSignInResponse.setJwtToken(token);
+            // Cast to CustomUserDetails
+            if (userDetails instanceof CustomUserDetails) {
+                CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+                String token = jwtHelper.generateToken(customUserDetails);
+                customSignInResponse.setJwtToken(token);
+            } else {
+                // Handle the case where userDetails is not an instance of CustomUserDetails
+//                 String token = jwtHelper.generateToken(userDetails);
+//                 customSignInResponse.setJwtToken(token);
+            }
+            //JwtResponse response = JwtResponse.builder().jwtToken(token).userName(userDetails.getUsername()).build();
+            //jwt logic end
 
             return new ResponseEntity<>(customSignInResponse, HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Incorrect username or password", HttpStatus.UNAUTHORIZED);
+    }
+
+    private void doAuthenticate(String username,String password) {
+        System.out.println(password);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
+
+        try {
+            authenticationManager.authenticate(authentication);
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Invalid Username or password");
+        }
+
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public String exceptionHandler() {
+        return "Credentials Invalid !!";
     }
 }

@@ -37,6 +37,7 @@ public class CustomPoolResponse {
             poolResponse.setEndLocation(pool.getEndLocation());
             poolResponse.setStartTime(pool.getStartTime());
             poolResponse.setDescription(pool.getDescription());
+            poolResponse.setCrewCreated(pool.isCrewCreated());
 
 
             //get the driver from profile -> userid -> driver

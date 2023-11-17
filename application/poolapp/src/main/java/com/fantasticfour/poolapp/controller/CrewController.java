@@ -3,7 +3,9 @@ package com.fantasticfour.poolapp.controller;
 import com.fantasticfour.poolapp.CustomResponse.CrewListResponse;
 import com.fantasticfour.poolapp.CustomResponse.CrewResponse;
 import com.fantasticfour.poolapp.domain.Crew;
+import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.Profile;
+import com.fantasticfour.poolapp.repository.PoolRepository;
 import com.fantasticfour.poolapp.repository.ProfileRepository;
 import com.fantasticfour.poolapp.services.CrewService;
 import com.fantasticfour.poolapp.repository.CrewRepository;
@@ -35,6 +37,9 @@ public class CrewController {
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private PoolRepository poolRepository;
+
     @PostMapping({"", "/"})
     public ResponseEntity<Crew> addCrew(@RequestBody Crew crew) {
         Crew newCrew = crewService.addCrew(crew);
@@ -46,7 +51,6 @@ public class CrewController {
 
         CrewListResponse crewListResponse = new CrewListResponse();
         List<CrewResponse> crewResponselist = new ArrayList<>();
-
         List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                                       .filter(Optional::isPresent)
                                       .map(Optional::get)
@@ -69,6 +73,11 @@ public class CrewController {
                 }
                 if ((crew.getMember3() != null)) {
                     crewResponse.setOneMember(crew.getMember3());
+                } else {
+                    System.out.println("User does not Exist");
+                }
+                if((crew.getCreator() != null)) {
+                    crewResponse.setOneMember(crew.getCreator());
                 } else {
                     System.out.println("User does not Exist");
                 }
@@ -101,21 +110,18 @@ public class CrewController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCrew(@PathVariable("id") int id) {
-        crewService.deleteCrew(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-    @DeleteMapping("/removemember")
+
+    @DeleteMapping("/remove/member")
     public ResponseEntity<?> deleteUser(@RequestBody Map<String, Object> jsonMap) {
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-
+        System.out.println("we are in the remove memver function");
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         int profileId = (int)jsonMap.get("profileId");
-        int crewId = (int)jsonMap.get("crewId");
+        int crewId = (int)jsonMap.get("crew_id");
+
 
         Optional<Crew> optionalCrew = crewRepository.findById(crewId);
 
@@ -125,7 +131,27 @@ public class CrewController {
 
         Crew crew = optionalCrew.get();
 
+        //passing in profileId,crewId
+
+        //if profileId called is the creator, delete the entire crew
+        //if not, remove profile from crew
+
         boolean isDeleted = false;
+        if(crew.getCreator() != null && profileId == crew.getCreator().getProfileId()){
+            deleteCrew(crew.getCrewId());
+
+            //set pool created to 0 after creator is deleted. because crew is deleted when creator deletes a crew.
+            Optional<Pool> optionalPool = poolRepository.findById(crew.getOriginPoolId());
+            if (optionalPool.isPresent()) {
+                Pool originalPool = optionalPool.get();
+                originalPool.setCrewCreated(false);
+                poolRepository.save(originalPool);
+            }else {
+                System.out.println("origin pool id does not exist to toggle crew_created field");
+            }
+
+            return new ResponseEntity<>("Crew deleted", HttpStatus.OK);
+        }
 
         if(crew.getMember1() != null && crew.getMember1().getProfileId() == profileId){
             crew.setMember1(null);
@@ -153,6 +179,13 @@ public class CrewController {
         }
     }
 
+    @DeleteMapping("/{id:[\\d]+}") //"/{id}"
+    public ResponseEntity<Void> deleteCrew(@PathVariable("id") int id) {
+        crewService.deleteCrew(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
     @PostMapping("/createcrew")
     public ResponseEntity<?> createCrew(@RequestBody Map<String,Object> jsonMap){
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
@@ -160,15 +193,27 @@ public class CrewController {
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>("Nothing in Json Body", HttpStatus.NO_CONTENT);
         }
-        String description = (String)jsonMap.get("description");
         boolean profileExists = false;
         Profile creator_id;
         Profile member1_id;
         Profile member2_id;
         Profile member3_id;
+        int originPoolId;
 
         Crew crew = new Crew();
-        crew.setDescription(description);
+        Pool pool = new Pool();
+
+
+        if(jsonMap.get("origin_pool_id") != null){
+            originPoolId = (int)jsonMap.get("origin_pool_id");
+            Optional<Pool> optionalPool = poolRepository.findPoolByPoolId(originPoolId);
+            if(optionalPool.isPresent()){
+                pool = optionalPool.get();
+                pool.setCrewCreated(true);
+                poolRepository.save(pool);
+                crew.setOriginPoolId((int)jsonMap.get("origin_pool_id"));
+            }
+        }
 
         //checks for existing profileId
         if(jsonMap.get("creator_id") != null){
@@ -180,14 +225,27 @@ public class CrewController {
                 profileExists = true;
             }
         }
-        if(jsonMap.get("member1_id") != null){
-            Optional<Profile> member_1 = profileRepository.findProfileByProfileId((int)jsonMap.get("member1_id"));
-            if(member_1.isPresent()){
-                member1_id = member_1.get();
-                crew.setMember1(member1_id);
-                profileExists = true;
-            }
+
+        if(pool.getMember1() != null){
+            member1_id = pool.getMember1();
+            crew.setMember1(member1_id);
+            profileExists = true;
         }
+        if(pool.getMember2() != null){
+            member2_id = pool.getMember1();
+            crew.setMember2(member2_id);
+            profileExists = true;
+        }
+        if(pool.getMember3() != null){
+            member3_id = pool.getMember1();
+            crew.setMember3(member3_id);
+            profileExists = true;
+        }
+        crew.setDescription(pool.getDescription());
+
+
+
+        /*
         if(jsonMap.get("member2_id") != null){
             Optional<Profile> member_2 = profileRepository.findProfileByProfileId((int)jsonMap.get("member2_id"));
             if(member_2.isPresent()){
@@ -203,7 +261,7 @@ public class CrewController {
                 crew.setMember3(member3_id);
                 profileExists = true;
             }
-        }
+        }*/
 
         if(profileExists){
             crewRepository.save(crew);
