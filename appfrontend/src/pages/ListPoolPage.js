@@ -50,15 +50,20 @@ export default function ListPoolPage() {
     if (type === "CREATE CREW") {
       const requestBody = {
         origin_pool_id: poolId,
-        creatorId: profileId,
+        creator_id: profileId,
       };
+
       await axiosInstance.post(`/crew/createcrew`, requestBody, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
       setIsLoading(true);
-      const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+      const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
 
       setData(response.data);
       setIsLoading(false);

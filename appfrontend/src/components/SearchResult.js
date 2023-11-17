@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../config/axios.config";
 
 export const SearchResult = ({ result }) => {
+  const userContext = useContext(UserContext);
+  const { profileId, jwtToken } = userContext.userInfo;
   const [disabledButtons, setDisabledButtons] = useState([]);
   const [errorPoolId, setErrorPoolId] = useState("");
-  const userContext = useContext(UserContext);
   const history = useNavigate();
 
   const handleJoinPoolClick = async (poolId) => {
@@ -17,13 +18,18 @@ export const SearchResult = ({ result }) => {
     } else {
       try {
         const requestBody = {
-          profileId: userContext?.userInfo.profileId,
+          profileId,
           poolId,
         };
 
         const response = await axiosInstance.put(
           `/pool/addUserToPool`,
-          requestBody
+          requestBody,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          }
         );
         if (response.status === 200) {
           setDisabledButtons((prevState) => {

@@ -33,7 +33,26 @@ export default function ListCrewPage() {
     fetchData();
   }, []);
 
-  const handleClick = (crewId, type) => {};
+  const handleClick = async (crewId) => {
+    const requestBody = {
+      profileId,
+      crew_id: crewId,
+    };
+    await axiosInstance.delete(`/crew/remove/member`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      data: requestBody,
+    });
+    setIsLoading(true);
+    const { data } = await axiosInstance.get(`/crew/${profileId}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
+    setCrews(data);
+    setIsLoading(false);
+  };
 
   const CardContainer = styled("div")`
     width: 100%;
