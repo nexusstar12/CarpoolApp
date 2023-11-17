@@ -27,7 +27,6 @@ export default function Bar() {
   const isLoggedIn = userInfo?.email;
   const [anchorEl, setAnchorEl] = useState(null);
 
-  console.log("isMobile", isMobile);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,6 +36,7 @@ export default function Bar() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("userInfo");
     setUserInfo(null);
     history("/");
   };
@@ -145,34 +145,31 @@ export default function Bar() {
           ) : (
             <>
               {isDriver && (
-                <Link
-                  to="/create-pool"
-                  style={{ textDecoration: "none", margin: "0 8px" }}
-                >
-                  <Button
-                    sx={{
-                      color: "#fff",
-                      backgroundColor: "transparent",
-                      fontWeight: "bold",
-                      "&:hover": { background: "rgba(255,255,255,0.08)" },
-                    }}
-                  >
-                    Post a pool
-                  </Button>
-                </Link>
-              )}
-              <Link to="/" style={{ textDecoration: "none", margin: "0 8px" }}>
                 <Button
-                  color="inherit"
+                  component={RouterLink}
+                  to="/create-pool"
                   sx={{
-                    fontWeight: "bold",
                     color: "#fff",
+                    backgroundColor: "transparent",
+                    fontWeight: "bold",
                     "&:hover": { background: "rgba(255,255,255,0.08)" },
                   }}
                 >
-                  Join a pool
+                  Post a pool
                 </Button>
-              </Link>
+              )}
+              <Button
+                component={RouterLink}
+                to="/"
+                color="inherit"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#fff",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                Join a pool
+              </Button>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Pool
               </Typography>

@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CookieConsent from "../components/CookieConsent";
 
 const defaultTheme = createTheme();
 
@@ -72,12 +73,22 @@ function HomePage() {
         >
           <div className="home-page-container">
             <div className="search-container">
-              {!isMobile && (
-                <h1 style={{ fontSize: "50px", textAlign: "center" }}>
-                  Get there, together.
-                </h1>
-              )}{" "}
-              <Grid item xs={12} sm={8} md={6} lg={12}>
+              <h1 className="home-page-title" style={{ textAlign: "center" }}>
+                Get there, together.
+              </h1>
+              <Grid
+                item
+                xs={12}
+                sm={8}
+                md={6}
+                lg={12}
+                style={{
+                  display: "block",
+                  justifyContent: "center",
+                  margin: "auto",
+                }}
+                className="search-input"
+              >
                 <SearchBar
                   onSearch={handleSearchSubmit}
                   style={{ width: isMobile ? "100%" : "auto" }}
@@ -98,26 +109,9 @@ function HomePage() {
           </div>
         </Grid>
       </Grid>
+      <CookieConsent />
     </ThemeProvider>
   );
 }
-/* <div className="home-page-container">
-      
-      <div className="search-container">
-        <h1 style={{ fontSize: "50px" }}>Get there, together.</h1>
-        <SearchBar onSearch={handleSearchSubmit} />
-        {result.length > 0 ? (
-          <div className="search-results-container">
-            <SearchResult
-              className="search-result"
-              result={result}
-              itemsPerPage={10}
-            />
-          </div>
-        ) : (
-          <div className="search-results-empty"></div>
-        )}
-      </div>
-    </div> */
 
 export default HomePage;

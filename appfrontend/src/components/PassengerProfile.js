@@ -7,7 +7,6 @@ import Hail from "@mui/icons-material/Hail";
 
 const PassengerProfile = () => {
   const userContext = useContext(UserContext);
-
   const containerStyle = {
     display: "flex",
     flexDirection: "column",
