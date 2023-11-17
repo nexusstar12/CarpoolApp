@@ -56,6 +56,8 @@ public class Pool {
     private double endLongitude;
 
     private boolean privacy;
+
+    private boolean crewCreated;
     private String startAddress;
     private String endAddress;
 
@@ -90,7 +92,17 @@ public class Pool {
     public void setCreator(Profile creator) {
         this.creator = creator;
     }
+
     //Getters and Setters
+
+
+    public boolean isCrewCreated() {
+        return crewCreated;
+    }
+
+    public void setCrewCreated(boolean crewCreated) {
+        this.crewCreated = crewCreated;
+    }
 
     public boolean getViewable(){
         return privacy;
