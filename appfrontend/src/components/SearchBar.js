@@ -70,7 +70,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
           value={searchQuery}
           onChange={handleSearchInputChange}
           onKeyDown={handleKeyDown}
-          style={{ marginRight: "10px", width: "400px" }}
+          style={{ marginRight: "10px", width: "300px" }}
         />
         <Select
           label="Filter"

@@ -8,13 +8,17 @@ import { LoadingBackdrop } from "../components/LoadingData";
 export default function ListCrewPage() {
   const [crews, setCrews] = useState([]);
   const userContext = useContext(UserContext);
-  const { profileId } = userContext.userInfo;
+  const { profileId, jwtToken } = userContext.userInfo;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axiosInstance.get(`/crew/${profileId}`);
+        const { data } = await axiosInstance.get(`/crew/${profileId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
         setCrews(data);
         setIsLoading(false);
       } catch (error) {
@@ -29,7 +33,26 @@ export default function ListCrewPage() {
     fetchData();
   }, []);
 
-  const handleClick = (crewId, type) => {};
+  const handleClick = async (crewId) => {
+    const requestBody = {
+      profileId,
+      crew_id: crewId,
+    };
+    await axiosInstance.delete(`/crew/remove/member`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      data: requestBody,
+    });
+    setIsLoading(true);
+    const { data } = await axiosInstance.get(`/crew/${profileId}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
+    setCrews(data);
+    setIsLoading(false);
+  };
 
   const CardContainer = styled("div")`
     width: 100%;
@@ -84,6 +107,7 @@ export default function ListCrewPage() {
   `;
 
   const getCards = (data) => {
+    console.log("datadatadata", data);
     if (!data) {
       return (
         <StyledCard>
@@ -104,10 +128,11 @@ export default function ListCrewPage() {
           <CardTitle>{dataRow?.description}</CardTitle>
 
           {dataRow.members.map((member) => {
+            // console.log("member", member);
             return (
               <CardContainer>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Members: </strong> {member.userId.name}
+                  <strong>Members: </strong> {member.userId?.name}
                 </Typography>
               </CardContainer>
             );
