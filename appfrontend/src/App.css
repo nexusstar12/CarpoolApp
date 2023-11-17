@@ -65,6 +65,10 @@ html {
   justify-content: space-between;
 }
 
+.home-page-title {
+  font-size: 50px;
+}
+
 .search-results-empty {
   margin-top: 200px;
 }
@@ -110,5 +114,8 @@ html {
   .search-results-container {
     height: 70%;
     overflow-y: auto;
+  }
+  .home-page-title {
+    font-size: 20px;
   }
 }

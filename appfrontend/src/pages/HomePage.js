@@ -73,12 +73,22 @@ function HomePage() {
         >
           <div className="home-page-container">
             <div className="search-container">
-              {!isMobile && (
-                <h1 style={{ fontSize: "50px", textAlign: "center" }}>
-                  Get there, together.
-                </h1>
-              )}{" "}
-              <Grid item xs={12} sm={8} md={6} lg={12} style={{ display: 'block', justifyContent: 'center', margin: 'auto'}} className="search-input">
+              <h1 className="home-page-title" style={{ textAlign: "center" }}>
+                Get there, together.
+              </h1>
+              <Grid
+                item
+                xs={12}
+                sm={8}
+                md={6}
+                lg={12}
+                style={{
+                  display: "block",
+                  justifyContent: "center",
+                  margin: "auto",
+                }}
+                className="search-input"
+              >
                 <SearchBar
                   onSearch={handleSearchSubmit}
                   style={{ width: isMobile ? "100%" : "auto" }}
