@@ -8,15 +8,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { isZipCodeValid } from "../utilities/zipCodeValidation";
 
-
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState("");
   const [error, setError] = useState(false);
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
   const [hasSearched, setHasSearched] = useState(false);
-  const [zipCodeError, setZipCodeError] = useState(null); 
-
+  const [zipCodeError, setZipCodeError] = useState(false);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -28,8 +26,18 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
         setError(true);
       } else {
         setError(false);
-        setHasSearched(true);
-        onSearch({ searchQuery, filterOption });
+        if (
+          (filterOption === "startZip" || filterOption === "endZip") &&
+          !isZipCodeValid(searchQuery)
+        ) {
+          console.log("searchQuery", searchQuery);
+          setZipCodeError(true);
+          return;
+        } else {
+          setZipCodeError(false);
+          setHasSearched(true);
+          onSearch({ searchQuery, filterOption });
+        }
       }
     }
   };
@@ -50,8 +58,18 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       setError(true);
     } else {
       setError(false);
-      setHasSearched(true);
-      onSearch({ searchQuery, filterOption });
+      console.log("!isZipCodeValid(searchQuery)", !isZipCodeValid(searchQuery));
+      if (
+        (filterOption === "startZip" || filterOption === "endZip") &&
+        !isZipCodeValid(searchQuery)
+      ) {
+        setZipCodeError(true);
+        return;
+      } else {
+        setZipCodeError(false);
+        setHasSearched(true);
+        onSearch({ searchQuery, filterOption });
+      }
     }
   };
 
@@ -103,10 +121,15 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       </Button>
       {error && (
         <Typography color="error" variant="body2">
-          {zipCodeError}
           {error && "Please select an option before searching."}
+          {zipCodeError && "Invalid zip code"}
         </Typography>
-        )}
+      )}
+      {zipCodeError && (
+        <Typography color="error" variant="body2">
+          Invalid zip code. The valid zip code should only be 5 valid numbers.
+        </Typography>
+      )}
     </div>
   );
 };

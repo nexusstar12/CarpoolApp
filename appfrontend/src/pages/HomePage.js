@@ -19,16 +19,9 @@ function HomePage() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
-  
+
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
-
-    if ((filterOption === "startZip" || filterOption === "endZip") && !isZipCodeValid(searchQuery)) {
-      setZipCodeError("Invalid zip code");
-      return;
-    } else {
-      setZipCodeError(null);
-    }
 
     const data = await axiosInstance.get(
       `/searchbar?filter=${filterOption}&value=${searchQuery}`
