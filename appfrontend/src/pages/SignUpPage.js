@@ -24,7 +24,6 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
-  const [agreeTermsError, setAgreeTermsError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -74,13 +73,6 @@ export default function SignUp() {
       return;
     } else {
       setEmailError(false);
-    }
-
-    if (!agreeTerms) {
-      setAgreeTermsError("You must agree to the Terms and Conditions to continue.");
-      return;
-    } else {
-      setAgreeTermsError(null);
     }
 
     try {
