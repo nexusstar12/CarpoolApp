@@ -3,12 +3,14 @@ import SearchBar from "../components/SearchBar";
 import React, { useState } from "react";
 import axiosInstance from "../config/axios.config";
 import { SearchResult } from "../components/SearchResult";
+import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
+import { isZipCodeValid } from "../utilities/zipCodeValidation";
 
 const defaultTheme = createTheme();
 
@@ -17,9 +19,16 @@ function HomePage() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
-
+  
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
+
+    if ((filterOption === "startZip" || filterOption === "endZip") && !isZipCodeValid(searchQuery)) {
+      setZipCodeError("Invalid zip code");
+      return;
+    } else {
+      setZipCodeError(null);
+    }
 
     const data = await axiosInstance.get(
       `/searchbar?filter=${filterOption}&value=${searchQuery}`

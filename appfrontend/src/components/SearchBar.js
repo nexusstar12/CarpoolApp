@@ -6,6 +6,8 @@ import Popup from "reactjs-popup";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { isZipCodeValid } from "../utilities/zipCodeValidation";
+
 
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,6 +15,8 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const [error, setError] = useState(false);
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
   const [hasSearched, setHasSearched] = useState(false);
+  const [zipCodeError, setZipCodeError] = useState(null); 
+
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -99,9 +103,10 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       </Button>
       {error && (
         <Typography color="error" variant="body2">
+          {zipCodeError}
           {error && "Please select an option before searching."}
         </Typography>
-      )}
+        )}
     </div>
   );
 };
