@@ -44,12 +44,22 @@ public class CrewController {
     @Autowired
     private PoolRepository poolRepository;
 
+    /**
+     * Create a crew entity.
+     * @param crew from json request body.
+     * @return ResponseEntity<Crew>
+     */
     @PostMapping({"", "/"})
     public ResponseEntity<Crew> addCrew(@RequestBody Crew crew) {
         Crew newCrew = crewService.addCrew(crew);
         return new ResponseEntity<>(newCrew, HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves crews certain profiles are a member of.
+     * @param profileId
+     * @return a list of crew entities the user is a member of.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<List<CrewResponse>> getCrewById(@PathVariable("id") int profileId) {
 
@@ -104,6 +114,12 @@ public class CrewController {
         return new ResponseEntity<>(crews, HttpStatus.OK);
     }
 
+    /**
+     * Updates members of an existing crew.
+     * @param id (crew id)
+     * @param crew
+     * @return A json response body of the updated crew.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Crew> updateCrew(@PathVariable("id") int id, @RequestBody Crew crew) {
         Optional<Crew> currentCrew = crewService.getCrewById(id);
@@ -116,10 +132,16 @@ public class CrewController {
     }
 
 
+    /**
+     * Removes a single member of a crew, if the member of the crew removed is also the
+     * creator then the entire crew entity is deleted.
+     * @param jsonMap : json request body with profileID and crewID.
+     * @return String in json response body whether removal is successful or not.
+     */
     @DeleteMapping("/remove/member")
     public ResponseEntity<?> deleteUser(@RequestBody Map<String, Object> jsonMap) {
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-        System.out.println("we are in the remove memver function");
+        System.out.println("we are in the remove member function");
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -135,8 +157,6 @@ public class CrewController {
         }
 
         Crew crew = optionalCrew.get();
-
-        //passing in profileId,crewId
 
         //if profileId called is the creator, delete the entire crew
         //if not, remove profile from crew
@@ -184,13 +204,23 @@ public class CrewController {
         }
     }
 
-    @DeleteMapping("/{id:[\\d]+}") //"/{id}"
+    /**
+     * Delete a crew entity.
+     * @param id (Crew ID)
+     * @return no content returned on deletion.
+     */
+    @DeleteMapping("/{id:[\\d]+}") //"/{id}" regex to make pathing more specific, only accepts integers.
     public ResponseEntity<Void> deleteCrew(@PathVariable("id") int id) {
         crewService.deleteCrew(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
+    /**
+     * Create a crew from from a previous pool id(carpoool id). Member of the pool will be the
+     * new members of the crew.
+     * @param jsonMap keys including the pool_id and creator of the crew.
+     * @return a json return body confirming if new crew is created or not.
+     */
     @PostMapping("/createcrew")
     public ResponseEntity<?> createCrew(@RequestBody Map<String,Object> jsonMap){
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
