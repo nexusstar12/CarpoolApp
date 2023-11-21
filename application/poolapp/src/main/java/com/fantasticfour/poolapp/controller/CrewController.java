@@ -1,3 +1,7 @@
+/**
+ * CrewController is part of the pool REST api that handles logic for CREWS.
+ *  FYI: A crew is a group of people that can schedule rides with one another.
+ */
 package com.fantasticfour.poolapp.controller;
 
 import com.fantasticfour.poolapp.CustomResponse.CrewListResponse;
@@ -55,6 +59,7 @@ public class CrewController {
                                       .filter(Optional::isPresent)
                                       .map(Optional::get)
                                       .collect(Collectors.toList());
+
         if(!crews.isEmpty()){
             for (Crew crew: crews
                  ) {
@@ -244,25 +249,6 @@ public class CrewController {
         crew.setDescription(pool.getDescription());
 
 
-
-        /*
-        if(jsonMap.get("member2_id") != null){
-            Optional<Profile> member_2 = profileRepository.findProfileByProfileId((int)jsonMap.get("member2_id"));
-            if(member_2.isPresent()){
-                member2_id = member_2.get();
-                crew.setMember2(member2_id);
-                profileExists = true;
-            }
-        }
-        if(jsonMap.get("member3_id") != null){
-            Optional<Profile> member_3 = profileRepository.findProfileByProfileId((int)jsonMap.get("member3_id"));
-            if(member_3.isPresent()){
-                member3_id = member_3.get();
-                crew.setMember3(member3_id);
-                profileExists = true;
-            }
-        }*/
-
         if(profileExists){
             crewRepository.save(crew);
             return new ResponseEntity<>("Crew created", HttpStatus.OK);
@@ -271,14 +257,6 @@ public class CrewController {
         else{
             return new ResponseEntity<>("Profile(s) do not exist, crew cannot be created", HttpStatus.NOT_FOUND);
         }
-
-
-
-
-
-
-
-
 
     }
 }
