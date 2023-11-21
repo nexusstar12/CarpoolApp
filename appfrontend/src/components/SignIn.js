@@ -21,7 +21,10 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const history = useNavigate();
   const [error, setError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const userContext = useContext(UserContext);
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +33,21 @@ export default function SignIn() {
     const password = data.get("password");
 
     const requestBody = { email, password };
+
+
+    if (!email || !emailRegex.test(email)) {
+      setEmailError("Please Enter a Valid Email");
+      return;
+    } else {
+      setEmailError(false);
+    }
+    if(!password){
+      setPasswordError("Please Enter a Valid Password");
+      return;
+    }
+    else{
+      setPasswordError(false);
+    }
     try {
       const response = await axiosInstance.post("/signin", requestBody);
       if (response.status === 200) {
@@ -116,6 +134,8 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error = {!!emailError}
+                helperText={emailError}
               />
               <TextField
                 margin="normal"
@@ -126,6 +146,8 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error = {!!passwordError}
+                helperText={passwordError}
               />
               <Typography color="error" variant="body2">
                 {error}
