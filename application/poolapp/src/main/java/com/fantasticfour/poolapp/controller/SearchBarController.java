@@ -1,5 +1,6 @@
 package com.fantasticfour.poolapp.controller;
 
+import com.fantasticfour.poolapp.CustomResponse.CityValidationEnum;
 import com.fantasticfour.poolapp.CustomResponse.ZipCodeValidationEnum;
 import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.User;
@@ -7,6 +8,7 @@ import com.fantasticfour.poolapp.domain.ZipData;
 import com.fantasticfour.poolapp.repository.PoolRepository;
 import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.repository.ZipDataRepository;
+import com.fantasticfour.poolapp.services.ValidationService;
 import com.fantasticfour.poolapp.services.ZipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,9 @@ public class SearchBarController {
     @Autowired
     ZipService zipService;
 
+    @Autowired
+    ValidationService validationService;
+
     @GetMapping("/api/searchbar")
     public ResponseEntity<List<Object>> searchBar (@RequestParam String filter, @RequestParam String value) {
         //http://localhost:8080/api/searchbar?filter=[columnNameInDB]&value=[stringTobesearched]
@@ -44,12 +49,20 @@ public class SearchBarController {
         String regex = "^" + value;
 
         ZipCodeValidationEnum zipCodeValidationEnum;
+        CityValidationEnum cityValidationEnum;
 
+        //determines which type of search function in the dropdown menu is executed
         switch (filter) {
             case "name":
                 matchByUserName(regex, results);
                 break;
             case "city":
+                //validate city
+                cityValidationEnum = validationService.cityInputValidation(value);
+                if (cityValidationEnum != CityValidationEnum.CITY_IS_VALID) {
+                    results.add(cityValidationEnum);
+                    return new ResponseEntity<>(results, HttpStatus.UNAUTHORIZED);
+                }
                 matchByStartCity(regex, results);
                 break;
             case "startZip":
