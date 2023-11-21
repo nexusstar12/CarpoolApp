@@ -1,5 +1,5 @@
 /**
- * CrewController is part of the pool REST api that handles logic for CREWS.
+ * CrewController: is part of the pool REST api that handles logic for CREWS.
  *  FYI: A crew is a group of people that can schedule rides with one another.
  */
 package com.fantasticfour.poolapp.controller;
@@ -65,11 +65,14 @@ public class CrewController {
 
         CrewListResponse crewListResponse = new CrewListResponse();
         List<CrewResponse> crewResponselist = new ArrayList<>();
+
+        //get crews by profile id
         List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                                       .filter(Optional::isPresent)
                                       .map(Optional::get)
                                       .collect(Collectors.toList());
 
+        //build a custom http response body
         if(!crews.isEmpty()){
             for (Crew crew: crews
                  ) {
@@ -105,6 +108,10 @@ public class CrewController {
         }
     }
 
+    /**
+     * Get all crews in the database
+     * @return A list of all the crews in the DB.
+     */
     @GetMapping({"", "/"})
     public ResponseEntity<List<Crew>> getAllCrews() {
         List<Crew> crews = crewService.getAllCrews();
