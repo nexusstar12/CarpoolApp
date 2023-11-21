@@ -60,12 +60,13 @@ public class SignUpUserController {
         Map<String, Object> responseMap = new HashMap<>();
 
 
-        //validate user inputs:
+        //validate user inputs: returns a string that describe which field is empty, returns is valid otherwise.
         String validityResponse = SignUpValidationResponseStringGenerator.generateResponse(jsonMap, validationService);
         if (!validityResponse.equals("IS_VALID")) {
             responseMap.put("error", validityResponse);
             return new ResponseEntity<>(responseMap, HttpStatus.UNAUTHORIZED);
         }
+
         //create new user
         String firstName = jsonMap.get("firstName");
         String lastName = jsonMap.get("lastName");
