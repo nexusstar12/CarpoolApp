@@ -33,6 +33,8 @@ export default function PostPool() {
   const [privacy, setPrivacy] = useState("");
   const [crews, setCrews] = useState([]);
   const [selectedCrewId, setSelectedCrewId] = useState("");
+  const [error, setError] = useState(null);
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -83,6 +85,52 @@ export default function PostPool() {
     } catch (error) {
       console.log("error", error);
     }
+
+    
+
+    if(!name){
+      setError("Required");
+      return;
+    }
+    else{
+      setError(false);
+    }
+    if(!startStreet){
+      setError("Required");
+      return;
+    }
+    else{
+      setError(false);
+    }
+    if(!startCity){
+      setError("Required");
+      return;
+    }
+    else{
+      setError(false);
+    }
+    if(!startZip){
+      setError("Required");
+      return;
+    }
+    else{
+      setError(false);
+    }
+    if(!startState){
+      setError("Required");
+      return;
+    }
+    else{
+      setError(false);
+    }
+    if(!startStreet){
+      setError("Required");
+      return;
+    }
+    else{
+      setError(false);
+    }
+  
   };
 
   const handlePrivacyChange = async (e) => {
@@ -102,6 +150,20 @@ export default function PostPool() {
     const crew = e.target.value;
     setSelectedCrewId(crew);
   };
+      /*name,
+      startStreet,
+      startCity,
+      startZip,
+      startState,
+      startTime: formattedDate,
+      endStreet,
+      endZip,
+      endCity,
+      endState,
+      crewId: selectedCrewId ? parseInt(selectedCrewId) : null,
+      creatorId: profileId,
+      privacy: privacy === "public" ? true : false,*/
+
 
   return (
     <Box
