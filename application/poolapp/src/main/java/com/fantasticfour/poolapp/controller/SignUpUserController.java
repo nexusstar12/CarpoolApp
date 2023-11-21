@@ -1,5 +1,6 @@
 package com.fantasticfour.poolapp.controller;
 
+import com.fantasticfour.poolapp.CustomResponse.SignUpValidationResponseStringGenerator;
 import com.fantasticfour.poolapp.domain.*;
 import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.services.*;
@@ -48,6 +49,9 @@ public class SignUpUserController {
     @Autowired
     private UserRegistrationService userRegistrationService;
 
+    @Autowired
+    ValidationService validationService;
+
     @PostMapping({"", "/"})
     public ResponseEntity<Map<String, Object>> addUser (@RequestBody Map<String, String> jsonMap) {
 //        jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
@@ -55,6 +59,13 @@ public class SignUpUserController {
         //build custom json response body
         Map<String, Object> responseMap = new HashMap<>();
 
+
+        //validate user inputs:
+        String validityResponse = SignUpValidationResponseStringGenerator.generateResponse(jsonMap, validationService);
+        if (!validityResponse.equals("IS_VALID")) {
+            responseMap.put("error", validityResponse);
+            return new ResponseEntity<>(responseMap, HttpStatus.UNAUTHORIZED);
+        }
         //create new user
         String firstName = jsonMap.get("firstName");
         String lastName = jsonMap.get("lastName");
