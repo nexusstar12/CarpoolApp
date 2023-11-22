@@ -185,6 +185,9 @@ public class CrewController {
             return new ResponseEntity<>("Crew deleted", HttpStatus.OK);
         }
 
+        /**
+         * Deleting crew members based on profile ID
+         */
         if(crew.getMember1() != null && crew.getMember1().getProfileId() == profileId){
             crew.setMember1(null);
             isDeleted = true;
@@ -232,6 +235,7 @@ public class CrewController {
     public ResponseEntity<?> createCrew(@RequestBody Map<String,Object> jsonMap){
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
+        // Checking is request body is empty
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>("Nothing in Json Body", HttpStatus.NO_CONTENT);
         }
@@ -245,7 +249,7 @@ public class CrewController {
         Crew crew = new Crew();
         Pool pool = new Pool();
 
-
+        // Create crew from original pool
         if(jsonMap.get("origin_pool_id") != null){
             originPoolId = (int)jsonMap.get("origin_pool_id");
             Optional<Pool> optionalPool = poolRepository.findPoolByPoolId(originPoolId);
@@ -268,6 +272,7 @@ public class CrewController {
             }
         }
 
+        // Setting members in a crew
         if(pool.getMember1() != null){
             member1_id = pool.getMember1();
             crew.setMember1(member1_id);
