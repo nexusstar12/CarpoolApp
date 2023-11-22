@@ -183,43 +183,14 @@ public class PoolController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @PostMapping("/createpool")
     public ResponseEntity<?> createPool(@RequestBody Map<String, Object> poolData) {
-        List<String> errors = new ArrayList<>();
-
-        // Fields that must not be null regardless of privacy setting
-        String[] requiredFields = {"startTime", "location", "destination"};
-
-        // Add 'someOtherField' to the required fields if privacy is not false
-        Boolean privacy = (Boolean) poolData.get("privacy");
-        if (privacy == null) {
-            errors.add("Privacy cannot be null");
-        } else if (privacy) {
-            // When privacy is true, add 'crewId' to the list of required fields
-            requiredFields = Arrays.copyOf(requiredFields, requiredFields.length + 1);
-            requiredFields[requiredFields.length - 1] = "crewId";
-        }
-
-        // Check all required fields
-        for (String field : requiredFields) {
-            if (poolData.get(field) == null) {
-                errors.add(field + "cannot be null");
-            }
-        }
-
-        // Return any errors
-        if (!errors.isEmpty()) {
-            return new ResponseEntity<>(String.join(", ", errors), HttpStatus.BAD_REQUEST);
-        }
-
-        // If there's no errors, continue pool creation
         try {
             poolService.createPool(poolData);
             return new ResponseEntity<>("Pool successfully created", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
+        } catch(Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
