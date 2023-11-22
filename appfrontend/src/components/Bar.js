@@ -55,6 +55,9 @@ export default function Bar() {
         <Toolbar>
           {isMobile ? (
             <>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Pool
+              </Typography>
               <IconButton
                 size="large"
                 edge="start"
