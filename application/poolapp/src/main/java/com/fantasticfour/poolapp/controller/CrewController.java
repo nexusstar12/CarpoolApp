@@ -1,3 +1,7 @@
+/**
+ * CrewController: is part of the pool REST api that handles logic for CREWS.
+ *  FYI: A crew is a group of people that can schedule rides with one another.
+ */
 package com.fantasticfour.poolapp.controller;
 
 import com.fantasticfour.poolapp.CustomResponse.CrewListResponse;
@@ -40,21 +44,35 @@ public class CrewController {
     @Autowired
     private PoolRepository poolRepository;
 
+    /**
+     * Create a crew entity.
+     * @param crew from json request body.
+     * @return ResponseEntity<Crew>
+     */
     @PostMapping({"", "/"})
     public ResponseEntity<Crew> addCrew(@RequestBody Crew crew) {
         Crew newCrew = crewService.addCrew(crew);
         return new ResponseEntity<>(newCrew, HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves crews certain profiles are a member of.
+     * @param profileId
+     * @return a list of crew entities the user is a member of.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<List<CrewResponse>> getCrewById(@PathVariable("id") int profileId) {
 
         CrewListResponse crewListResponse = new CrewListResponse();
         List<CrewResponse> crewResponselist = new ArrayList<>();
+
+        //get crews by profile id
         List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                                       .filter(Optional::isPresent)
                                       .map(Optional::get)
                                       .collect(Collectors.toList());
+
+        //build a custom http response body
         if(!crews.isEmpty()){
             for (Crew crew: crews
                  ) {
@@ -90,6 +108,10 @@ public class CrewController {
         }
     }
 
+    /**
+     * Get all crews in the database
+     * @return A list of all the crews in the DB.
+     */
     @GetMapping({"", "/"})
     public ResponseEntity<List<Crew>> getAllCrews() {
         List<Crew> crews = crewService.getAllCrews();
@@ -99,6 +121,12 @@ public class CrewController {
         return new ResponseEntity<>(crews, HttpStatus.OK);
     }
 
+    /**
+     * Updates members of an existing crew.
+     * @param id (crew id)
+     * @param crew
+     * @return A json response body of the updated crew.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Crew> updateCrew(@PathVariable("id") int id, @RequestBody Crew crew) {
         Optional<Crew> currentCrew = crewService.getCrewById(id);
@@ -111,10 +139,16 @@ public class CrewController {
     }
 
 
+    /**
+     * Removes a single member of a crew, if the member of the crew removed is also the
+     * creator then the entire crew entity is deleted.
+     * @param jsonMap : json request body with profileID and crewID.
+     * @return String in json response body whether removal is successful or not.
+     */
     @DeleteMapping("/remove/member")
     public ResponseEntity<?> deleteUser(@RequestBody Map<String, Object> jsonMap) {
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-        System.out.println("we are in the remove memver function");
+        System.out.println("we are in the remove member function");
         if(jsonMap.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -130,8 +164,6 @@ public class CrewController {
         }
 
         Crew crew = optionalCrew.get();
-
-        //passing in profileId,crewId
 
         //if profileId called is the creator, delete the entire crew
         //if not, remove profile from crew
@@ -179,13 +211,23 @@ public class CrewController {
         }
     }
 
-    @DeleteMapping("/{id:[\\d]+}") //"/{id}"
+    /**
+     * Delete a crew entity.
+     * @param id (Crew ID)
+     * @return no content returned on deletion.
+     */
+    @DeleteMapping("/{id:[\\d]+}") //"/{id}" regex to make pathing more specific, only accepts integers.
     public ResponseEntity<Void> deleteCrew(@PathVariable("id") int id) {
         crewService.deleteCrew(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
+    /**
+     * Create a crew from from a previous pool id(carpoool id). Member of the pool will be the
+     * new members of the crew.
+     * @param jsonMap keys including the pool_id and creator of the crew.
+     * @return a json return body confirming if new crew is created or not.
+     */
     @PostMapping("/createcrew")
     public ResponseEntity<?> createCrew(@RequestBody Map<String,Object> jsonMap){
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
@@ -244,25 +286,6 @@ public class CrewController {
         crew.setDescription(pool.getDescription());
 
 
-
-        /*
-        if(jsonMap.get("member2_id") != null){
-            Optional<Profile> member_2 = profileRepository.findProfileByProfileId((int)jsonMap.get("member2_id"));
-            if(member_2.isPresent()){
-                member2_id = member_2.get();
-                crew.setMember2(member2_id);
-                profileExists = true;
-            }
-        }
-        if(jsonMap.get("member3_id") != null){
-            Optional<Profile> member_3 = profileRepository.findProfileByProfileId((int)jsonMap.get("member3_id"));
-            if(member_3.isPresent()){
-                member3_id = member_3.get();
-                crew.setMember3(member3_id);
-                profileExists = true;
-            }
-        }*/
-
         if(profileExists){
             crewRepository.save(crew);
             return new ResponseEntity<>("Crew created", HttpStatus.OK);
@@ -271,14 +294,6 @@ public class CrewController {
         else{
             return new ResponseEntity<>("Profile(s) do not exist, crew cannot be created", HttpStatus.NOT_FOUND);
         }
-
-
-
-
-
-
-
-
 
     }
 }
