@@ -124,21 +124,6 @@ public class PoolService {
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date-time format for start_time", e);
         }
-        // Validation
-        if (description == null ||
-                startStreet == null ||
-                startCity == null ||
-                startZip == null ||
-                startState == null ||
-                endStreet == null ||
-                endCity == null ||
-                endZip == null ||
-                endState == null ||
-                creatorId == null ||
-                privacy == null ||
-                startTime == null) {
-            throw new IllegalArgumentException("Required fields are missing");
-        }
 
         if(!profileExists(creatorId)) {
             throw new IllegalArgumentException("ProfileId not found");
