@@ -32,61 +32,68 @@ public class ValidationService {
     }
 
     public ResponseEntity<String> createPoolValidation(Map<String, Object> poolData) {
-        // Check for null or empty values in description
-        if (poolData.get("description") == null || ((String) poolData.get("description")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.descriptionCannotBeNull");
+        StringBuilder errors = new StringBuilder();
+
+        // Length validation for street address and city
+        validateLength("startStreet", poolData, 85, "invalidEntry.streetAddressMustConsistOfFewerThan86Characters", errors);
+        validateLength("endStreet", poolData, 85, "invalidEntry.streetAddressMustConsistOfFewerThan86Characters", errors);
+        validateLength("startCity", poolData, 85, "invalidEntry.cityMustConsistOfFewerThan86Characters", errors);
+        validateLength("endCity", poolData, 85, "invalidEntry.cityMustConsistOfFewerThan86Characters", errors);
+
+        // Length validation for zip code
+        validateLength("startZip", poolData, 5, "invalidEntry.zipMustBeFiveCharacters", errors);
+        validateLength("endZip", poolData, 5, "invalidEntry.zipMustBeFiveCharacters", errors);
+
+        // Length validation for state
+        validateLength("startState", poolData, 2, "invalidEntry.stateMustBeTwoCharacters", errors);
+        validateLength("endState", poolData, 2, "invalidEntry.stateMustBeTwoCharacters", errors);
+
+        // Character validation for street address
+        validateCharacters("startStreet", poolData, "^[a-zA-Z0-9-. ]+$", "invalidEntry.streetAddressMustContainOnlyLettersHyphensPeriods", errors);
+        validateCharacters("endStreet", poolData, "^[a-zA-Z0-9-. ]+$", "invalidEntry.streetAddressMustContainOnlyLettersHyphensPeriods", errors);
+
+        // Character validation for city
+        validateCharacters("startCity", poolData, "^[a-zA-Z-. ]+$", "invalidEntry.cityMustContainOnlyLettersHyphensPeriods", errors);
+        validateCharacters("endCity", poolData, "^[a-zA-Z-. ]+$", "invalidEntry.cityMustContainOnlyLettersHyphensPeriods", errors);
+
+        // Character validation for zip code
+        validateCharacters("startZip", poolData, "^[0-9]+$", "invalidEntry.zipMustBeNumeric", errors);
+        validateCharacters("endZip", poolData, "^[0-9]+$", "invalidEntry.zipMustBeNumeric", errors);
+
+        // Character validation for state
+        validateCharacters("startState", poolData, "^[a-zA-Z]+$", "invalidEntry.stateMustBeAlphabetic", errors);
+        validateCharacters("endState", poolData, "^[a-zA-Z]+$", "invalidEntry.stateMustBeAlphabetic", errors);
+
+        // Name or description validation
+        if (poolData.get("name") == null || ((String) poolData.get("name")).isBlank()) {
+            errors.append("error.descriptionCannotBeNull ");
         }
-        // Check for null or empty values in startStreet
-        if (poolData.get("startStreet") == null || ((String) poolData.get("startStreet")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.startStreetCannotBeNull");
-        }
-        // Check for null or empty values in startCity
-        if (poolData.get("startCity") == null || ((String) poolData.get("startCity")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.startCityCannotBeNull");
-        }
-        // Check for null or empty values in startZip
-        if (poolData.get("startZip") == null || ((String) poolData.get("startZip")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.startZipCannotBeNull");
-        }
-        // Check for null or empty values in startState
-        if (poolData.get("startState") == null || ((String) poolData.get("startState")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.startStateCannotBeNull");
-        }
-        // Check for null or empty values in endStreet
-        if (poolData.get("endStreet") == null || ((String) poolData.get("endStreet")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.endStreetCannotBeNull");
-        }
-        // Check for null or empty values in endCity
-        if (poolData.get("endCity") == null || ((String) poolData.get("endCity")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.endCityCannotBeNull");
-        }
-        // Check for null or empty values in endZip
-        if (poolData.get("endZip") == null || ((String) poolData.get("endZip")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.endZipCannotBeNull");
-        }
-        // Check for null or empty values in endState
-        if (poolData.get("endState") == null || ((String) poolData.get("endState")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.endStateCannotBeNull");
-        }
-        // Check for null or empty values in creatorId
-        if (poolData.get("creatorId") == null) {
-            return ResponseEntity.badRequest().body("required.creatorIdCannotBeNull");
-        }
-        // Check for null values in privacy
+
+        // Privacy validation
         if (poolData.get("privacy") == null) {
-            return ResponseEntity.badRequest().body("required.privacyCannotBeNull");
+            errors.append("error.privacyCannotBeNull ");
         }
-        // Check for null or improperly formatted values in startTime
-        if (poolData.get("startTime") == null || ((String) poolData.get("startTime")).isBlank()) {
-            return ResponseEntity.badRequest().body("required.startTimeCannotBeNull");
-        } else {
-            try {
-                LocalDateTime.parse((String) poolData.get("startTime"));
-            } catch (DateTimeParseException e) {
-                return ResponseEntity.badRequest().body("invalid.startTimeFormat");
-            }
+
+        // Return any errors here
+        if (!errors.isEmpty()) {
+            return ResponseEntity.badRequest().body(errors.toString().trim());
         }
+
         // If all fields are valid
         return ResponseEntity.ok("All fields are valid");
+    }
+
+    private void validateLength(String fieldName, Map<String, Object> poolData, int maxLength, String errorMessage, StringBuilder errors) {
+        String fieldValue = (String) poolData.get(fieldName);
+        if (fieldValue != null && fieldValue.length() > maxLength) {
+            errors.append(errorMessage).append(" ");
+        }
+    }
+
+    private void validateCharacters(String fieldName, Map<String, Object> poolData, String regex, String errorMessage, StringBuilder errors) {
+        String fieldValue = (String) poolData.get(fieldName);
+        if (fieldValue != null && !fieldValue.matches(regex)) {
+            errors.append(errorMessage).append(" ");
+        }
     }
 }
