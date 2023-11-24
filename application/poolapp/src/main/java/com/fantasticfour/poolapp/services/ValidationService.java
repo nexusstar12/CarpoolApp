@@ -69,6 +69,46 @@ public class ValidationService {
             errors.append("error.descriptionCannotBeNull ");
         }
 
+        // startStreet validation
+        if (poolData.get("startStreet") == null || ((String) poolData.get("startStreet")).isBlank()) {
+            errors.append("error.startStreetCannotBeNull ");
+        }
+
+        // startCity validation
+        if (poolData.get("startCity") == null || ((String) poolData.get("startCity")).isBlank()) {
+            errors.append("error.startCityCannotBeNull ");
+        }
+
+        // startZip validation
+        if (poolData.get("startZip") == null || ((String) poolData.get("startZip")).isBlank()) {
+            errors.append("error.startZipCannotBeNull ");
+        }
+
+        // startState validation
+        if (poolData.get("startState") == null || ((String) poolData.get("startState")).isBlank()) {
+            errors.append("error.startStateCannotBeNull ");
+        }
+
+        // endStreet validation
+        if (poolData.get("endStreet") == null || ((String) poolData.get("endStreet")).isBlank()) {
+            errors.append("error.endStreetCannotBeNull ");
+        }
+
+        // endCity validation
+        if (poolData.get("endCity") == null || ((String) poolData.get("endCity")).isBlank()) {
+            errors.append("error.endCityCannotBeNull ");
+        }
+
+        // endZip validation
+        if (poolData.get("endZip") == null || ((String) poolData.get("endZip")).isBlank()) {
+            errors.append("error.endZipCannotBeNull ");
+        }
+
+        // endState validation
+        if (poolData.get("endState") == null || ((String) poolData.get("endState")).isBlank()) {
+            errors.append("error.endStateCannotBeNull ");
+        }
+
         // Privacy validation
         if (poolData.get("privacy") == null) {
             errors.append("error.privacyCannotBeNull ");
