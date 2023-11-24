@@ -114,6 +114,19 @@ public class ValidationService {
             errors.append("error.privacyCannotBeNull ");
         }
 
+        // Check for startDateTime and validate it's in the future
+        String startDateTimeStr = (String) poolData.get("startTime");
+        if (startDateTimeStr != null && !startDateTimeStr.isBlank()) {
+            try {
+                LocalDateTime startDateTime = LocalDateTime.parse(startDateTimeStr);
+                if (startDateTime.isBefore(LocalDateTime.now())) {
+                    errors.append("invalidEntry.dateTimeMustBeInTheFuture ");
+                }
+            } catch (DateTimeParseException e) {
+                errors.append("invalid.startTimeFormat ");
+            }
+        }
+
         // Return any errors here
         if (!errors.isEmpty()) {
             return ResponseEntity.badRequest().body(errors.toString().trim());
