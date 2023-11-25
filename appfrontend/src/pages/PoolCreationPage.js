@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   TextField,
@@ -32,7 +32,26 @@ export default function PostPool() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [privacy, setPrivacy] = useState("");
   const [crews, setCrews] = useState([]);
+  const [hasCrew, setHasCrew] = useState(false);
   const [selectedCrewId, setSelectedCrewId] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axiosInstance.get(`/crew/${profileId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+        setHasCrew(true);
+        setCrews(data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -87,12 +106,15 @@ export default function PostPool() {
 
   const handlePrivacyChange = async (e) => {
     const privacy = e.target.value;
-    console.log("privacy", privacy);
     setPrivacy(privacy);
 
     if (privacy === "private") {
       try {
-        const { data } = await axiosInstance.get(`/crew/${profileId}`);
+        const { data } = await axiosInstance.get(`/crew/${profileId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
         setCrews(data);
       } catch (error) {}
     }
@@ -136,7 +158,6 @@ export default function PostPool() {
             <TextField fullWidth name="name" label="Pool Name" sx={{ mb: 2 }} />
           </AccordionDetails>
         </Accordion>
-
         {/* Enter start location section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -169,7 +190,6 @@ export default function PostPool() {
             />
           </AccordionDetails>
         </Accordion>
-
         {/* Enter end location section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -197,7 +217,6 @@ export default function PostPool() {
             />
           </AccordionDetails>
         </Accordion>
-
         {/* Start time/date section */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -217,46 +236,46 @@ export default function PostPool() {
             </LocalizationProvider>
           </AccordionDetails>
         </Accordion>
-
         {/* Public or Private Pool section */}
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            Privacy Settings
-          </AccordionSummary>
-          <AccordionDetails>
-            <RadioGroup value={privacy} onChange={handlePrivacyChange}>
-              <FormControlLabel
-                value="public"
-                control={<Radio />}
-                name="publicPool"
-                label="Public"
-              />
-              <FormControlLabel
-                value="private"
-                control={<Radio />}
-                name="privatePool"
-                label="Private"
-              />
-            </RadioGroup>
-            {privacy === "private" && (
-              <Select
-                fullWidth
-                value={selectedCrewId}
-                onChange={handleSelectChange}
-                displayEmpty // This prop allows us to display an empty item
-              >
-                <MenuItem value="">Please select a crew</MenuItem>
-                {crews.length &&
-                  crews.map((crew) => (
-                    <MenuItem key={crew.crewId} value={crew.crewId}>
-                      {crew.description}
-                    </MenuItem>
-                  ))}
-              </Select>
-            )}
-          </AccordionDetails>
-        </Accordion>
-
+        {hasCrew && (
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              Privacy Settings
+            </AccordionSummary>
+            <AccordionDetails>
+              <RadioGroup value={privacy} onChange={handlePrivacyChange}>
+                <FormControlLabel
+                  value="public"
+                  control={<Radio />}
+                  name="publicPool"
+                  label="Public"
+                />
+                <FormControlLabel
+                  value="private"
+                  control={<Radio />}
+                  name="privatePool"
+                  label="Private"
+                />
+              </RadioGroup>
+              {privacy === "private" && (
+                <Select
+                  fullWidth
+                  value={selectedCrewId}
+                  onChange={handleSelectChange}
+                  displayEmpty // This prop allows us to display an empty item
+                >
+                  <MenuItem value="">Please select a crew</MenuItem>
+                  {crews.length &&
+                    crews.map((crew) => (
+                      <MenuItem key={crew.crewId} value={crew.crewId}>
+                        {crew.description}
+                      </MenuItem>
+                    ))}
+                </Select>
+              )}
+            </AccordionDetails>
+          </Accordion>
+        )}
         <Button
           variant="contained"
           color="primary"
