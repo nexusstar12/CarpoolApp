@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axiosInstance from "../config/axios.config";
 import { useNavigate } from "react-router-dom";
@@ -24,16 +25,15 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
-  const [agreeTermsError, setAgreeTermsError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [firstNameError, setFirstNameError] = useState(null);
   const [lastNameError, setLastNameError] = useState(null);
   const [firstNameCharError, setFirstNameCharError] = useState(null);
-const [lastNameCharError, setLastNameCharError] = useState(null);
+  const [lastNameCharError, setLastNameCharError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,14 +59,18 @@ const [lastNameCharError, setLastNameCharError] = useState(null);
     }
     const firstNameRegex = /^[a-zA-Z.-]+$/;
     if (!firstNameRegex.test(firstName)) {
-      setFirstNameCharError("Enter a name consisting only of letters, hyphens, or periods.");
+      setFirstNameCharError(
+        "Enter a name consisting only of letters, hyphens, or periods."
+      );
       return;
     } else {
       setFirstNameCharError(null);
     }
     const lastNameRegex = /^[a-zA-Z.-]+$/;
     if (!lastNameRegex.test(lastName)) {
-      setLastNameCharError("Enter a name consisting only of letters, hyphens, or periods.");
+      setLastNameCharError(
+        "Enter a name consisting only of letters, hyphens, or periods."
+      );
       return;
     } else {
       setLastNameCharError(null);
@@ -105,24 +109,56 @@ const [lastNameCharError, setLastNameCharError] = useState(null);
       setEmailError(false);
     }
 
-    if (!agreeTerms) {
-      setAgreeTermsError(
-        "You must agree to the Terms and Conditions to continue."
-      );
-      return;
-    } else {
-      setAgreeTermsError(null);
-    }
-
     try {
       const response = await axiosInstance.post("/signup", requestBody);
 
       if (response.status === 201) {
-        history("/signin");
+        setShowSuccessModal(true);
       }
     } catch (error) {
       setError(error.response.data.message);
     }
+  };
+
+  const SuccessModal = () => {
+    const handleRedirect = () => {
+      setShowSuccessModal(false);
+      history("/signin");
+    };
+
+    return (
+      <Modal
+        open={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Typography id="success-modal-title" variant="h6" component="h2">
+            Signup Successful!
+          </Typography>
+          <Typography id="success-modal-description" sx={{ mt: 2 }}>
+            Your account has been created. You can now sign in.
+          </Typography>
+          <Button onClick={handleRedirect}>Go to Sign In</Button>
+        </Box>
+      </Modal>
+    );
   };
 
   return (
@@ -165,6 +201,7 @@ const [lastNameCharError, setLastNameCharError] = useState(null);
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
+
             <Box
               component="form"
               noValidate
@@ -315,6 +352,7 @@ const [lastNameCharError, setLastNameCharError] = useState(null);
           }}
         />
       </Grid>
+      <SuccessModal />
     </ThemeProvider>
   );
 }

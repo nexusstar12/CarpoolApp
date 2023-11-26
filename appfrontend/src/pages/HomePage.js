@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
+import { Typography } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -24,6 +25,8 @@ function HomePage() {
     const data = await axiosInstance.get(
       `/searchbar?filter=${filterOption}&value=${searchQuery}`
     );
+
+    console.log("data", data);
     setResult(data.data);
   };
 
@@ -94,17 +97,20 @@ function HomePage() {
                   style={{ width: isMobile ? "100%" : "auto" }}
                 />
               </Grid>
-              {result.length > 0 ? (
-                <div className="search-results-container">
+
+              <div className="search-results-container">
+                {result.length > 0 ? (
                   <SearchResult
                     className="search-result"
                     result={result}
                     itemsPerPage={10}
                   />
-                </div>
-              ) : (
-                <div className="search-results-empty"></div>
-              )}
+                ) : (
+                  <Typography>
+                    No pools found. Try searching for a pool in San Francisco.
+                  </Typography>
+                )}
+              </div>
             </div>
           </div>
         </Grid>
