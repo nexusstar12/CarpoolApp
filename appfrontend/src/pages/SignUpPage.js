@@ -30,6 +30,10 @@ export default function SignUp() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const [firstNameError, setFirstNameError] = useState(null);
+  const [lastNameError, setLastNameError] = useState(null);
+  const [firstNameCharError, setFirstNameCharError] = useState(null);
+const [lastNameCharError, setLastNameCharError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,7 +45,32 @@ export default function SignUp() {
     const email = data.get("email");
     const password = data.get("password");
     const fasTrakVerification = data.get("fasTrakVerification");
-
+    if (firstName.length > 50) {
+      setFirstNameError("Enter a name less than 51 characters long.");
+      return;
+    } else {
+      setFirstNameError(null);
+    }
+    if (lastName.length > 50) {
+      setLastNameError("Enter a name less than 51 characters long.");
+      return;
+    } else {
+      setLastNameError(null);
+    }
+    const firstNameRegex = /^[a-zA-Z.-]+$/;
+    if (!firstNameRegex.test(firstName)) {
+      setFirstNameCharError("Enter a name consisting only of letters, hyphens, or periods.");
+      return;
+    } else {
+      setFirstNameCharError(null);
+    }
+    const lastNameRegex = /^[a-zA-Z.-]+$/;
+    if (!lastNameRegex.test(lastName)) {
+      setLastNameCharError("Enter a name consisting only of letters, hyphens, or periods.");
+      return;
+    } else {
+      setLastNameCharError(null);
+    }
     const requestBody = {
       firstName,
       lastName,
@@ -77,7 +106,9 @@ export default function SignUp() {
     }
 
     if (!agreeTerms) {
-      setAgreeTermsError("You must agree to the Terms and Conditions to continue.");
+      setAgreeTermsError(
+        "You must agree to the Terms and Conditions to continue."
+      );
       return;
     } else {
       setAgreeTermsError(null);
@@ -150,6 +181,8 @@ export default function SignUp() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    error={!!firstNameCharError || !!firstNameError}
+                    helperText={firstNameCharError || firstNameError || ""}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -160,6 +193,8 @@ export default function SignUp() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
+                    error={!!lastNameCharError || !!lastNameError}
+                    helperText={lastNameCharError || lastNameError || ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
