@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,6 +65,10 @@ public class SignInController {
 
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
+        boolean validEmail = isEmailNull(jsonMap.get("email"));
+        if(!validEmail){
+            return new ResponseEntity<>("Email is empty or null", HttpStatus.UNAUTHORIZED);
+        }
         //Fetch user by email
         Optional<User> optionalUser = userRepository.findByEmail(jsonMap.get("email"));
 
@@ -86,6 +91,11 @@ public class SignInController {
         }
 
         //check if password matches
+        boolean validPassword = isPasswordNull(jsonMap.get("password"));
+        if(!validPassword){
+            return new ResponseEntity<>("Password is empty or null", HttpStatus.UNAUTHORIZED);
+        }
+
         String inputPassword = jsonMap.get("password");
         String storedPassword = account.getPassword().getPassword(); //hashed password
         boolean isPasswordMatching = passwordEncoder.matches(inputPassword, storedPassword);
@@ -146,8 +156,25 @@ public class SignInController {
 
     }
 
+    // Response when there's an error
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {
         return "Credentials Invalid !!";
+    }
+
+    private boolean isEmailNull(String email){
+        if (email == null || email.isBlank())
+        {
+            return false;
+        }
+            return true;
+    }
+
+    private boolean isPasswordNull(String password){
+        if (password == null || password.isBlank())
+        {
+            return false;
+        }
+        return true;
     }
 }
