@@ -13,12 +13,12 @@ import java.util.Map;
 @Service
 public class ValidationService {
 
-    public CityValidationEnum cityInputValidation (String city) {
+    public CityValidationEnum cityInputValidation(String city) {
         if(city == null || city.isBlank()) {
             return CityValidationEnum.CITY_HAS_BLANK_NAME;
-        } else if (!city.matches("^[a-zA-Z ]+$")) { //contains non-alphabetic chars. spaces allowed
+        } else if (!city.matches("^[a-zA-Z\\- ]+$")) { // Allows alphabetic chars, hyphens, and spaces
             return CityValidationEnum.CITY_NAME_CONTAINS_NON_ALPHA_CHARS;
-        } else if (city.length() > 85 ) {
+        } else if (city.length() > 85) {
             return CityValidationEnum.CITY_NAME_TOO_LONG;
         }
         return CityValidationEnum.CITY_IS_VALID;
@@ -51,6 +51,7 @@ public class ValidationService {
         // Character validation for street address
         validateCharacters("startStreet", poolData, "^[a-zA-Z0-9-. ]+$", "invalidEntry.streetAddressMustContainOnlyLettersHyphensPeriods", errors);
         validateCharacters("endStreet", poolData, "^[a-zA-Z0-9-. ]+$", "invalidEntry.streetAddressMustContainOnlyLettersHyphensPeriods", errors);
+
 
         // Character validation for city
         validateCharacters("startCity", poolData, "^[a-zA-Z-. ]+$", "invalidEntry.cityMustContainOnlyLettersHyphensPeriods", errors);
@@ -114,6 +115,22 @@ public class ValidationService {
             errors.append("error.privacyCannotBeNull ");
         }
 
+        // Character validation for street address to contain at least one letter
+        if (poolData.get("startStreet") != null && !containsLetter((String) poolData.get("startStreet"))) {
+            errors.append("error.startStreetMustContainAtLeastOneLetter ");
+        }
+        if (poolData.get("endStreet") != null && !containsLetter((String) poolData.get("endStreet"))) {
+            errors.append("error.endStreetMustContainAtLeastOneLetter ");
+        }
+
+        // Character validation for city to contain at least one letter
+        if (poolData.get("startCity") != null && !containsLetter((String) poolData.get("startCity"))) {
+            errors.append("error.startCityMustContainAtLeastOneLetter ");
+        }
+        if (poolData.get("endCity") != null && !containsLetter((String) poolData.get("endCity"))) {
+            errors.append("error.endCityMustContainAtLeastOneLetter ");
+        }
+
         // Check for startDateTime and validate it's in the future
         String startDateTimeStr = (String) poolData.get("startTime");
         if (startDateTimeStr != null && !startDateTimeStr.isBlank()) {
@@ -134,6 +151,11 @@ public class ValidationService {
 
         // If all fields are valid
         return ResponseEntity.ok("All fields are valid");
+    }
+
+    // Check if a string contains at least one letter
+    private boolean containsLetter(String input) {
+        return input.matches(".*[a-zA-Z]+.*");
     }
 
     private void validateLength(String fieldName, Map<String, Object> poolData, int maxLength, String errorMessage, StringBuilder errors) {

@@ -65,7 +65,7 @@ public class SignInController {
 
         jsonMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
-        boolean validEmail = isEmailValid(jsonMap.get("email"));
+        boolean validEmail = isEmailNull(jsonMap.get("email"));
         if(!validEmail){
             return new ResponseEntity<>("Email is empty or null", HttpStatus.UNAUTHORIZED);
         }
@@ -91,7 +91,7 @@ public class SignInController {
         }
 
         //check if password matches
-        boolean validPassword = isPasswordValid(jsonMap.get("password"));
+        boolean validPassword = isPasswordNull(jsonMap.get("password"));
         if(!validPassword){
             return new ResponseEntity<>("Password is empty or null", HttpStatus.UNAUTHORIZED);
         }
@@ -156,12 +156,13 @@ public class SignInController {
 
     }
 
+    // Response when there's an error
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {
         return "Credentials Invalid !!";
     }
 
-    private boolean isEmailValid(String email){
+    private boolean isEmailNull(String email){
         if (email == null || email.isBlank())
         {
             return false;
@@ -169,7 +170,7 @@ public class SignInController {
             return true;
     }
 
-    private boolean isPasswordValid(String password){
+    private boolean isPasswordNull(String password){
         if (password == null || password.isBlank())
         {
             return false;
