@@ -32,6 +32,8 @@ export default function SignUp() {
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   const [firstNameError, setFirstNameError] = useState(null);
   const [lastNameError, setLastNameError] = useState(null);
+  const [firstNameCharError, setFirstNameCharError] = useState(null);
+const [lastNameCharError, setLastNameCharError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,6 +56,20 @@ export default function SignUp() {
       return;
     } else {
       setLastNameError(null);
+    }
+    const firstNameRegex = /^[a-zA-Z.-]+$/;
+    if (!firstNameRegex.test(firstName)) {
+      setFirstNameCharError("Enter a name consisting only of letters, hyphens, or periods.");
+      return;
+    } else {
+      setFirstNameCharError(null);
+    }
+    const lastNameRegex = /^[a-zA-Z.-]+$/;
+    if (!lastNameRegex.test(lastName)) {
+      setLastNameCharError("Enter a name consisting only of letters, hyphens, or periods.");
+      return;
+    } else {
+      setLastNameCharError(null);
     }
     const requestBody = {
       firstName,
@@ -165,8 +181,8 @@ export default function SignUp() {
                     id="firstName"
                     label="First Name"
                     autoFocus
-                    error={!!firstNameError}
-                    helperText={firstNameError}
+                    error={!!firstNameCharError || !!firstNameError}
+                    helperText={firstNameCharError || firstNameError || ""}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -177,8 +193,8 @@ export default function SignUp() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
-                    error={!!lastNameError}
-                    helperText={lastNameError}
+                    error={!!lastNameCharError || !!lastNameError}
+                    helperText={lastNameCharError || lastNameError || ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
