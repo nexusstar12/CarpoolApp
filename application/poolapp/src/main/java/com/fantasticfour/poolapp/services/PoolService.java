@@ -114,7 +114,7 @@ public class PoolService {
         String endZip = (String) poolData.get("endZip");
         String endState = (String) poolData.get("endState");
         Integer creatorId = (Integer) poolData.get("creatorId");
-        Boolean publicOrPrivate = (Boolean) poolData.get("privacy");
+        Boolean privacy = (Boolean) poolData.get("privacy");
         Integer crewId = (Integer) poolData.get("crewId");
         String startAddress = formatAddress(startStreet, startCity, startState, startZip);
         String endAddress = formatAddress(endStreet, endCity, endState, endZip);
@@ -135,7 +135,7 @@ public class PoolService {
                 endZip == null ||
                 endState == null ||
                 creatorId == null ||
-                publicOrPrivate == null ||
+                privacy == null ||
                 startTime == null) {
             throw new IllegalArgumentException("Required fields are missing");
         }
@@ -168,7 +168,7 @@ public class PoolService {
         pool.setEndZip(endZip);
         pool.setEndState(endState);
         pool.setCreator(creatorProfile);
-        pool.setPublicOrPrivate(publicOrPrivate);
+        pool.setPrivacy(privacy);
         pool.setCrew(crewEntity);
         pool.setStartTime(startTime);
 
