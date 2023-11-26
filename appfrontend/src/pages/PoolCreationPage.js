@@ -43,8 +43,10 @@ export default function PostPool() {
             Authorization: `Bearer ${jwtToken}`,
           },
         });
-        setHasCrew(true);
-        setCrews(data);
+        if (data?.length) {
+          setHasCrew(true);
+          setCrews(data);
+        }
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
