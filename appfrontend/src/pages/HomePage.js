@@ -18,6 +18,7 @@ function HomePage() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
+  const [notFound, setNotFound] = useState(false);
 
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
@@ -26,8 +27,12 @@ function HomePage() {
       `/searchbar?filter=${filterOption}&value=${searchQuery}`
     );
 
-    console.log("data", data);
-    setResult(data.data);
+    if (data.data.length > 0) {
+      setResult(data.data);
+    } else {
+      setNotFound(true);
+      setResult([]);
+    }
   };
 
   return (
@@ -99,13 +104,14 @@ function HomePage() {
               </Grid>
 
               <div className="search-results-container">
-                {result.length > 0 ? (
+                {result.length > 0 && (
                   <SearchResult
                     className="search-result"
                     result={result}
                     itemsPerPage={10}
                   />
-                ) : (
+                )}
+                {notFound && (
                   <Typography>
                     No pools found. Try searching for a pool in San Francisco.
                   </Typography>
