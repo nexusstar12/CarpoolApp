@@ -1,4 +1,4 @@
-export function isCityCodeValid(input) {
+export function isCityNameValid(input) {
     if (input.length > 85) {
       return false;
     }

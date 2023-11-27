@@ -7,7 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { isZipCodeValid } from "../utilities/zipCodeValidation";
-import { isCityCodeValid } from "../utilities/cityCodeValidation";
+import { isCityNameValid } from "../utilities/cityValidation";
 
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,6 +16,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
   const [hasSearched, setHasSearched] = useState(false);
   const [zipCodeError, setZipCodeError] = useState(false);
+  const [cityNameError, setCityNameError] = useState(false);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -36,6 +37,14 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
           return;
         } else {
           setZipCodeError(false);
+          setHasSearched(true);
+          onSearch({ searchQuery, filterOption });
+        }
+        if (filterOption === "city" &&!isCityNameValid(searchQuery)) {
+          setCityNameError(true);
+          return;
+        }else{
+          setCityNameError(false);
           setHasSearched(true);
           onSearch({ searchQuery, filterOption });
         }
@@ -68,6 +77,14 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
         return;
       } else {
         setZipCodeError(false);
+        setHasSearched(true);
+        onSearch({ searchQuery, filterOption });
+      }
+      if (filterOption === "city" &&!isCityNameValid(searchQuery)) {
+        setCityNameError(true);
+        return;
+      }else{
+        setCityNameError(false);
         setHasSearched(true);
         onSearch({ searchQuery, filterOption });
       }
@@ -124,6 +141,7 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
         <Typography color="error" variant="body2">
           {error && "Please select an option before searching."}
           {zipCodeError && "Invalid zip code"}
+          {cityNameError && "Enter a city name consisting only of letters."}
         </Typography>
       )}
       {zipCodeError && (
