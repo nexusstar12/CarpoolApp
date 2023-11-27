@@ -25,6 +25,7 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
@@ -118,7 +119,43 @@ export default function SignUp() {
     } catch (error) {
       setError(error.response.data.message);
     }
+    if (!firstName) {
+      setFirstNameError("Required");
+    } else {
+      setFirstNameError(null);
+    }
+  
+    if (!lastName) {
+      setLastNameError("Required");
+    } else {
+      setLastNameError(null);
+    }
+  
+    if (!phoneNumber) {
+      setPhoneError("Required");
+    } else {
+      setPhoneError(null);
+    }
+  
+    if (!email) {
+      setEmailError("Required");
+    } else {
+      setEmailError(null);
+    }
+  
+    if (!password || password.trim() === "") {
+      setPasswordError("Required");
+    } else {
+      setPasswordError(null);
+    }
+    if (!firstNameError && !lastNameError && !phoneError && !emailError && !passwordError) {
+      try {
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+    }
   };
+
 
   const SuccessModal = () => {
     const handleRedirect = () => {
@@ -267,6 +304,19 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                  
+                      if (!value || value.trim() === "") {
+                        setPasswordError("Required");
+                      } else if (value.length < 8) {
+                        setPasswordError("Password must be at least 8 characters long");
+                      } else {
+                        setPasswordError(null);
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
