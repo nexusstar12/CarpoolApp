@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { isZipCodeValid } from "../utilities/zipCodeValidation";
+import { isCityCodeValid } from "../utilities/cityCodeValidation";
 
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");

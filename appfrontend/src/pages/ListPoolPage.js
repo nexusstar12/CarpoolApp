@@ -12,6 +12,20 @@ export default function ListPoolPage() {
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const getFormattedStartTime = (startTime) => {
+    if (!startTime) {
+      return "N/A";
+    }
+
+    const date = new Date(startTime);
+    const dateString = date.toLocaleDateString();
+    const timeString = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return `${dateString} ${timeString}`;
+  };
 
   const handleClick = async (poolId, type) => {
     if (type === "DELETE POOL") {
@@ -19,7 +33,11 @@ export default function ListPoolPage() {
         setIsLoading(true);
         await axiosInstance.delete(`/pool/deletepool/${poolId}`);
 
-        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
         setData(response.data);
         setIsLoading(false);
@@ -37,7 +55,11 @@ export default function ListPoolPage() {
         };
         await axiosInstance.delete(`/pool/deletemember`, config);
 
-        const response = await axiosInstance.get(`/pool/getpools/${userId}`);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
         setData(response.data);
         setIsLoading(false);
@@ -58,6 +80,7 @@ export default function ListPoolPage() {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
+
       setIsLoading(true);
       const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
         headers: {
@@ -168,7 +191,7 @@ export default function ListPoolPage() {
           {/* Time */}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
-              <strong>Starting Time: </strong> {dataRow.startTime || "N/A"}
+            <strong>Starting Time: </strong> {getFormattedStartTime(dataRow.startTime)}
             </Typography>
           </CardContainer>
           <CardContainer>
