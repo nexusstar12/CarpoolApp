@@ -22,6 +22,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+//import { Client } from '@googlemaps/google-maps-services-js';
 
 import axiosInstance from "../config/axios.config";
 
@@ -34,6 +35,19 @@ export default function PostPool() {
   const [crews, setCrews] = useState([]);
   const [hasCrew, setHasCrew] = useState(false);
   const [selectedCrewId, setSelectedCrewId] = useState("");
+  const [error, setError] = useState(null);
+  const [nameError, setNameError] = useState(null);
+  const [startStreetError, setStartStreetError] = useState(null);
+  const [endStreetError, setEndStreetError] = useState(null);
+  const [startCityError, setStartCityError] = useState(null);
+  const [endCityError, setEndCityError] = useState(null);
+  const [startStateError, setStartStateError] = useState(null);
+  const [endStateError, setEndStateError] = useState(null);
+  const [startZipError, setStartZipError] = useState(null);
+  const [endZipError, setEndZipError] = useState(null);
+
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,7 +118,115 @@ export default function PostPool() {
     } catch (error) {
       console.log("error", error);
     }
+
+
+    //field validations
+    if(!validateName(name)){
+      setNameError("Required");
+    }
+    else{
+      setNameError(null);
+    }
+    if(!startStreet){
+      setStartStreetError("Required");
+    }
+    else{
+      setStartStreetError(null);
+    }
+    if(!startCity){
+      setStartCityError("Required");
+    }
+    else{
+      setStartCityError(null);
+    }
+    if(!validateZipCode(startZip)){
+      setStartZipError("Required");
+    }
+    else{
+      setStartZipError(null);
+    }
+    if(!validateState(startState)){
+      setStartStateError("Required");
+    }
+    else{
+      setStartStateError(null);
+    }
+
+    if(!endStreet){
+      setEndStreetError("Required");
+    }
+    else{
+      setEndStreetError(null);
+    }
+    if(!endCity){
+      setEndCityError("Required");
+    }
+    else{
+      setEndCityError(null);
+    }
+    if(!validateZipCode(endZip)){
+      setEndZipError("Required");
+    }
+    else{
+      setEndZipError(null);
+    }
+
+    if(!validateState(endState)){
+      setEndStateError("Required");
+    }
+    else{
+      setEndStateError(null);
+    }
+
+    return;
+
+
+  
   };
+  function validateName(name){
+    let nameInput = name;
+    const namePattern = /[a-zA-Z0-9_ ]/;
+    return namePattern.test(nameInput);
+  }
+  /*const validateStreet = async (street) => {
+    const client = new Client();
+    try{
+      const response = await client.geocode({
+        params : {
+          address : street,
+        }
+      });
+
+      if(response.data.status === 'OK'){
+        const formattedAddress = response.data.results[0].formatted_address;
+      } else {
+        setError('Invalid address');
+      }
+    } catch (error){
+      return false;
+    }
+
+  }*/
+  function validateState(state){
+    let stateInput = state;
+    const allStates = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", 
+    "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", 
+    "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+
+    return(allStates.includes(stateInput, 0));
+
+  }
+
+  function validateZipCode(zipCode){
+    let zipCodeInput = zipCode;
+    if(zipCodeInput.length < 1 || zipCodeInput.length > 5){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
 
   const handlePrivacyChange = async (e) => {
     const privacy = e.target.value;
@@ -121,11 +243,16 @@ export default function PostPool() {
       } catch (error) {}
     }
   };
+  function helperFunction(){
+    if(this.state.data.startState.trim().length > 0) return "OK";
+    if (this.state.data.startState.replace(/[a-zA-Z0-9_ ]/g, '').length>0) return 'Only letters and numbers';
+  };
 
   const handleSelectChange = async (e) => {
     const crew = e.target.value;
     setSelectedCrewId(crew);
   };
+
 
   return (
     <Box
@@ -157,7 +284,11 @@ export default function PostPool() {
             Pool Name
           </AccordionSummary>
           <AccordionDetails>
-            <TextField fullWidth name="name" label="Pool Name" sx={{ mb: 2 }} />
+            <TextField fullWidth name="name" 
+            label="Pool Name" 
+            sx={{ mb: 2 }} 
+            error = {!!nameError} 
+            helperText = {nameError} />
           </AccordionDetails>
         </Accordion>
         {/* Enter start location section */}
@@ -170,24 +301,32 @@ export default function PostPool() {
               fullWidth
               name="startStreet"
               label="Street address"
+              error = {!!startStreetError}
+              helperText = {startStreetError}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="startCity"
               label="Start city"
+              error = {!!startCityError} 
+              helperText = {startCityError}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="startZip"
               label="Start zip code"
+              error = {!!startZipError} 
+              helperText = {startZipError}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="startState"
               label="Start state"
+              error = {!!startStateError} 
+              helperText = {startStateError}
               sx={{ mb: 2 }}
             />
           </AccordionDetails>
@@ -202,19 +341,25 @@ export default function PostPool() {
               fullWidth
               name="endStreet"
               label="Street address"
+              error = {!!endStreetError} 
+              helperText = {endStreetError}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               name="endCity"
               label="End city"
+              error = {!!endCityError} 
+              helperText = {endCityError}
               sx={{ mb: 2 }}
             />
-            <TextField fullWidth name="endZip" label="End zip" sx={{ mb: 2 }} />
+            <TextField fullWidth name="endZip" label="End zip" sx={{ mb: 2 }} error = {!!endZipError} helperText = {endZipError}/>
             <TextField
               fullWidth
               name="endState"
               label="End state"
+              error = {!!endStateError} 
+              helperText = {endStateError}
               sx={{ mb: 2 }}
             />
           </AccordionDetails>
