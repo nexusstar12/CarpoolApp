@@ -69,7 +69,6 @@ public class PoolController {
     public ResponseEntity<?> getPools (@PathVariable int userId) {
         //response object
         PoolsByIdResponse poolsByIdResponse = new PoolsByIdResponse();
-//        CustomPoolResponse customPoolResponse = new CustomPoolResponse();
 
         //get user entity
         Optional<User> optionalUser = userRepository.findById(userId);
