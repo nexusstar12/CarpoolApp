@@ -37,7 +37,7 @@ public class SecurityConfig {
         http.cors().and()
                 .csrf(csrf -> csrf.disable())
                         .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").authenticated()
-                        .requestMatchers("/api/signin/","/api/signin", "/api/searchbar**", "/api/signup**", "/api/pool/createpool").permitAll()
+                        .requestMatchers("/api/signin/","/api/signin", "/api/searchbar**", "/api/signup**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
