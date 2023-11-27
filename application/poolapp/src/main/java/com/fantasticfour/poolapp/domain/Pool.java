@@ -2,9 +2,7 @@ package com.fantasticfour.poolapp.domain;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.*;
 
 
 @Entity
@@ -57,10 +55,8 @@ public class Pool {
     private double endLatitude;
     private double endLongitude;
 
-    private boolean publicOrPrivate;
-    @Transient
+    private boolean privacy;
     private String startAddress;
-    @Transient
     private String endAddress;
 
     public Profile getMember1() {
@@ -97,10 +93,10 @@ public class Pool {
     //Getters and Setters
 
     public boolean getViewable(){
-        return publicOrPrivate;
+        return privacy;
     }
     public void setViewable(boolean status){
-        publicOrPrivate = status;
+        privacy = status;
     }
     public int getPoolId() {
         return poolId;
@@ -247,12 +243,12 @@ public class Pool {
     }
 
     // 1 is public 0 is private
-    public boolean isPublicOrPrivate() {
-        return publicOrPrivate;
+    public boolean isPrivacy() {
+        return privacy;
     }
 
-    public void setPublicOrPrivate(boolean publicOrPrivate) {
-        this.publicOrPrivate = publicOrPrivate;
+    public void setPrivacy(boolean privacy) {
+        this.privacy = privacy;
     }
 
     public String getStartAddress() {
@@ -296,7 +292,7 @@ public class Pool {
                 ", endZip='" + endZip + '\'' +
                 ", endLatitude=" + endLatitude +
                 ", endLongitude=" + endLongitude +
-                ", publicOrPrivate=" + publicOrPrivate +
+                ", privacy=" + privacy +
                 '}';
     }
 }
