@@ -26,28 +26,32 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
     if (event.key === "Enter") {
       if (!filterOption) {
         setError(true);
+        return;
+      }
+      setError(false);
+
+      let hasError = false;
+
+      if (
+        (filterOption === "startZip" || filterOption === "endZip") &&
+        !isZipCodeValid(searchQuery)
+      ) {
+        setZipCodeError(true);
+        hasError = true;
       } else {
-        setError(false);
-        if (
-          (filterOption === "startZip" || filterOption === "endZip") &&
-          !isZipCodeValid(searchQuery)
-        ) {
-          console.log("searchQuery", searchQuery);
-          setZipCodeError(true);
-          return;
-        } else {
-          setZipCodeError(false);
-          setHasSearched(true);
-          onSearch({ searchQuery, filterOption });
-        }
-        if (filterOption === "city" &&!isCityNameValid(searchQuery)) {
-          setCityNameError(true);
-          return;
-        }else{
-          setCityNameError(false);
-          setHasSearched(true);
-          onSearch({ searchQuery, filterOption });
-        }
+        setZipCodeError(false);
+      }
+
+      if (filterOption === "city" && !isCityNameValid(searchQuery)) {
+        setCityNameError(true);
+        hasError = true;
+      } else {
+        setCityNameError(false);
+      }
+
+      if (!hasError) {
+        setHasSearched(true);
+        onSearch({ searchQuery, filterOption });
       }
     }
   };
@@ -66,28 +70,32 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const handleClick = () => {
     if (!filterOption) {
       setError(true);
+      return;
+    }
+    setError(false);
+
+    let hasError = false;
+
+    if (
+      (filterOption === "startZip" || filterOption === "endZip") &&
+      !isZipCodeValid(searchQuery)
+    ) {
+      setZipCodeError(true);
+      hasError = true;
     } else {
-      setError(false);
-      console.log("!isZipCodeValid(searchQuery)", !isZipCodeValid(searchQuery));
-      if (
-        (filterOption === "startZip" || filterOption === "endZip") &&
-        !isZipCodeValid(searchQuery)
-      ) {
-        setZipCodeError(true);
-        return;
-      } else {
-        setZipCodeError(false);
-        setHasSearched(true);
-        onSearch({ searchQuery, filterOption });
-      }
-      if (filterOption === "city" &&!isCityNameValid(searchQuery)) {
-        setCityNameError(true);
-        return;
-      }else{
-        setCityNameError(false);
-        setHasSearched(true);
-        onSearch({ searchQuery, filterOption });
-      }
+      setZipCodeError(false);
+    }
+
+    if (filterOption === "city" && !isCityNameValid(searchQuery)) {
+      setCityNameError(true);
+      hasError = true;
+    } else {
+      setCityNameError(false);
+    }
+
+    if (!hasError) {
+      setHasSearched(true);
+      onSearch({ searchQuery, filterOption });
     }
   };
 
@@ -137,16 +145,13 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       >
         Search
       </Button>
-      {error && (
+      {(error || zipCodeError || cityNameError) && (
         <Typography color="error" variant="body2">
           {error && "Please select an option before searching."}
-          {zipCodeError && "Invalid zip code"}
-          {cityNameError && "Enter a city name consisting only of letters."}
-        </Typography>
-      )}
-      {zipCodeError && (
-        <Typography color="error" variant="body2">
-          Invalid zip code. The valid zip code should only be 5 valid numbers.
+          {zipCodeError &&
+            "Invalid zip code. The valid zip code should only be 5 valid numbers."}
+          {cityNameError &&
+            "Enter a city name consisting only of letters with 85 or fewer characters"}
         </Typography>
       )}
     </div>
