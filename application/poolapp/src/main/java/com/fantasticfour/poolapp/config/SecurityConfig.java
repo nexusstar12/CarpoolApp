@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,7 +37,7 @@ public class SecurityConfig {
         http.cors().and()
                 .csrf(csrf -> csrf.disable())
                         .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").authenticated()
-                        .requestMatchers("/api/signin/","/api/signin", "/api/searchbar**", "/api/signup**").permitAll()
+                        .requestMatchers("/api/signin/","/api/signin", "/api/searchbar**", "/api/signup**", "/api/pool/createpool").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
