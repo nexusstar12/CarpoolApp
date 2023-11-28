@@ -104,11 +104,13 @@ function TermsAndConditions() {
     <h3>Governing Law</h3>
         <p style={{
         paddingLeft: '60px',
-        paddingRight: '60px'
+        paddingRight: '60px',
+        marginBottom: '100px'
   }}>
 These terms and conditions are governed by and construed in accordance with the laws of United States.
 
-By using our carpooling services, users agree to abide by these terms and conditions. If you do not agree with any part of these terms, please do not use our services.    </p>
+By using our carpooling services, users agree to abide by these terms and conditions. If you do not agree with any part of these terms, please do not use our services.    
+</p>
 
 
      </div>
