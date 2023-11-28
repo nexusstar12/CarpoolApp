@@ -4,6 +4,8 @@ import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
 import { UserContext } from "../App";
 import { LoadingBackdrop } from "../components/LoadingData";
+import { convertFromUTC } from "../utilities/convertUTCToBrowserTimeZone";
+import { getBrowserTimezone } from "../utilities/getTimeZoneBrowser";
 
 export default function ListPoolPage() {
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
@@ -12,7 +14,8 @@ export default function ListPoolPage() {
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const getFormattedStartTime = (startTime) => {
+  const getFormattedStartTime = (utcTime) => {
+    let startTime = convertFromUTC(utcTime, getBrowserTimezone());
     if (!startTime) {
       return "N/A";
     }
@@ -191,7 +194,8 @@ export default function ListPoolPage() {
           {/* Time */}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
-            <strong>Starting Time: </strong> {getFormattedStartTime(dataRow.startTime)}
+              <strong>Starting Time: </strong>{" "}
+              {getFormattedStartTime(dataRow.startTime)}
             </Typography>
           </CardContainer>
           <CardContainer>
