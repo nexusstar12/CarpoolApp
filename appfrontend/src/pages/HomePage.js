@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
+import { isZipCodeValid } from "../utilities/zipCodeValidation";
 import { Typography } from "@mui/material";
 
 const defaultTheme = createTheme();
@@ -22,7 +23,6 @@ function HomePage() {
 
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
-
     const data = await axiosInstance.get(
       `/searchbar?filter=${filterOption}&value=${searchQuery}`
     );

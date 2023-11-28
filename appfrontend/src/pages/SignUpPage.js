@@ -75,6 +75,13 @@ export default function SignUp() {
     } else {
       setLastNameCharError(null);
     }
+    
+    if (!emailRegex.test(email)) {
+      setEmailError("Email must be valid, i.e. 'example@email.com'");
+      return;
+    } else {
+      setEmailError(null);
+    }
     const requestBody = {
       firstName,
       lastName,
