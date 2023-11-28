@@ -24,9 +24,21 @@ public class ValidationService {
         return CityValidationEnum.CITY_IS_VALID;
     }
 
-    public SignUpValidationEnum signUpValidation (String signUpValue) {
+    public SignUpValidationEnum signUpValidation (String signUpKey, String signUpValue) {
         if (signUpValue == null || signUpValue.isBlank()) {
             return SignUpValidationEnum.IS_EMPTY;
+        }
+        if (signUpKey.equals("firstName") || signUpKey.equals("lastName")) {
+            SignUpValidationEnum signUpValidationEnum = validateUserName(signUpValue);
+            if (signUpValidationEnum != SignUpValidationEnum.IS_VALID) {
+                return signUpValidationEnum;
+            }
+        }
+        if (signUpKey.equals("phoneNumber")) {
+            SignUpValidationEnum signUpValidationEnum = validatePhoneNumber(signUpValue);
+            if (signUpValidationEnum != SignUpValidationEnum.IS_VALID) {
+                return signUpValidationEnum;
+            }
         }
         return SignUpValidationEnum.IS_VALID;
     }
@@ -170,5 +182,52 @@ public class ValidationService {
         if (fieldValue != null && !fieldValue.matches(regex)) {
             errors.append(errorMessage).append(" ");
         }
+    }
+
+    private SignUpValidationEnum validateUserName  (String name) {
+        if (name == null || name.isBlank()) {
+            return SignUpValidationEnum.IS_EMPTY;
+        } else if (name.length() > 50) {
+            return SignUpValidationEnum.IS_LONGER_THAN_50_CHAR;
+        } else if (!name.matches("^[a-zA-Z-.]+$")) { //matches letters, hyphens and periods in names
+            return SignUpValidationEnum.INVALID_CHARACTERS_OTHER_THAN_HYPHEN_OR_PERIOD;
+        }
+        return SignUpValidationEnum.IS_VALID;
+    }
+
+    private SignUpValidationEnum validatePhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            return SignUpValidationEnum.IS_EMPTY;
+        } else if (phoneNumber.length() != 10) {
+            return SignUpValidationEnum.PHONE_NUMBER_MUST_BE_LENGTH_0F_10_CHARACTERS;
+        } else if (!phoneNumber.matches("^[0-9]+$")) {
+            return SignUpValidationEnum.PHONE_NUMBER_MUST_CONSIST_OF_ONLY_NUMBERS;
+        } else if (phoneNumber.matches("^(.)\\1+$")) { //phone number is one duplicate character repeating
+            return SignUpValidationEnum.PHONE_NUMBER_COMPOSED_OF_DUPLICATE_CHARACTERS;
+        } else if (isSequential(phoneNumber)) {
+            return SignUpValidationEnum.NON_SEQUENTIAL_PHONE_NUMBER_REQUIRED;
+        } else if (phoneNumber.matches("^(?:[01].{2}.|...[01]).*$")) { //area code validation 1st and 4th digit are 0 or 1 is invalid
+            return SignUpValidationEnum.AREA_CODE_INVALID;
+        }
+        return SignUpValidationEnum.IS_VALID;
+    }
+
+    //ascending sequential numeric sequence returns true.
+    public static boolean isSequential (String string) {
+        if (string == null || string.length() < 2) {
+            return false;
+        }
+
+        int character = Character.getNumericValue(string.charAt(0));
+
+        for (int i = 0; i < string.length() -1 ; i++) {
+            int currentNum = Character.getNumericValue(string.charAt(i));
+            int nextNum = Character.getNumericValue(string.charAt(i + 1));
+            if ((nextNum - currentNum) != 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
