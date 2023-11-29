@@ -6,6 +6,7 @@ import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.repository.*;
 import com.fantasticfour.poolapp.services.PoolService;
+import com.fantasticfour.poolapp.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -40,6 +41,9 @@ public class PoolController {
     @Autowired
     private CustomPoolResponse customPoolResponse;
 
+    @Autowired
+    private ValidationService validationService;
+
     @PostMapping("/join/{poolId}")
     public ResponseEntity<?> joinPool(@PathVariable int poolId, @RequestBody int profileId){
         poolService.addProfileToPool(poolId, profileId);
@@ -65,7 +69,6 @@ public class PoolController {
     public ResponseEntity<?> getPools (@PathVariable int userId) {
         //response object
         PoolsByIdResponse poolsByIdResponse = new PoolsByIdResponse();
-//        CustomPoolResponse customPoolResponse = new CustomPoolResponse();
 
         //get user entity
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -186,6 +189,13 @@ public class PoolController {
 
     @PostMapping("/createpool")
     public ResponseEntity<?> createPool(@RequestBody Map<String, Object> poolData) {
+        // Call the validation service
+        ResponseEntity<String> validationResponse = validationService.createPoolValidation(poolData);
+        // If the response status is bad request, return the validation response
+        if (validationResponse.getStatusCode() != HttpStatus.OK) {
+            return validationResponse;
+        }
+
         try {
             poolService.createPool(poolData);
             return new ResponseEntity<>("Pool successfully created", HttpStatus.CREATED);
