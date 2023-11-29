@@ -34,8 +34,11 @@ export default function ListPoolPage() {
     if (type === "DELETE POOL") {
       try {
         setIsLoading(true);
-        await axiosInstance.delete(`/pool/deletepool/${poolId}`);
-
+        await axiosInstance.delete(`/pool/deletepool/${poolId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
         const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
@@ -52,12 +55,14 @@ export default function ListPoolPage() {
     if (type === "LEAVE POOL") {
       try {
         setIsLoading(true);
-        // const requestBody = { profileId, poolId };
-        const config = {
-          // data: requestBody,
-        };
-        await axiosInstance.delete(`/pool/deletemember`, config);
+        const requestBody = { profileId, poolId };
 
+        await axiosInstance.delete(`/pool/deletemember`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+          data: requestBody,
+        });
         const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
