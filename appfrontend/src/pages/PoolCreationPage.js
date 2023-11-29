@@ -119,6 +119,7 @@ export default function PostPool() {
     } catch (error) {
       console.log("error", error);
     }
+    
 
     //field validations
     if (!validateName(name)) {
@@ -126,34 +127,51 @@ export default function PostPool() {
     } else {
       setNameError(null);
     }
+    
     if (!startStreet) {
       setStartStreetError("Required");
+    } else if (!validateStreetName(startStreet)) {
+      setStartStreetError("Enter a street name consisting only of letters, hyphens, or periods.");
+    } else if (!validateStreetAddress(startStreet)) {
+      setStartStreetError("Enter a location less than 85 characters long.");
     } else {
       setStartStreetError(null);
     }
+    
     if (!startCity) {
       setStartCityError("Required");
+    } else if (!validateCityName(startCity)) {
+      setStartCityError("Enter a city name consisting only of letters, hyphens, or periods.");
     } else {
       setStartCityError(null);
     }
+    
     if (!validateZipCode(startZip)) {
       setStartZipError("Required");
     } else {
       setStartZipError(null);
     }
+    
     if (!validateState(startState)) {
       setStartStateError("Required");
     } else {
       setStartStateError(null);
     }
-
+    
     if (!endStreet) {
       setEndStreetError("Required");
+    } else if (!validateStreetName(endStreet)) {
+      setEndStreetError("Enter a street name consisting only of letters, hyphens, or periods.");
+    } else if (!validateStreetAddress(endStreet)) {
+      setEndStreetError("Enter a location less than 85 characters long.");
     } else {
       setEndStreetError(null);
     }
+    
     if (!endCity) {
       setEndCityError("Required");
+    } else if (!validateCityName(endCity)) {
+      setEndCityError("Enter a city name consisting only of letters, hyphens, or periods.");
     } else {
       setEndCityError(null);
     }
@@ -162,11 +180,31 @@ export default function PostPool() {
     } else {
       setEndZipError(null);
     }
-
+    
     if (!validateState(endState)) {
       setEndStateError("Required");
     } else {
       setEndStateError(null);
+    }
+    
+  // Length validation check for start and end cities and addresses 
+ 
+    if (!startZip) {
+      setStartZipError("Required");
+      return;
+    } else if (!/^\d+$/.test(startZip)) {
+      setStartZipError("Enter a zip code consisting only of numbers.");
+      return;
+    } else if (startZip.length !== 5) {
+      setStartZipError("Enter a five-digit zip code.");
+      return;
+    } else {
+      setStartZipError(null);
+    }
+    const streetRegex =  /^[a-zA-Z.-]+$/;
+    if (!streetRegex.test(startStreet)){
+      setStartStreetError("Enter a street name consisting only of letters, hyphens, or periods.");
+      return;
     }
 
     return;
@@ -175,6 +213,20 @@ export default function PostPool() {
     let nameInput = name;
     const namePattern = /[a-zA-Z0-9_ ]/;
     return namePattern.test(nameInput);
+  }
+  function validateStreetAddress(streetAddress) {
+    if (streetAddress.length === 0) {
+      return false;
+    }
+    return streetAddress.length <= 85;
+  }
+  function validateStreetName(streetName) {
+    const streetNamePattern = /^[a-zA-Z\-\.\s]+$/;
+    return streetNamePattern.test(streetName);
+  }
+  function validateCityName(cityName) {
+    const cityPattern = /^[a-zA-Z\-\.\s]+$/;
+    return cityPattern.test(cityName);
   }
   /*const validateStreet = async (street) => {
     const client = new Client();
