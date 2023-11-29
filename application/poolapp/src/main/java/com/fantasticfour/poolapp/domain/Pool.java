@@ -58,6 +58,7 @@ public class Pool {
     private boolean privacy;
 
     private boolean crewCreated;
+
     private String startAddress;
     private String endAddress;
 
