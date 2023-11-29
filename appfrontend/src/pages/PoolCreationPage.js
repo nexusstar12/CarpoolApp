@@ -81,6 +81,7 @@ export default function PostPool() {
     const endCity = data.get("endCity");
     const endState = data.get("endState");
     const formattedDate = selectedDate?.format("YYYY-MM-DDTHH:mm:ss");
+    const maxLength = 85;
     const utcDateTime = convertTimeZoneToUTC(
       formattedDate,
       getBrowserTimezone()
@@ -142,6 +143,8 @@ export default function PostPool() {
       setStartCityError("Required");
     } else if (!validateCityName(startCity)) {
       setStartCityError("Enter a city name consisting only of letters, hyphens, or periods.");
+    } else if (!validateLength(startCity, maxLength)) {
+      setStartCityError("Enter a location less than 85 characters long.");
     } else {
       setStartCityError(null);
     }
@@ -151,12 +154,14 @@ export default function PostPool() {
     } else {
       setStartZipError(null);
     }
-    
-    if (!validateState(startState)) {
+    if (!startState) {
       setStartStateError("Required");
+    } else if (!validateState(startState)) {
+      setStartStateError("Enter a two-letter state abbreviation, e.g., CA for California");
     } else {
       setStartStateError(null);
     }
+    
     
     if (!endStreet) {
       setEndStreetError("Required");
@@ -168,12 +173,14 @@ export default function PostPool() {
       setEndStreetError(null);
     }
     
-    if (!endCity) {
-      setEndCityError("Required");
-    } else if (!validateCityName(endCity)) {
-      setEndCityError("Enter a city name consisting only of letters, hyphens, or periods.");
+    if (!startCity) {
+      setStartCityError("Required");
+    } else if (!validateCityName(startCity)) {
+      setStartCityError("Enter a city name consisting only of letters, hyphens, or periods.");
+    } else if (!validateLength(startCity, maxLength)) {
+      setStartCityError("Enter a location less than 85 characters long.");
     } else {
-      setEndCityError(null);
+      setStartCityError(null);
     }
     if (!validateZipCode(endZip)) {
       setEndZipError("Required");
@@ -181,8 +188,11 @@ export default function PostPool() {
       setEndZipError(null);
     }
     
-    if (!validateState(endState)) {
+    if (!endState) {
       setEndStateError("Required");
+    } else if (!validateState(endState)) {
+      setEndStateError("Enter a two-letter state abbreviation, e.g., CA for California");
+      return;
     } else {
       setEndStateError(null);
     }
@@ -202,10 +212,6 @@ export default function PostPool() {
       setStartZipError(null);
     }
     const streetRegex =  /^[a-zA-Z.-]+$/;
-    if (!streetRegex.test(startStreet)){
-      setStartStreetError("Enter a street name consisting only of letters, hyphens, or periods.");
-      return;
-    }
 
     return;
   };
@@ -214,6 +220,9 @@ export default function PostPool() {
     const namePattern = /[a-zA-Z0-9_ ]/;
     return namePattern.test(nameInput);
   }
+  function validateLength(input, maxLength) {
+    return input.length <= maxLength;
+  }
   function validateStreetAddress(streetAddress) {
     if (streetAddress.length === 0) {
       return false;
@@ -221,7 +230,7 @@ export default function PostPool() {
     return streetAddress.length <= 85;
   }
   function validateStreetName(streetName) {
-    const streetNamePattern = /^[a-zA-Z\-\.\s]+$/;
+    const streetNamePattern = /^[a-zA-Z0-9\-\.\s]+$/;
     return streetNamePattern.test(streetName);
   }
   function validateCityName(cityName) {
