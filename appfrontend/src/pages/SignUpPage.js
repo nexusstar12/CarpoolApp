@@ -369,8 +369,7 @@ export default function SignUp() {
                       const value = e.target.value;
                       setEmailError(value.trim() === "" ? "Required" : null);
                     }}
-                    error={!!emailError}
-                    helperText={emailError || ""}
+                    
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -389,8 +388,8 @@ export default function SignUp() {
 
                       setPasswordError(value.trim() === "" ? "Required" : null);
                     }}
-                    error={!!passwordError}
-                    helperText={passwordError || ""}
+                    
+                   
                   />
                 </Grid>
                 <Grid item xs={12}>
