@@ -45,6 +45,7 @@ export default function SignUp() {
     const email = data.get("email");
     const password = data.get("password");
     const fasTrakVerification = data.get("fasTrakVerification");
+
     if (firstName.length > 50) {
       setFirstNameError("Enter a name less than 51 characters long.");
       return;
@@ -76,6 +77,13 @@ export default function SignUp() {
       setLastNameCharError(null);
     }
     
+    if (isPhoneNumberValid(phoneNumber)) {
+      setPhoneError(isPhoneNumberValid(phoneNumber));
+      return;
+    } else {
+      setPhoneError(false);
+    } 
+
     if (!emailRegex.test(email)) {
       setEmailError("Email must be valid, i.e. 'example@email.com'");
       return;
@@ -93,12 +101,7 @@ export default function SignUp() {
       role: driversLicense ? "driver" : "passenger",
     };
 
-    if (!isPhoneNumberValid(phoneNumber)) {
-      setPhoneError("Invalid phone number");
-      return;
-    } else {
-      setPhoneError(false);
-    }
+
 
     if (driversLicense) {
       if (!licenseRegex.test(driversLicense)) {
