@@ -24,7 +24,7 @@ import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { getBrowserTimezone } from "../utilities/getTimeZoneBrowser";
 import { convertTimeZoneToUTC } from "../utilities/convertTimeZonetoUTC";
-
+import dayjs from "dayjs";
 import axiosInstance from "../config/axios.config";
 
 export default function PostPool() {
@@ -69,6 +69,15 @@ export default function PostPool() {
     fetchData();
   }, []);
 
+  const handleDateChange = (newValue) => {
+    if (newValue && dayjs().isAfter(newValue)) {
+      setDateTimeError("Time can not be in the past.");
+    } else {
+      setSelectedDate(newValue);
+      setDateTimeError(null);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -83,6 +92,7 @@ export default function PostPool() {
     const endState = data.get("endState");
     const formattedDate = selectedDate?.format("YYYY-MM-DDTHH:mm:ss");
     const maxLength = 85;
+
     const utcDateTime = formattedDate
       ? convertTimeZoneToUTC(formattedDate, getBrowserTimezone())
       : null;
@@ -217,6 +227,7 @@ export default function PostPool() {
       endStreetError ||
       endZipError
     ) {
+      return;
     }
     try {
       const response = await axiosInstance.post(
@@ -480,7 +491,7 @@ export default function PostPool() {
                   required
                   label="Start date and time"
                   value={selectedDate}
-                  onChange={(newValue) => setSelectedDate(newValue)}
+                  onChange={handleDateChange}
                 />
                 {dateTimeError && (
                   <Typography color={"#d32f2f"} fontSize={"13px"}>
