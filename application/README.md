@@ -71,3 +71,49 @@ Extract the archive to any location on your file system. On macOS, this can be a
 
 Once done, open a new terminal so the changes take effect and run command **./google-cloud-sdk/bin/gcloud init**
 
+## 8. Data Breach Plan
+
+Introduction
+This document outlines our application's response procedures in the event of a data breach. Our commitment is to maintain the highest standards of data security and to act swiftly and transparently should a breach occur.
+
+1. Notification Procedures in Case of a Data Breach
+   Upon discovering a data breach, we will:
+* Conduct an Immediate Investigation: Identify the nature and scope of the breach, the type of data involved, and the potential impact on users.
+* Notify Affected Users: Users will be notified via email and in-app notifications. This notification will include:
+    * A description of what occurred.
+    * The type of data that was compromised.
+    * Actions taken to secure the data and prevent further unauthorized access.
+    * Steps users can take to protect themselves.
+    * Contact information for users to ask questions or obtain additional assistance.
+
+2. Timeliness of Notification
+* Timeline: Users will be notified within 72 hours of confirming the data breach. This complies with the General Data Protection Regulation (GDPR) and other relevant privacy laws.
+
+3. User Support Post-Breach
+* Guidance: Instructions on how to change account passwords and secure other personal information will be provided.
+* Support Channels: A dedicated email address will be available for inquiries related to the breach.
+* Credit Monitoring Services: If financial data is compromised, we will offer free credit monitoring services to the affected users for one year.
+
+4. Data Recovery and Safeguarding Measures
+* Data Recovery: Implement our pre-established data recovery plan, including restoring data from backups.
+* Security Enhancement: Post-breach, we will strengthen our security measures, including implementing two-factor authentication and additional monitoring systems.
+
+5. Preventive Measures and Data Protection
+* Regular Security Audits: Periodic audits to identify vulnerabilities.
+* Encryption: All sensitive data is encrypted to protect against unauthorized access.
+* Employee Training: Ongoing training for staff on best practices in data security.
+* Software Updates: Regular updates of security software and prompt application of security patches.
+
+6. Amendment and Review
+* Update Policy: This plan will be reviewed and updated annually, or in response to significant changes in technology, data protection laws, or our business operations.
+
+7. Document Control
+* Version History: Each update of this document will be recorded with version numbers.
+* Responsible Team: Our cybersecurity team will be responsible for maintaining this document.
+
+No Liability Clause
+Limitation of Liability: In the event of any data breach or unauthorized access to user data, Pool shall take immediate steps to identify the cause, rectify the breach, and notify affected users. While Pool commits to maintaining the highest standards of data protection and will make every effort to safeguard user data, Pool shall not be liable for any indirect, incidental, special, consequential or punitive damages, including but not limited to loss of profits, data, use, goodwill, or other intangible losses, resulting from:
+1. Your access to or use of or inability to access or use the services;
+2. Any conduct or content of any third party on the services;
+3. Unauthorized access, use, or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage, and even if a remedy set forth herein is found to have failed of its essential purpose.
+   Disclaimer: Pool does not guarantee that the services it provides will be secure or free from bugs or viruses, nor does Pool guarantee the continuous, uninterrupted or error-free operability of the services. While Pool takes all reasonable measures to safeguard the personal data of its users, it cannot guarantee the security of user data transmitted to our services; any transmission is at the user's own risk.
