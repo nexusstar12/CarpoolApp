@@ -173,21 +173,16 @@ export default function PostPool() {
       setEndStreetError(null);
     }
     
-    if (!startCity) {
-      setStartCityError("Required");
+    if (!endCity) {
+      setEndCityError("Required");
     } else if (!validateCityName(startCity)) {
-      setStartCityError("Enter a city name consisting only of letters, hyphens, or periods.");
+      setEndCityError("Enter a city name consisting only of letters, hyphens, or periods.");
     } else if (!validateLength(startCity, maxLength)) {
-      setStartCityError("Enter a location less than 85 characters long.");
+      setEndCityError("Enter a location less than 85 characters long.");
     } else {
-      setStartCityError(null);
+      setEndCityError(null);
     }
-    if (!validateZipCode(endZip)) {
-      setEndZipError("Required");
-    } else {
-      setEndZipError(null);
-    }
-    
+
     if (!endState) {
       setEndStateError("Required");
     } else if (!validateState(endState)) {
@@ -199,18 +194,31 @@ export default function PostPool() {
     
   // Length validation check for start and end cities and addresses 
  
-    if (!startZip) {
+  if (!validateZipCode(startZip)) {
       setStartZipError("Required");
       return;
     } else if (!/^\d+$/.test(startZip)) {
       setStartZipError("Enter a zip code consisting only of numbers.");
       return;
-    } else if (startZip.length !== 5) {
+    } else if (validateZipCode.length !== 5) {
       setStartZipError("Enter a five-digit zip code.");
       return;
     } else {
       setStartZipError(null);
     }
+     
+  if (!validateZipCode(endZip)) {
+    setEndZipError("Required");
+    return;
+  } else if (!/^\d+$/.test(endZip)) {
+    setEndZipError("Enter a zip code consisting only of numbers.");
+    return;
+  } else if (endZip.length !== 5) {
+    setEndZipError("Enter a five-digit zip code.");
+    return;
+  } else {
+    setEndZipError(null);
+  }
     const streetRegex =  /^[a-zA-Z.-]+$/;
 
     return;
