@@ -6,9 +6,9 @@ to organize the contents of the prototypes' folder as you see fit. But remember 
 This does include the structure of your application. Points will be deducted from poorly structured application folders.
 
 ## Please use the rest of the README.md to store important information for your team's application. 
-## Local Setup for MacOS
+### Local Setup Instructions for MacOS
 
-## 1. Docker
+#### 1. Docker
 
 Download Docker Desktop https://www.docker.com/products/docker-desktop/ 
 
@@ -16,7 +16,7 @@ Version 4.23.0
 
 Create account for login after downloading 
 
-## 2. IntelliJ Idea Ultimate
+#### 2. IntelliJ Idea Ultimate
 
 Download the IDE https://www.jetbrains.com/idea/download/?section=mac
 
@@ -24,7 +24,7 @@ Click on the .dmg file if your mac is Intel or Apple Silicon
 
 Create account and login once downloaded
 
-## 3. JAVA17
+#### 3. JAVA17
 
 On mac https://download.oracle.com/java/17/archive/jdk-17.0.8_macos-aarch64_bin.dmg 
 
@@ -35,9 +35,9 @@ On the terminal, then navigate to the downloads folder and then run the followin
 Once extracted, you can set up your JAVA_HOME environment variable to point to the installation directory, and add the "bin" directory to your PATH in your shell profile file
 In order to check if correctly installed run the command: 	java –version
 
-## 4. Maven
+#### 4. Maven
  
-## 5. Node & Node npm
+#### 5. Node & Node npm
    
 Open the terminal
 
@@ -55,9 +55,9 @@ In order to check that node and npm are installed you run
 node -v
 npm -v
 
-## 6. React
+#### 6. React
 
-## 7. Google CLI
+#### 7. Google CLI
 
 In order to connect Google CLI follow the instructions on https://cloud.google.com/sdk/docs/install-sdk 
 
@@ -71,9 +71,8 @@ Extract the archive to any location on your file system. On macOS, this can be a
 
 Once done, open a new terminal so the changes take effect and run command **./google-cloud-sdk/bin/gcloud init**
 
-## 8. Data Breach Plan
+### Data Breach Plan
 
-Introduction
 This document outlines our application's response procedures in the event of a data breach. Our commitment is to maintain the highest standards of data security and to act swiftly and transparently should a breach occur.
 
 1. Notification Procedures in Case of a Data Breach
