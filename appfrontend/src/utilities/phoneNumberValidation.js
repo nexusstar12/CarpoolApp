@@ -1,6 +1,5 @@
 export function isPhoneNumberValid(input) {
   //check if it has 10 characters
-  console.log("aaaa", !/^\d{10}$/.test(input));
   if (!/^\d{10}$/.test(input)) {
     return "Phone number must be ten digits.";
   }
@@ -9,7 +8,6 @@ export function isPhoneNumberValid(input) {
   if (input === null) {
     return;
   }
-
 
   //checking for list validation
   if (input === "1234567890") {

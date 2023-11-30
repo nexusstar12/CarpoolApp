@@ -25,6 +25,7 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
@@ -128,6 +129,47 @@ export default function SignUp() {
     } catch (error) {
       setError(error.response.data.message);
     }
+    if (!firstName) {
+      setFirstNameError("Required");
+    } else {
+      setFirstNameError(null);
+    }
+
+    if (!lastName) {
+      setLastNameError("Required");
+    } else {
+      setLastNameError(null);
+    }
+
+    if (!phoneNumber) {
+      setPhoneError("Required");
+    } else {
+      setPhoneError(null);
+    }
+
+    if (!email) {
+      setEmailError("Required");
+    } else {
+      setEmailError(null);
+    }
+
+    if (!password || password.trim() === "") {
+      setPasswordError("Required");
+    } else {
+      setPasswordError(null);
+    }
+    if (
+      !firstNameError &&
+      !lastNameError &&
+      !phoneError &&
+      !emailError &&
+      !passwordError
+    ) {
+      try {
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+    }
   };
 
   const SuccessModal = () => {
@@ -228,6 +270,36 @@ export default function SignUp() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      // Check for required field
+                      if (!value || value.trim() === "") {
+                        setFirstNameError("Required");
+                        setFirstNameCharError(null);
+                      } else {
+                        // Check for length
+                        if (value.length > 50) {
+                          setFirstNameError(
+                            "Enter a name less than 51 characters long."
+                          );
+                          setFirstNameCharError(null);
+                        } else {
+                          // Check for valid characters
+                          const firstNameRegex = /^[A-Za-z.-]+$/;
+                          if (!firstNameRegex.test(value)) {
+                            setFirstNameCharError(
+                              "Enter a valid first name consisting only of letters, hyphens, or periods."
+                            );
+                            setFirstNameError(null);
+                          } else {
+                            // Clear errors if everything is valid
+                            setFirstNameError(null);
+                            setFirstNameCharError(null);
+                          }
+                        }
+                      }
+                    }}
                     error={!!firstNameCharError || !!firstNameError}
                     helperText={firstNameCharError || firstNameError || ""}
                   />
@@ -240,6 +312,32 @@ export default function SignUp() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      if (!value || value.trim() === "") {
+                        setLastNameError("Required");
+                        setLastNameCharError(null);
+                      } else {
+                        if (value.length > 50) {
+                          setLastNameError(
+                            "Enter a name less than 51 characters long."
+                          );
+                          setLastNameCharError(null);
+                        } else {
+                          const lastNameRegex = /^[A-Za-z.-]+$/;
+                          if (!lastNameRegex.test(value)) {
+                            setLastNameCharError(
+                              "Enter a valid last name consisting only of letters, hyphens, or periods."
+                            );
+                            setLastNameError(null);
+                          } else {
+                            setLastNameError(null);
+                            setLastNameCharError(null);
+                          }
+                        }
+                      }
+                    }}
                     error={!!lastNameCharError || !!lastNameError}
                     helperText={lastNameCharError || lastNameError || ""}
                   />
@@ -254,6 +352,17 @@ export default function SignUp() {
                     autoComplete="phoneNumber"
                     error={!!phoneError}
                     helperText={phoneError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      if (!value || value.trim() === "") {
+                        setPhoneError("Required");
+                      } else if (!isPhoneNumberValid(value)) {
+                        setPhoneError("Invalid phone number");
+                      } else {
+                        setPhoneError(null);
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -266,6 +375,11 @@ export default function SignUp() {
                     autoComplete="email"
                     error={!!emailError}
                     helperText={emailError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      setEmailError(value.trim() === "" ? "Required" : null);
+                    }}
+                    
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -277,6 +391,15 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      setPasswordError(value.trim() === "" ? "Required" : null);
+                    }}
+                    
+                   
                   />
                 </Grid>
                 <Grid item xs={12}>

@@ -46,6 +46,7 @@ export default function PostPool() {
   const [endStateError, setEndStateError] = useState(null);
   const [startZipError, setStartZipError] = useState(null);
   const [endZipError, setEndZipError] = useState(null);
+  const [dateTimeError, setDateTimeError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,10 +82,14 @@ export default function PostPool() {
     const endCity = data.get("endCity");
     const endState = data.get("endState");
     const formattedDate = selectedDate?.format("YYYY-MM-DDTHH:mm:ss");
-    const utcDateTime = convertTimeZoneToUTC(
-      formattedDate,
-      getBrowserTimezone()
-    );
+    const maxLength = 85;
+    const utcDateTime = formattedDate
+      ? convertTimeZoneToUTC(formattedDate, getBrowserTimezone())
+      : null;
+
+    if (!utcDateTime) {
+      setDateTimeError("Required");
+    }
 
     const requestBody = {
       name,
@@ -102,6 +107,117 @@ export default function PostPool() {
       privacy: privacy === "public" ? true : false,
     };
 
+    //field validations
+    if (!validateName(name)) {
+      setNameError("Required");
+    } else {
+      setNameError(null);
+    }
+
+    if (!startStreet) {
+      setStartStreetError("Required");
+    } else if (!validateStreetName(startStreet)) {
+      setStartStreetError(
+        "Enter a street name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateStreetAddress(startStreet)) {
+      setStartStreetError("Enter a location less than 85 characters long.");
+    } else {
+      setStartStreetError(null);
+    }
+    // Start City Validation
+
+    if (!startCity) {
+      setStartCityError("Required");
+    } else if (!validateCityName(startCity)) {
+      setStartCityError(
+        "Enter a city name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateLength(startCity, maxLength)) {
+      setStartCityError("Enter a location less than 85 characters long.");
+    } else {
+      setStartCityError(null);
+    }
+
+    if (!startState || startState === "") {
+      setStartStateError("Required");
+    } else if (!validateState(startState)) {
+      setStartStateError(
+        "Enter a two-letter state abbreviation, e.g., CA for California"
+      );
+    } else {
+      setStartStateError(null);
+    }
+
+    if (!endStreet) {
+      setEndStreetError("Required");
+    } else if (!validateStreetName(endStreet)) {
+      setEndStreetError(
+        "Enter a street name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateStreetAddress(endStreet)) {
+      setEndStreetError("Enter a location less than 85 characters long.");
+    } else {
+      setEndStreetError(null);
+    }
+
+    // End City Validation
+    if (!endCity) {
+      setEndCityError("Required");
+    } else if (!validateCityName(endCity)) {
+      setEndCityError(
+        "Enter a city name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateLength(endCity, maxLength)) {
+      setEndCityError("Enter a location less than 85 characters long.");
+    } else {
+      setEndCityError(null);
+    }
+
+    if (!endState) {
+      setEndStateError("Required");
+    } else if (!validateState(endState)) {
+      setEndStateError(
+        "Enter a two-letter state abbreviation, e.g., CA for California"
+      );
+      return;
+    } else {
+      setEndStateError(null);
+    }
+
+    // Start Zip Validation
+    if (!startZip) {
+      setStartZipError("Required");
+    } else if (!/^\d+$/.test(startZip)) {
+      setStartZipError("Enter a zip code consisting only of numbers.");
+    } else if (startZip.length !== 5) {
+      setStartZipError("Enter a five-digit zip code.");
+    } else {
+      setStartZipError(null);
+    }
+
+    // End Zip Validation
+    if (!endZip) {
+      setEndZipError("Required");
+    } else if (!/^\d+$/.test(endZip)) {
+      setEndZipError("Enter a zip code consisting only of numbers.");
+    } else if (endZip.length !== 5) {
+      setEndZipError("Enter a five-digit zip code.");
+    } else {
+      setEndZipError(null);
+    }
+
+    if (
+      startCityError ||
+      startStateError ||
+      startStreetError ||
+      startZipError ||
+      endStateError ||
+      endCityError ||
+      endStreetError ||
+      endZipError
+    ) {
+    }
     try {
       const response = await axiosInstance.post(
         `/pool/createpool`,
@@ -112,61 +228,11 @@ export default function PostPool() {
           },
         }
       );
-      console.log("response", response);
       if (response.status === 201) {
         history("/my-pools");
       }
     } catch (error) {
       console.log("error", error);
-    }
-
-    //field validations
-    if (!validateName(name)) {
-      setNameError("Required");
-    } else {
-      setNameError(null);
-    }
-    if (!startStreet) {
-      setStartStreetError("Required");
-    } else {
-      setStartStreetError(null);
-    }
-    if (!startCity) {
-      setStartCityError("Required");
-    } else {
-      setStartCityError(null);
-    }
-    if (!validateZipCode(startZip)) {
-      setStartZipError("Required");
-    } else {
-      setStartZipError(null);
-    }
-    if (!validateState(startState)) {
-      setStartStateError("Required");
-    } else {
-      setStartStateError(null);
-    }
-
-    if (!endStreet) {
-      setEndStreetError("Required");
-    } else {
-      setEndStreetError(null);
-    }
-    if (!endCity) {
-      setEndCityError("Required");
-    } else {
-      setEndCityError(null);
-    }
-    if (!validateZipCode(endZip)) {
-      setEndZipError("Required");
-    } else {
-      setEndZipError(null);
-    }
-
-    if (!validateState(endState)) {
-      setEndStateError("Required");
-    } else {
-      setEndStateError(null);
     }
 
     return;
@@ -176,25 +242,24 @@ export default function PostPool() {
     const namePattern = /[a-zA-Z0-9_ ]/;
     return namePattern.test(nameInput);
   }
-  /*const validateStreet = async (street) => {
-    const client = new Client();
-    try{
-      const response = await client.geocode({
-        params : {
-          address : street,
-        }
-      });
-
-      if(response.data.status === 'OK'){
-        const formattedAddress = response.data.results[0].formatted_address;
-      } else {
-        setError('Invalid address');
-      }
-    } catch (error){
+  function validateLength(input, maxLength) {
+    return input.length <= maxLength;
+  }
+  function validateStreetAddress(streetAddress) {
+    if (streetAddress.length === 0) {
       return false;
     }
+    return streetAddress.length <= 85;
+  }
+  function validateStreetName(streetName) {
+    const streetNamePattern = /^[a-zA-Z0-9\-\.\s]+$/;
+    return streetNamePattern.test(streetName);
+  }
+  function validateCityName(cityName) {
+    const cityPattern = /^[a-zA-Z\-\.\s]+$/;
+    return cityPattern.test(cityName);
+  }
 
-  }*/
   function validateState(state) {
     let stateInput = state;
     const allStates = [
@@ -277,11 +342,6 @@ export default function PostPool() {
       } catch (error) {}
     }
   };
-  function helperFunction() {
-    if (this.state.data.startState.trim().length > 0) return "OK";
-    if (this.state.data.startState.replace(/[a-zA-Z0-9_ ]/g, "").length > 0)
-      return "Only letters and numbers";
-  }
 
   const handleSelectChange = async (e) => {
     const crew = e.target.value;
@@ -418,11 +478,15 @@ export default function PostPool() {
               <DemoContainer components={["DateTimePicker"]}>
                 <DateTimePicker
                   required
-                  error={"Wrong"}
                   label="Start date and time"
                   value={selectedDate}
                   onChange={(newValue) => setSelectedDate(newValue)}
                 />
+                {dateTimeError && (
+                  <Typography color={"#d32f2f"} fontSize={"13px"}>
+                    {dateTimeError}
+                  </Typography>
+                )}
               </DemoContainer>
             </LocalizationProvider>
           </AccordionDetails>
