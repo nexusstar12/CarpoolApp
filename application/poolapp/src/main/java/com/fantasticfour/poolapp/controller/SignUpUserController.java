@@ -91,7 +91,7 @@ public class SignUpUserController {
             // handle duplicate email
             Map<String, Object> response = new HashMap<>();
             response.put("message", "duplicate user email");
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
 
