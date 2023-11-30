@@ -77,13 +77,13 @@ export default function SignUp() {
     } else {
       setLastNameCharError(null);
     }
-    
+
     if (isPhoneNumberValid(phoneNumber)) {
       setPhoneError(isPhoneNumberValid(phoneNumber));
       return;
     } else {
       setPhoneError(false);
-    } 
+    }
 
     if (!emailRegex.test(email)) {
       setEmailError("Email must be valid, i.e. 'example@email.com'");
@@ -101,8 +101,6 @@ export default function SignUp() {
       driversLicense,
       role: driversLicense ? "driver" : "passenger",
     };
-
-
 
     if (driversLicense) {
       if (!licenseRegex.test(driversLicense)) {
@@ -358,7 +356,7 @@ export default function SignUp() {
                       if (!value || value.trim() === "") {
                         setPhoneError("Required");
                       } else if (!isPhoneNumberValid(value)) {
-                        setPhoneError("Invalid phone number");
+                        setPhoneError(isPhoneNumberValid(value));
                       } else {
                         setPhoneError(null);
                       }
@@ -379,7 +377,6 @@ export default function SignUp() {
                       const value = e.target.value;
                       setEmailError(value.trim() === "" ? "Required" : null);
                     }}
-                    
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -395,11 +392,8 @@ export default function SignUp() {
                     helperText={passwordError}
                     onBlur={(e) => {
                       const value = e.target.value;
-
                       setPasswordError(value.trim() === "" ? "Required" : null);
                     }}
-                    
-                   
                   />
                 </Grid>
                 <Grid item xs={12}>
