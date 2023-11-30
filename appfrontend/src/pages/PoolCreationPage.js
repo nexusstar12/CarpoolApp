@@ -46,6 +46,7 @@ export default function PostPool() {
   const [endStateError, setEndStateError] = useState(null);
   const [startZipError, setStartZipError] = useState(null);
   const [endZipError, setEndZipError] = useState(null);
+  const [dateTimeError, setDateTimeError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,10 +83,13 @@ export default function PostPool() {
     const endState = data.get("endState");
     const formattedDate = selectedDate?.format("YYYY-MM-DDTHH:mm:ss");
     const maxLength = 85;
-    const utcDateTime = convertTimeZoneToUTC(
-      formattedDate,
-      getBrowserTimezone()
-    );
+    const utcDateTime = formattedDate
+      ? convertTimeZoneToUTC(formattedDate, getBrowserTimezone())
+      : null;
+
+    if (!utcDateTime) {
+      setDateTimeError("Required");
+    }
 
     const requestBody = {
       name,
@@ -102,24 +106,6 @@ export default function PostPool() {
       creatorId: profileId,
       privacy: privacy === "public" ? true : false,
     };
-
-    try {
-      const response = await axiosInstance.post(
-        `/pool/createpool`,
-        requestBody,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
-      );
-      console.log("response", response);
-      if (response.status === 201) {
-        history("/my-pools");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
 
     //field validations
     if (!validateName(name)) {
@@ -153,7 +139,7 @@ export default function PostPool() {
       setStartCityError(null);
     }
 
-    if (!startState) {
+    if (!startState || startState === "") {
       setStartStateError("Required");
     } else if (!validateState(startState)) {
       setStartStateError(
@@ -221,6 +207,34 @@ export default function PostPool() {
       setEndZipError(null);
     }
 
+    if (
+      startCityError ||
+      startStateError ||
+      startStreetError ||
+      startZipError ||
+      endStateError ||
+      endCityError ||
+      endStreetError ||
+      endZipError
+    ) {
+    }
+    try {
+      const response = await axiosInstance.post(
+        `/pool/createpool`,
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      if (response.status === 201) {
+        history("/my-pools");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+
     return;
   };
   function validateName(name) {
@@ -245,25 +259,7 @@ export default function PostPool() {
     const cityPattern = /^[a-zA-Z\-\.\s]+$/;
     return cityPattern.test(cityName);
   }
-  /*const validateStreet = async (street) => {
-    const client = new Client();
-    try{
-      const response = await client.geocode({
-        params : {
-          address : street,
-        }
-      });
 
-      if(response.data.status === 'OK'){
-        const formattedAddress = response.data.results[0].formatted_address;
-      } else {
-        setError('Invalid address');
-      }
-    } catch (error){
-      return false;
-    }
-
-  }*/
   function validateState(state) {
     let stateInput = state;
     const allStates = [
@@ -346,11 +342,6 @@ export default function PostPool() {
       } catch (error) {}
     }
   };
-  function helperFunction() {
-    if (this.state.data.startState.trim().length > 0) return "OK";
-    if (this.state.data.startState.replace(/[a-zA-Z0-9_ ]/g, "").length > 0)
-      return "Only letters and numbers";
-  }
 
   const handleSelectChange = async (e) => {
     const crew = e.target.value;
@@ -487,11 +478,15 @@ export default function PostPool() {
               <DemoContainer components={["DateTimePicker"]}>
                 <DateTimePicker
                   required
-                  error={"Wrong"}
                   label="Start date and time"
                   value={selectedDate}
                   onChange={(newValue) => setSelectedDate(newValue)}
                 />
+                {dateTimeError && (
+                  <Typography color={"#d32f2f"} fontSize={"13px"}>
+                    {dateTimeError}
+                  </Typography>
+                )}
               </DemoContainer>
             </LocalizationProvider>
           </AccordionDetails>

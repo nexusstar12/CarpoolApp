@@ -25,8 +25,6 @@ export default function ListCrewPage() {
         console.log("error", error);
         setError(error);
         setIsLoading(false);
-
-        // setError(error.response.data.message);
       }
     };
 
@@ -107,7 +105,6 @@ export default function ListCrewPage() {
   `;
 
   const getCards = (data) => {
-    console.log("datadatadata", data);
     if (!data) {
       return (
         <StyledCard>
@@ -128,7 +125,6 @@ export default function ListCrewPage() {
           <CardTitle>{dataRow?.description}</CardTitle>
 
           {dataRow.members.map((member) => {
-            // console.log("member", member);
             return (
               <CardContainer>
                 <Typography variant="body2" color="textSecondary">
