@@ -81,6 +81,7 @@ export default function PostPool() {
     const endCity = data.get("endCity");
     const endState = data.get("endState");
     const formattedDate = selectedDate?.format("YYYY-MM-DDTHH:mm:ss");
+    const maxLength = 85;
     const utcDateTime = convertTimeZoneToUTC(
       formattedDate,
       getBrowserTimezone()
@@ -126,47 +127,98 @@ export default function PostPool() {
     } else {
       setNameError(null);
     }
+
     if (!startStreet) {
       setStartStreetError("Required");
+    } else if (!validateStreetName(startStreet)) {
+      setStartStreetError(
+        "Enter a street name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateStreetAddress(startStreet)) {
+      setStartStreetError("Enter a location less than 85 characters long.");
     } else {
       setStartStreetError(null);
     }
+    // Start City Validation
+
     if (!startCity) {
       setStartCityError("Required");
+    } else if (!validateCityName(startCity)) {
+      setStartCityError(
+        "Enter a city name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateLength(startCity, maxLength)) {
+      setStartCityError("Enter a location less than 85 characters long.");
     } else {
       setStartCityError(null);
     }
-    if (!validateZipCode(startZip)) {
-      setStartZipError("Required");
-    } else {
-      setStartZipError(null);
-    }
-    if (!validateState(startState)) {
+
+    if (!startState) {
       setStartStateError("Required");
+    } else if (!validateState(startState)) {
+      setStartStateError(
+        "Enter a two-letter state abbreviation, e.g., CA for California"
+      );
     } else {
       setStartStateError(null);
     }
 
     if (!endStreet) {
       setEndStreetError("Required");
+    } else if (!validateStreetName(endStreet)) {
+      setEndStreetError(
+        "Enter a street name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateStreetAddress(endStreet)) {
+      setEndStreetError("Enter a location less than 85 characters long.");
     } else {
       setEndStreetError(null);
     }
+
+    // End City Validation
     if (!endCity) {
       setEndCityError("Required");
+    } else if (!validateCityName(endCity)) {
+      setEndCityError(
+        "Enter a city name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateLength(endCity, maxLength)) {
+      setEndCityError("Enter a location less than 85 characters long.");
     } else {
       setEndCityError(null);
     }
-    if (!validateZipCode(endZip)) {
-      setEndZipError("Required");
-    } else {
-      setEndZipError(null);
-    }
 
-    if (!validateState(endState)) {
+    if (!endState) {
       setEndStateError("Required");
+    } else if (!validateState(endState)) {
+      setEndStateError(
+        "Enter a two-letter state abbreviation, e.g., CA for California"
+      );
+      return;
     } else {
       setEndStateError(null);
+    }
+
+    // Start Zip Validation
+    if (!startZip) {
+      setStartZipError("Required");
+    } else if (!/^\d+$/.test(startZip)) {
+      setStartZipError("Enter a zip code consisting only of numbers.");
+    } else if (startZip.length !== 5) {
+      setStartZipError("Enter a five-digit zip code.");
+    } else {
+      setStartZipError(null);
+    }
+
+    // End Zip Validation
+    if (!endZip) {
+      setEndZipError("Required");
+    } else if (!/^\d+$/.test(endZip)) {
+      setEndZipError("Enter a zip code consisting only of numbers.");
+    } else if (endZip.length !== 5) {
+      setEndZipError("Enter a five-digit zip code.");
+    } else {
+      setEndZipError(null);
     }
 
     return;
@@ -175,6 +227,23 @@ export default function PostPool() {
     let nameInput = name;
     const namePattern = /[a-zA-Z0-9_ ]/;
     return namePattern.test(nameInput);
+  }
+  function validateLength(input, maxLength) {
+    return input.length <= maxLength;
+  }
+  function validateStreetAddress(streetAddress) {
+    if (streetAddress.length === 0) {
+      return false;
+    }
+    return streetAddress.length <= 85;
+  }
+  function validateStreetName(streetName) {
+    const streetNamePattern = /^[a-zA-Z0-9\-\.\s]+$/;
+    return streetNamePattern.test(streetName);
+  }
+  function validateCityName(cityName) {
+    const cityPattern = /^[a-zA-Z\-\.\s]+$/;
+    return cityPattern.test(cityName);
   }
   /*const validateStreet = async (street) => {
     const client = new Client();
