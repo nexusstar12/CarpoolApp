@@ -10,7 +10,6 @@ import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
 import { Typography } from "@mui/material";
-
 const defaultTheme = createTheme();
 
 function HomePage() {
@@ -41,7 +40,8 @@ function HomePage() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "100vh" }}
+        sx={{ height: "80vh",
+      marginBottom : "10vh" }}
       >
         <CssBaseline />
         <Grid
@@ -119,6 +119,7 @@ function HomePage() {
               </div>
             </div>
           </div>
+          
         </Grid>
       </Grid>
       <CookieConsent />
