@@ -176,17 +176,17 @@ export default function PostPool() {
     }
 
     // End City Validation
-if (!endCity) {
-  setEndCityError("Required");
-} else if (!validateCityName(endCity)) {
-  setEndCityError(
-    "Enter a city name consisting only of letters, hyphens, or periods."
-  );
-} else if (!validateLength(endCity, maxLength)) {
-  setEndCityError("Enter a location less than 85 characters long.");
-} else {
-  setEndCityError(null);
-}
+    if (!endCity) {
+      setEndCityError("Required");
+    } else if (!validateCityName(endCity)) {
+      setEndCityError(
+        "Enter a city name consisting only of letters, hyphens, or periods."
+      );
+    } else if (!validateLength(endCity, maxLength)) {
+      setEndCityError("Enter a location less than 85 characters long.");
+    } else {
+      setEndCityError(null);
+    }
 
     if (!endState) {
       setEndStateError("Required");
@@ -199,28 +199,27 @@ if (!endCity) {
       setEndStateError(null);
     }
 
-
     // Start Zip Validation
-if (!startZip) {
-  setStartZipError("Required");
-} else if (!/^\d+$/.test(startZip)) {
-  setStartZipError("Enter a zip code consisting only of numbers.");
-} else if (startZip.length !== 5) {
-  setStartZipError("Enter a five-digit zip code.");
-} else {
-  setStartZipError(null);
-}
+    if (!startZip) {
+      setStartZipError("Required");
+    } else if (!/^\d+$/.test(startZip)) {
+      setStartZipError("Enter a zip code consisting only of numbers.");
+    } else if (startZip.length !== 5) {
+      setStartZipError("Enter a five-digit zip code.");
+    } else {
+      setStartZipError(null);
+    }
 
-// End Zip Validation
-if (!endZip) {
-  setEndZipError("Required");
-} else if (!/^\d+$/.test(endZip)) {
-  setEndZipError("Enter a zip code consisting only of numbers.");
-} else if (endZip.length !== 5) {
-  setEndZipError("Enter a five-digit zip code.");
-} else {
-  setEndZipError(null);
-}
+    // End Zip Validation
+    if (!endZip) {
+      setEndZipError("Required");
+    } else if (!/^\d+$/.test(endZip)) {
+      setEndZipError("Enter a zip code consisting only of numbers.");
+    } else if (endZip.length !== 5) {
+      setEndZipError("Enter a five-digit zip code.");
+    } else {
+      setEndZipError(null);
+    }
 
     return;
   };
