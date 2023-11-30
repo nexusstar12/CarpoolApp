@@ -99,6 +99,8 @@ export default function PostPool() {
 
     if (!utcDateTime) {
       setDateTimeError("Required");
+    } else {
+      setDateTimeError(null);
     }
 
     const requestBody = {
@@ -225,7 +227,8 @@ export default function PostPool() {
       endStateError ||
       endCityError ||
       endStreetError ||
-      endZipError
+      endZipError ||
+      dateTimeError
     ) {
       return;
     }
