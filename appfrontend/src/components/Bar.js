@@ -55,6 +55,9 @@ export default function Bar() {
         <Toolbar>
           {isMobile ? (
             <>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Pool
+              </Typography>
               <IconButton
                 size="large"
                 edge="start"
@@ -111,13 +114,33 @@ export default function Bar() {
                     >
                       My Crews
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleClose}
-                      component={RouterLink}
-                      to="/passenger-profile"
-                    >
-                      My Profile
-                    </MenuItem>
+
+                    {isDriver ? (
+                      <>
+                        <MenuItem
+                          onClick={handleClose}
+                          component={RouterLink}
+                          to="/passenger-profile"
+                        >
+                          Passenger Profile
+                        </MenuItem>
+                        <MenuItem
+                          onClick={handleClose}
+                          component={RouterLink}
+                          to="/driver-profile"
+                        >
+                          Driver Profile
+                        </MenuItem>
+                      </>
+                    ) : (
+                      <MenuItem
+                        onClick={handleClose}
+                        component={RouterLink}
+                        to="/passenger-profile"
+                      >
+                        My Profile
+                      </MenuItem>
+                    )}
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </>
                 ) : (

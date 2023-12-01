@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axiosInstance from "../config/axios.config";
 import { useNavigate } from "react-router-dom";
@@ -24,12 +25,16 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [licenseError, setLicenseError] = useState(null);
-  const [agreeTermsError, setAgreeTermsError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   const [registerDriver, setRegisterDriver] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
   const licenseRegex = /^[a-zA-Z0-9]{1,20}$/;
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [firstNameError, setFirstNameError] = useState(null);
+  const [lastNameError, setLastNameError] = useState(null);
+  const [firstNameCharError, setFirstNameCharError] = useState(null);
+  const [lastNameCharError, setLastNameCharError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,6 +47,50 @@ export default function SignUp() {
     const password = data.get("password");
     const fasTrakVerification = data.get("fasTrakVerification");
 
+    if (firstName.length > 50) {
+      setFirstNameError("Enter a name less than 51 characters long.");
+      return;
+    } else {
+      setFirstNameError(null);
+    }
+    if (lastName.length > 50) {
+      setLastNameError("Enter a name less than 51 characters long.");
+      return;
+    } else {
+      setLastNameError(null);
+    }
+    const firstNameRegex = /^[a-zA-Z.-]+$/;
+    if (!firstNameRegex.test(firstName)) {
+      setFirstNameCharError(
+        "Enter a name consisting only of letters, hyphens, or periods."
+      );
+      return;
+    } else {
+      setFirstNameCharError(null);
+    }
+    const lastNameRegex = /^[a-zA-Z.-]+$/;
+    if (!lastNameRegex.test(lastName)) {
+      setLastNameCharError(
+        "Enter a name consisting only of letters, hyphens, or periods."
+      );
+      return;
+    } else {
+      setLastNameCharError(null);
+    }
+
+    if (isPhoneNumberValid(phoneNumber)) {
+      setPhoneError(isPhoneNumberValid(phoneNumber));
+      return;
+    } else {
+      setPhoneError(false);
+    }
+
+    if (!emailRegex.test(email)) {
+      setEmailError("Email must be valid, i.e. 'example@email.com'");
+      return;
+    } else {
+      setEmailError(null);
+    }
     const requestBody = {
       firstName,
       lastName,
@@ -52,13 +101,6 @@ export default function SignUp() {
       driversLicense,
       role: driversLicense ? "driver" : "passenger",
     };
-
-    if (!isPhoneNumberValid(phoneNumber)) {
-      setPhoneError("Invalid phone number");
-      return;
-    } else {
-      setPhoneError(false);
-    }
 
     if (driversLicense) {
       if (!licenseRegex.test(driversLicense)) {
@@ -76,22 +118,97 @@ export default function SignUp() {
       setEmailError(false);
     }
 
-    if (!agreeTerms) {
-      setAgreeTermsError("You must agree to the Terms and Conditions to continue.");
-      return;
-    } else {
-      setAgreeTermsError(null);
-    }
-
     try {
       const response = await axiosInstance.post("/signup", requestBody);
 
       if (response.status === 201) {
-        history("/signin");
+        setShowSuccessModal(true);
       }
     } catch (error) {
       setError(error.response.data.message);
     }
+    if (!firstName) {
+      setFirstNameError("Required");
+    } else {
+      setFirstNameError(null);
+    }
+
+    if (!lastName) {
+      setLastNameError("Required");
+    } else {
+      setLastNameError(null);
+    }
+
+    if (!phoneNumber) {
+      setPhoneError("Required");
+    } else {
+      setPhoneError(null);
+    }
+
+    if (!email) {
+      setEmailError("Required");
+    } else {
+      setEmailError(null);
+    }
+
+    if (!password || password.trim() === "") {
+      setPasswordError("Required");
+    } else {
+      setPasswordError(null);
+    }
+    if (
+      !firstNameError &&
+      !lastNameError &&
+      !phoneError &&
+      !emailError &&
+      !passwordError
+    ) {
+      try {
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+    }
+  };
+
+  const SuccessModal = () => {
+    const handleRedirect = () => {
+      setShowSuccessModal(false);
+      history("/signin");
+    };
+
+    return (
+      <Modal
+        open={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Typography id="success-modal-title" variant="h6" component="h2">
+            Signup Successful!
+          </Typography>
+          <Typography id="success-modal-description" sx={{ mt: 2 }}>
+            Your account has been created. You can now sign in.
+          </Typography>
+          <Button onClick={handleRedirect}>Go to Sign In</Button>
+        </Box>
+      </Modal>
+    );
   };
 
   return (
@@ -134,6 +251,7 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
+
             <Box
               component="form"
               noValidate
@@ -150,6 +268,38 @@ export default function SignUp() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      // Check for required field
+                      if (!value || value.trim() === "") {
+                        setFirstNameError("Required");
+                        setFirstNameCharError(null);
+                      } else {
+                        // Check for length
+                        if (value.length > 50) {
+                          setFirstNameError(
+                            "Enter a name less than 51 characters long."
+                          );
+                          setFirstNameCharError(null);
+                        } else {
+                          // Check for valid characters
+                          const firstNameRegex = /^[A-Za-z.-]+$/;
+                          if (!firstNameRegex.test(value)) {
+                            setFirstNameCharError(
+                              "Enter a valid first name consisting only of letters, hyphens, or periods."
+                            );
+                            setFirstNameError(null);
+                          } else {
+                            // Clear errors if everything is valid
+                            setFirstNameError(null);
+                            setFirstNameCharError(null);
+                          }
+                        }
+                      }
+                    }}
+                    error={!!firstNameCharError || !!firstNameError}
+                    helperText={firstNameCharError || firstNameError || ""}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -160,6 +310,34 @@ export default function SignUp() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      if (!value || value.trim() === "") {
+                        setLastNameError("Required");
+                        setLastNameCharError(null);
+                      } else {
+                        if (value.length > 50) {
+                          setLastNameError(
+                            "Enter a name less than 51 characters long."
+                          );
+                          setLastNameCharError(null);
+                        } else {
+                          const lastNameRegex = /^[A-Za-z.-]+$/;
+                          if (!lastNameRegex.test(value)) {
+                            setLastNameCharError(
+                              "Enter a valid last name consisting only of letters, hyphens, or periods."
+                            );
+                            setLastNameError(null);
+                          } else {
+                            setLastNameError(null);
+                            setLastNameCharError(null);
+                          }
+                        }
+                      }
+                    }}
+                    error={!!lastNameCharError || !!lastNameError}
+                    helperText={lastNameCharError || lastNameError || ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -172,6 +350,17 @@ export default function SignUp() {
                     autoComplete="phoneNumber"
                     error={!!phoneError}
                     helperText={phoneError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+
+                      if (!value || value.trim() === "") {
+                        setPhoneError("Required");
+                      } else if (!isPhoneNumberValid(value)) {
+                        setPhoneError(isPhoneNumberValid(value));
+                      } else {
+                        setPhoneError(null);
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -184,6 +373,10 @@ export default function SignUp() {
                     autoComplete="email"
                     error={!!emailError}
                     helperText={emailError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      setEmailError(value.trim() === "" ? "Required" : null);
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -195,6 +388,12 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      setPasswordError(value.trim() === "" ? "Required" : null);
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -280,6 +479,7 @@ export default function SignUp() {
           }}
         />
       </Grid>
+      <SuccessModal />
     </ThemeProvider>
   );
 }

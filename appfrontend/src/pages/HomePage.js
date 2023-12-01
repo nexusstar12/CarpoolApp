@@ -9,6 +9,8 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
+import { isZipCodeValid } from "../utilities/zipCodeValidation";
+import { Typography } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -17,14 +19,20 @@ function HomePage() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
+  const [notFound, setNotFound] = useState(false);
 
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
-
     const data = await axiosInstance.get(
       `/searchbar?filter=${filterOption}&value=${searchQuery}`
     );
-    setResult(data.data);
+
+    if (data.data.length > 0) {
+      setResult(data.data);
+    } else {
+      setNotFound(true);
+      setResult([]);
+    }
   };
 
   return (
@@ -94,17 +102,21 @@ function HomePage() {
                   style={{ width: isMobile ? "100%" : "auto" }}
                 />
               </Grid>
-              {result.length > 0 ? (
-                <div className="search-results-container">
+
+              <div className="search-results-container">
+                {result.length > 0 && (
                   <SearchResult
                     className="search-result"
                     result={result}
                     itemsPerPage={10}
                   />
-                </div>
-              ) : (
-                <div className="search-results-empty"></div>
-              )}
+                )}
+                {notFound && (
+                  <Typography>
+                    No pools found. Try searching for a pool in San Francisco.
+                  </Typography>
+                )}
+              </div>
             </div>
           </div>
         </Grid>

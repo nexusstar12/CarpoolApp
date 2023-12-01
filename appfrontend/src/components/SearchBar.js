@@ -6,6 +6,8 @@ import Popup from "reactjs-popup";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { isZipCodeValid } from "../utilities/zipCodeValidation";
+import { isCityNameValid } from "../utilities/cityValidation";
 
 const SearchBar = ({ onSearch, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,6 +15,8 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const [error, setError] = useState(false);
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
   const [hasSearched, setHasSearched] = useState(false);
+  const [zipCodeError, setZipCodeError] = useState(false);
+  const [cityNameError, setCityNameError] = useState(false);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -22,8 +26,30 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
     if (event.key === "Enter") {
       if (!filterOption) {
         setError(true);
+        return;
+      }
+      setError(false);
+
+      let hasError = false;
+
+      if (
+        (filterOption === "startZip" || filterOption === "endZip") &&
+        !isZipCodeValid(searchQuery)
+      ) {
+        setZipCodeError(true);
+        hasError = true;
       } else {
-        setError(false);
+        setZipCodeError(false);
+      }
+
+      if (filterOption === "city" && !isCityNameValid(searchQuery)) {
+        setCityNameError(true);
+        hasError = true;
+      } else {
+        setCityNameError(false);
+      }
+
+      if (!hasError) {
         setHasSearched(true);
         onSearch({ searchQuery, filterOption });
       }
@@ -44,8 +70,30 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
   const handleClick = () => {
     if (!filterOption) {
       setError(true);
+      return;
+    }
+    setError(false);
+
+    let hasError = false;
+
+    if (
+      (filterOption === "startZip" || filterOption === "endZip") &&
+      !isZipCodeValid(searchQuery)
+    ) {
+      setZipCodeError(true);
+      hasError = true;
     } else {
-      setError(false);
+      setZipCodeError(false);
+    }
+
+    if (filterOption === "city" && !isCityNameValid(searchQuery)) {
+      setCityNameError(true);
+      hasError = true;
+    } else {
+      setCityNameError(false);
+    }
+
+    if (!hasError) {
       setHasSearched(true);
       onSearch({ searchQuery, filterOption });
     }
@@ -97,9 +145,13 @@ const SearchBar = ({ onSearch, onFilterChange }) => {
       >
         Search
       </Button>
-      {error && (
+      {(error || zipCodeError || cityNameError) && (
         <Typography color="error" variant="body2">
           {error && "Please select an option before searching."}
+          {zipCodeError &&
+            "Invalid zip code. The valid zip code should only be 5 valid numbers."}
+          {cityNameError &&
+            "Enter a city name consisting only of letters with 85 or fewer characters"}
         </Typography>
       )}
     </div>
