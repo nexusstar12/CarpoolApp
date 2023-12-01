@@ -13,15 +13,15 @@
 
 4. Fill out the table below. Note that roles are not yet defined for members of the team, they can be added later on. However, the fields of "Student name", "Student Email", and "Github Username" are mandatory to be completed the same day the repository is created.
 
-| Student |  Student Full Name   |      Student SFSU Email      | GitHub Username  | Discord Username |       Role       |
-| :-----: | :------------------: | :--------------------------: | :--------------: | :--------------: | :--------------: |
-|   #1    |     Jonathan Sum     |        jsum@sfsu.edu         |    nasalito9     |       hoe2       |  Database Duke   |
-|   #2    |    Kendrick Rivas    |       krivas2@sfsu.edu       |  yaboikendrick   |  kendrickkrivas  | Frontend Support |
-|   #3    |   Kristian Goranov   |      kgoranov@sfsu.edu       |     kkrstchn     |  bonemaster7977  |  Fullstack Lead  |
-|   #4    | Isiah Paul-McGlothin | ipaulmcglothin@mail.sfsu.edu |     IamGemek     |      gemek       |    UX Expert     |
-|   #5    |     Phillip Diec     |        gdiec@sfsu.edu        |   nexusstar12    |    Nexusstar     |  Backend Baron   |
-|   #6    | Xuan Duy Anh Nguyen  |      anguyen96@sfsu.edu      | nguyenxuanduyanh |      nxdanh      |  Frontend Lead   |
-|   #7    |   Zoe Panagopoulos   |    zpanagopoulos@sfsu.edu    |      zrrrpy      |      zrrrpy      |    Team Lead     |
+| Student |  Student Full Name   |      Student SFSU Email      | GitHub Username  | Discord Username |       Role        |
+| :-----: | :------------------: | :--------------------------: | :--------------: | :--------------: |:-----------------:|
+|   #1    |     Jonathan Sum     |        jsum@sfsu.edu         |    nasalito9     |       hoe2       | Fullstack Support |
+|   #2    |    Kendrick Rivas    |       krivas2@sfsu.edu       |  yaboikendrick   |  kendrickkrivas  | Frontend Support  |
+|   #3    |   Kristian Goranov   |      kgoranov@sfsu.edu       |     kkrstchn     |  bonemaster7977  |  Fullstack Lead   |
+|   #4    | Isiah Paul-McGlothin | ipaulmcglothin@mail.sfsu.edu |     IamGemek     |      gemek       |     UX Expert     |
+|   #5    |     Phillip Diec     |        gdiec@sfsu.edu        |   nexusstar12    |    Nexusstar     |   Backend Baron   |
+|   #6    | Xuan Duy Anh Nguyen  |      anguyen96@sfsu.edu      | nguyenxuanduyanh |      nxdanh      |   Frontend Lead   |
+|   #7    |   Zoe Panagopoulos   |    zpanagopoulos@sfsu.edu    |      zrrrpy      |      zrrrpy      |     Team Lead     |
 
 4. All the team members must sign the team contract found [here](https://forms.gle/dxATAsa9isXKbcBn7). Missing signatures from students will result in these students being dropped from the course since this means that they disagree with the policies and terms needed to work in a team environment.
 
