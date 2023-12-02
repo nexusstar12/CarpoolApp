@@ -6,8 +6,10 @@ import { UserContext } from "../App";
 import { LoadingBackdrop } from "../components/LoadingData";
 import { convertFromUTC } from "../utilities/convertUTCToBrowserTimeZone";
 import { getBrowserTimezone } from "../utilities/getTimeZoneBrowser";
+import { useNavigate } from "react-router-dom";
 
 export default function ListPoolPage() {
+  const history = useNavigate();
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
   const userContext = useContext(UserContext);
   const { profileId, userId, jwtToken } = userContext.userInfo;
@@ -47,8 +49,11 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     }
@@ -71,33 +76,44 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     }
 
     if (type === "CREATE CREW") {
-      const requestBody = {
-        origin_pool_id: poolId,
-        creator_id: profileId,
-      };
+      try {
+        const requestBody = {
+          origin_pool_id: poolId,
+          creator_id: profileId,
+        };
 
-      await axiosInstance.post(`/crew/createcrew`, requestBody, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+        await axiosInstance.post(`/crew/createcrew`, requestBody, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      setIsLoading(true);
-      const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+        setIsLoading(true);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      setData(response.data);
-      setIsLoading(false);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -114,8 +130,11 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     };

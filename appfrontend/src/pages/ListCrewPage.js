@@ -4,13 +4,16 @@ import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
 import { UserContext } from "../App";
 import { LoadingBackdrop } from "../components/LoadingData";
+import { useNavigate } from "react-router-dom";
 
 export default function ListCrewPage() {
+  const history = useNavigate();
   const [crews, setCrews] = useState([]);
   const userContext = useContext(UserContext);
   const { profileId, jwtToken } = userContext.userInfo;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,20 +39,27 @@ export default function ListCrewPage() {
       profileId,
       crew_id: crewId,
     };
-    await axiosInstance.delete(`/crew/remove/member`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      data: requestBody,
-    });
-    setIsLoading(true);
-    const { data } = await axiosInstance.get(`/crew/${profileId}`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    });
-    setCrews(data);
-    setIsLoading(false);
+
+    try {
+      await axiosInstance.delete(`/crew/remove/member`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        data: requestBody,
+      });
+      setIsLoading(true);
+      const { data } = await axiosInstance.get(`/crew/${profileId}`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      setCrews(data);
+      setIsLoading(false);
+    } catch (error) {
+      if (error.response.status >= 500) {
+        history("/down");
+      }
+    }
   };
 
   const CardContainer = styled("div")`
