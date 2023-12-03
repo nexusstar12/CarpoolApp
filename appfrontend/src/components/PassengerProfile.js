@@ -12,7 +12,7 @@ const PassengerProfile = () => {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "80vh",
+    minHeight: "85vh",
   };
 
   const profileStyle = {
