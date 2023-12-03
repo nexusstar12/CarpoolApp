@@ -16,20 +16,21 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container direction="column" alignItems="center">
+        <Grid container direction="row" alignItems="center">
           <Grid item xs={12}>
-            <Typography color="black" variant="h5">
-              Pool
-            </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography color="#FFFFFF" variant="subtitle1">
-              <Link href="/terms-and-conditions" className="FooterText">
+              <Link href="/terms-and-conditions" className="FooterText" lineHeight={"2.4"} >
                 Terms and Conditions
               </Link>
             </Typography>
           </Grid>
         </Grid>
+        <Typography color="#FFFFFF" variant="h2" fontSize={"15px"} fontWeight={"bold"} >
+          Region & Language: United States - English
+        </Typography>
+
       </Container>
     </Box>
   );

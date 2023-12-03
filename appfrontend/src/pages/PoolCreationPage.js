@@ -264,6 +264,7 @@ export default function PostPool() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        height : "80vh",
       }}
     >
       <Paper
