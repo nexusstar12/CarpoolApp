@@ -2,6 +2,16 @@
   text-align: center;
 }
 
+.not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+  text-align: center;
+}
+
+/* Add more styles if needed */
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
