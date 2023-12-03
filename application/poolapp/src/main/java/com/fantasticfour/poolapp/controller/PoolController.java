@@ -105,7 +105,7 @@ public class PoolController {
         //build custom response
         poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(myPools));
 
-        //available pools -  private pools they are a member of
+        //available pools -  private pools they are not a member of that have a crew they are associated with
         List<Pool> availablePools = poolRepository.findByProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
