@@ -167,7 +167,7 @@ export default function SignUp() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "100vh" }}
+        sx={{ height: "85vh" }}
       >
         <CssBaseline />
         <Grid
@@ -180,7 +180,7 @@ export default function SignUp() {
           elevation={6}
           square
           sx={{
-            height: "90vh",
+            height: "100vh",
             overflow: "auto",
             display: "flex",
             flexDirection: "column",

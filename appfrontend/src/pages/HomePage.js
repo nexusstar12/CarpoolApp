@@ -40,8 +40,7 @@ function HomePage() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "80vh",
-      marginBottom : "10vh" }}
+        sx={{ height: "85vh" }}
       >
         <CssBaseline />
         <Grid
@@ -119,7 +118,6 @@ function HomePage() {
               </div>
             </div>
           </div>
-          
         </Grid>
       </Grid>
       <CookieConsent />

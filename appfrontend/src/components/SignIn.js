@@ -34,18 +34,16 @@ export default function SignIn() {
 
     const requestBody = { email, password };
 
-
     if (!email || !emailRegex.test(email)) {
       setEmailError("Please Enter a Valid Email");
       return;
     } else {
       setEmailError(false);
     }
-    if(!password){
+    if (!password) {
       setPasswordError("Please Enter a Valid Password");
       return;
-    }
-    else{
+    } else {
       setPasswordError(false);
     }
     try {
@@ -66,7 +64,7 @@ export default function SignIn() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "100vh" }}
+        sx={{ height: "85vh" }}
       >
         <CssBaseline />
         <Grid
@@ -134,7 +132,7 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                error = {!!emailError}
+                error={!!emailError}
                 helperText={emailError}
               />
               <TextField
@@ -146,7 +144,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                error = {!!passwordError}
+                error={!!passwordError}
                 helperText={passwordError}
               />
               <Typography color="error" variant="body2">
