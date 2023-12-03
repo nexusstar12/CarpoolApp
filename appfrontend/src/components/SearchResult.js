@@ -165,17 +165,5 @@ export const SearchResult = ({ result }) => {
     ));
   };
 
-  return (
-    <>
-      <CardContainer>{getCards()}</CardContainer>
-
-      <div>
-        {result.length === 0 ? (
-          <p>No results found.</p>
-        ) : (
-          <CardContainer>{getCards()}</CardContainer>
-        )}
-      </div>
-    </>
-  );
+  return <CardContainer>{getCards()}</CardContainer>;
 };

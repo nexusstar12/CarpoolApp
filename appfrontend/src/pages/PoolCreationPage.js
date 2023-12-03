@@ -62,6 +62,9 @@ export default function PostPool() {
           setCrews(data);
         }
       } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
         console.error("Error fetching data: ", error);
       }
     };
@@ -246,6 +249,9 @@ export default function PostPool() {
         history("/my-pools");
       }
     } catch (error) {
+      if (error.response.status >= 500) {
+        history("/down");
+      }
       console.log("error", error);
     }
 

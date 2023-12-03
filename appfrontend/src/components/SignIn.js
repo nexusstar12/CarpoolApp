@@ -34,18 +34,16 @@ export default function SignIn() {
 
     const requestBody = { email, password };
 
-
     if (!email || !emailRegex.test(email)) {
       setEmailError("Please Enter a Valid Email");
       return;
     } else {
       setEmailError(false);
     }
-    if(!password){
+    if (!password) {
       setPasswordError("Please Enter a Valid Password");
       return;
-    }
-    else{
+    } else {
       setPasswordError(false);
     }
     try {
@@ -56,6 +54,9 @@ export default function SignIn() {
         history("/", { replace: true });
       }
     } catch (error) {
+      if (error.response.status >= 500) {
+        history("/down");
+      }
       setError(error.response.data);
     }
   };
@@ -134,7 +135,7 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                error = {!!emailError}
+                error={!!emailError}
                 helperText={emailError}
               />
               <TextField
@@ -146,7 +147,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                error = {!!passwordError}
+                error={!!passwordError}
                 helperText={passwordError}
               />
               <Typography color="error" variant="body2">
