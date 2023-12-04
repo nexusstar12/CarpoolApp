@@ -5,8 +5,8 @@
   min-height: 100vh; /* Make sure your app takes at least the full height of the viewport */
 }
 
-.content{
-  flex : 1;
+.content {
+  flex: 1;
 }
 
 .not-found-container {
@@ -134,5 +134,21 @@ html {
   }
   .home-page-title {
     font-size: 20px;
+  }
+
+  .team-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This centers the images horizontally */
+    justify-content: flex-start; /* This aligns the images to the top of the container */
+    gap: 20px; /* Adjusts the space between items */
+  }
+
+  /* Desktop styles */
+  @media (max-width: 768px) {
+    .team-member img {
+      width: 100px;
+      height: 100px;
+    }
   }
 }

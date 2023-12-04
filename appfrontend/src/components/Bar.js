@@ -207,6 +207,17 @@ export default function Bar() {
               >
                 Home
               </Button>
+              <Button
+                component={RouterLink}
+                to="/about"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#fff",
+                  "&:hover": { background: "rgba(255,255,255,0.08)" },
+                }}
+              >
+                About
+              </Button>
               {isLoggedIn && (
                 <Button
                   component={RouterLink}
