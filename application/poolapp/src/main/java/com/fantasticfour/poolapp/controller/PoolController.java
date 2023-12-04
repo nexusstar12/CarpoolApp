@@ -1,10 +1,12 @@
 package com.fantasticfour.poolapp.controller;
 
 import com.fantasticfour.poolapp.CustomResponse.*;
+import com.fantasticfour.poolapp.domain.Crew;
 import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.Profile;
 import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.repository.*;
+import com.fantasticfour.poolapp.services.CrewService;
 import com.fantasticfour.poolapp.services.PoolService;
 import com.fantasticfour.poolapp.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pool")
@@ -43,6 +46,9 @@ public class PoolController {
 
     @Autowired
     private ValidationService validationService;
+
+    @Autowired
+    private CrewService crewService;
 
     @PostMapping("/join/{poolId}")
     public ResponseEntity<?> joinPool(@PathVariable int poolId, @RequestBody int profileId){
@@ -105,13 +111,50 @@ public class PoolController {
         //build custom response
         poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(myPools));
 
-        //available pools -  private pools they are not a member of that have a crew they are associated with
-        List<Pool> availablePools = poolRepository.findByProfileId(profileId).stream()
+        //        available pools -  private pools they are not a member of that have a crew they are associated with
+        List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(pool -> pool.getStartTime().isAfter(currentTime)) //.filter(Pool::isPrivacy)
-                .toList();
+                .collect(Collectors.toList());
 
+        System.out.println("crews" + Arrays.toString(crews.toArray()));
+
+        List<Pool> poolsWithCrewsList = poolService.getPoolsByCrewIds(crews);
+        System.out.println("pools with crew id" + Arrays.toString(poolsWithCrewsList.toArray()));
+                //        available pools -  private pools they are not a member of that have a crew they are associated with
+//        availablePools = poolRepository.findByProfileId(profileId).stream()
+//                .filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .filter(pool -> pool.getStartTime().isAfter(currentTime)) //.filter(Pool::isPrivacy)
+//                .toList();
+        System.out.println("profile id: " + profileId);
+        List<Pool> availablePools = poolsWithCrewsList.stream()
+                .filter(pool -> pool.getStartTime().isAfter(currentTime))
+                .filter(pool -> {
+                    if (pool.getMember1() != null) {
+                        if (pool.getMember1().getProfileId() == profileId) {
+                          return false;
+                        }
+                    }
+                    if (pool.getMember2() != null) {
+                        if (pool.getMember2().getProfileId() == profileId) {
+                            return false;
+                        }
+                    }
+                    if (pool.getMember3() != null) {
+                        if (pool.getMember3().getProfileId() == profileId) {
+                            return false;
+                        }
+                    }
+                    if (pool.getCreator() != null) {
+                        if (pool.getCreator().getProfileId() == profileId) {
+                            return false;
+                        }
+                    }
+                    return true;
+                })//.filter(Pool::isPrivacy)
+                .toList();
+        System.out.println("available pools" + Arrays.toString(availablePools.toArray()));
         //add to custom response
         poolsByIdResponse.setAvailablePools(customPoolResponse.buildPoolResponseList(availablePools));
 
