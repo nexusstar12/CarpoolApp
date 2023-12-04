@@ -55,9 +55,11 @@ export default function Bar() {
         <Toolbar>
           {isMobile ? (
             <>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Pool
-              </Typography>
+              <img
+                src="Pool_Logo2.png"
+                alt="Logo"
+                style={{ height: "60px", marginRight: "8px" }} 
+              />
               <IconButton
                 size="large"
                 edge="start"
@@ -193,13 +195,19 @@ export default function Bar() {
               >
                 Join a pool
               </Button>
+              <img
+                src="Pool_Logo2.png"
+                alt="Logo"
+                style={{ height: "80px", marginLeft: "950px" }} // Adjust the height and margin as needed
+              />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Pool
+              
               </Typography>
               <Button
                 component={RouterLink}
                 to="/"
                 sx={{
+                 // flexGrow: 1,
                   fontWeight: "bold",
                   color: "#fff",
                   "&:hover": { background: "rgba(255,255,255,0.08)" },
