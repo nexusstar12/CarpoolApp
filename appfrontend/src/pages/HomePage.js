@@ -49,7 +49,7 @@ function HomePage() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "100vh" }}
+        sx={{ height: "85vh" }}
       >
         <CssBaseline />
         <Grid
