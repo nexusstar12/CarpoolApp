@@ -9,10 +9,14 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
+import { isZipCodeValid } from "../utilities/zipCodeValidation";
 import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 const defaultTheme = createTheme();
 
 function HomePage() {
+  const history = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [search, setSearch] = useState("");
@@ -21,16 +25,21 @@ function HomePage() {
 
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
+    try {
+      const data = await axiosInstance.get(
+        `/searchbar?filter=${filterOption}&value=${searchQuery}`
+      );
 
-    const data = await axiosInstance.get(
-      `/searchbar?filter=${filterOption}&value=${searchQuery}`
-    );
-
-    if (data.data.length > 0) {
-      setResult(data.data);
-    } else {
-      setNotFound(true);
-      setResult([]);
+      if (data.data.length > 0) {
+        setResult(data.data);
+      } else {
+        setNotFound(true);
+        setResult([]);
+      }
+    } catch (error) {
+      if (error.response.status >= 500) {
+        history("/down");
+      }
     }
   };
 

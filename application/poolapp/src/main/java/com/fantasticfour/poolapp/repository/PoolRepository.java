@@ -30,4 +30,6 @@ public interface PoolRepository extends JpaRepository<Pool, Integer> {
     //get pools if profile id matches one of member or creator fields
     @Query(value = "SELECT * FROM pool WHERE member_1_id = ?1 OR member_2_id = ?1 OR member_3_id = ?1 OR creator_id = ?1", nativeQuery = true)
     List<Optional<Pool>> findByProfileId(@Param("profile_id") int profileId);
+
+    Optional<Pool> findPoolByPoolId(int poolId);
 }

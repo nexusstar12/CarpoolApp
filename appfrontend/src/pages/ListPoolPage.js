@@ -4,15 +4,20 @@ import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import axiosInstance from "../config/axios.config";
 import { UserContext } from "../App";
 import { LoadingBackdrop } from "../components/LoadingData";
+import { convertFromUTC } from "../utilities/convertUTCToBrowserTimeZone";
+import { getBrowserTimezone } from "../utilities/getTimeZoneBrowser";
+import { useNavigate } from "react-router-dom";
 
 export default function ListPoolPage() {
+  const history = useNavigate();
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
   const userContext = useContext(UserContext);
   const { profileId, userId, jwtToken } = userContext.userInfo;
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const getFormattedStartTime = (startTime) => {
+  const getFormattedStartTime = (utcTime) => {
+    let startTime = convertFromUTC(utcTime, getBrowserTimezone());
     if (!startTime) {
       return "N/A";
     }
@@ -31,8 +36,11 @@ export default function ListPoolPage() {
     if (type === "DELETE POOL") {
       try {
         setIsLoading(true);
-        await axiosInstance.delete(`/pool/deletepool/${poolId}`);
-
+        await axiosInstance.delete(`/pool/deletepool/${poolId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
         const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
@@ -41,20 +49,25 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     }
     if (type === "LEAVE POOL") {
       try {
         setIsLoading(true);
-        // const requestBody = { profileId, poolId };
-        const config = {
-          // data: requestBody,
-        };
-        await axiosInstance.delete(`/pool/deletemember`, config);
+        const requestBody = { profileId, poolId };
 
+        await axiosInstance.delete(`/pool/deletemember`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+          data: requestBody,
+        });
         const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
@@ -63,33 +76,44 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     }
 
     if (type === "CREATE CREW") {
-      const requestBody = {
-        origin_pool_id: poolId,
-        creator_id: profileId,
-      };
+      try {
+        const requestBody = {
+          origin_pool_id: poolId,
+          creator_id: profileId,
+        };
 
-      await axiosInstance.post(`/crew/createcrew`, requestBody, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+        await axiosInstance.post(`/crew/createcrew`, requestBody, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      setIsLoading(true);
-      const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+        setIsLoading(true);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      setData(response.data);
-      setIsLoading(false);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -106,8 +130,11 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     };
@@ -191,7 +218,8 @@ export default function ListPoolPage() {
           {/* Time */}
           <CardContainer>
             <Typography variant="body2" color="textSecondary">
-            <strong>Starting Time: </strong> {getFormattedStartTime(dataRow.startTime)}
+              <strong>Starting Time: </strong>{" "}
+              {getFormattedStartTime(dataRow.startTime)}
             </Typography>
           </CardContainer>
           <CardContainer>

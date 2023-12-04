@@ -15,6 +15,6 @@ public interface CrewRepository extends JpaRepository<Crew, Integer> {
 
     Crew findByPool_PoolId(@Param("poolId")int poolId);
 
-    @Query(value = "SELECT * FROM crew WHERE member1_id = ?1 OR member2_id = ?1 OR member3_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM crew WHERE member1_id = ?1 OR member2_id = ?1 OR member3_id = ?1 OR creator_id = ?1", nativeQuery = true)
     List<Optional<Crew>> findByProfile_ProfileId(@Param("profile_id")int profileId);
 }

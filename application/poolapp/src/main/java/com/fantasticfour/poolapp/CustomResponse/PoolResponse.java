@@ -19,6 +19,8 @@ public class PoolResponse {
 
     private List<CustomPassenger> passengers;
 
+    private boolean isCrewCreated;
+
     public PoolResponse() {
         passengers = new ArrayList<>();
     }
@@ -83,6 +85,14 @@ public class PoolResponse {
     public void addPassenger (CustomPassenger passenger) {
         this.passengers.add(passenger);
     };
+
+    public boolean isCrewCreated() {
+        return isCrewCreated;
+    }
+
+    public void setCrewCreated(boolean crewCreated) {
+        isCrewCreated = crewCreated;
+    }
 
     @Override
     public String toString() {
