@@ -8,6 +8,7 @@ import DriverProfilePage from "./pages/DriverProfilePage";
 import ListPoolPage from "./pages/ListPoolPage";
 import ListCrewPage from "./pages/ListCrewPage";
 import TermsAndConditions from "./pages/TermsAndConditions";
+import AboutPage from "./pages/aboutPage";
 import OutagePage from "./pages/OutagePage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Bar from "./components/Bar";
@@ -44,6 +45,7 @@ function App() {
             <Route path="/my-pools" element={<ListPoolPage />} />
             <Route path="/my-crews" element={<ListCrewPage />} />
             <Route path="/down" element={<OutagePage />} />
+            <Route path="/about" element={<AboutPage />} />
           </Routes>
         </Router>
       </div>

@@ -83,7 +83,7 @@ export default function SignUp() {
     } else {
       setPhoneError(false);
     } 
-
+    
     if (!emailRegex.test(email)) {
       setEmailError("Email must be valid, i.e. 'example@email.com'");
       return;
