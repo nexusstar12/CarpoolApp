@@ -12,6 +12,8 @@ import AboutPage from "./pages/aboutPage";
 import OutagePage from "./pages/OutagePage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Bar from "./components/Bar";
+import Footer from "./components/Footer";
+import NotFound from "./pages/NotFoundPage";
 
 import { createContext, useState, useEffect } from "react";
 
@@ -46,8 +48,14 @@ function App() {
             <Route path="/my-crews" element={<ListCrewPage />} />
             <Route path="/down" element={<OutagePage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<NotFound />} />{" "}
+            {/* Corrected catch-all Route */}
           </Routes>
         </Router>
+
+        <div className="content" />
+        <Footer />
+        <div />
       </div>
     </UserContext.Provider>
   );

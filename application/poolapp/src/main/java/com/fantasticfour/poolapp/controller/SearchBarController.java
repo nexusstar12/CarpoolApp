@@ -1,11 +1,15 @@
 package com.fantasticfour.poolapp.controller;
 
+import com.fantasticfour.poolapp.CustomResponse.CityValidationEnum;
+import com.fantasticfour.poolapp.CustomResponse.ZipCodeValidationEnum;
 import com.fantasticfour.poolapp.domain.Pool;
 import com.fantasticfour.poolapp.domain.User;
 import com.fantasticfour.poolapp.domain.ZipData;
 import com.fantasticfour.poolapp.repository.PoolRepository;
 import com.fantasticfour.poolapp.repository.UserRepository;
 import com.fantasticfour.poolapp.repository.ZipDataRepository;
+import com.fantasticfour.poolapp.services.ValidationService;
+import com.fantasticfour.poolapp.services.ZipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,29 +32,56 @@ public class SearchBarController {
 
     @Autowired
     private ZipDataRepository zipDataRepository;
+    
+    @Autowired
+    ZipService zipService;
+
+    @Autowired
+    ValidationService validationService;
 
     @GetMapping("/api/searchbar")
-//    List<Map<String, Object>>
     public ResponseEntity<List<Object>> searchBar (@RequestParam String filter, @RequestParam String value) {
         //http://localhost:8080/api/searchbar?filter=[columnNameInDB]&value=[stringTobesearched]
-
-//        Map<String, Object>
+        
         List<Object> results = new ArrayList<>();
+        
         //value to be searched in db
         String regex = "^" + value;
 
+        ZipCodeValidationEnum zipCodeValidationEnum;
+        CityValidationEnum cityValidationEnum;
+
+        //determines which type of search function in the dropdown menu is executed
         switch (filter) {
             case "name":
                 matchByUserName(regex, results);
                 break;
             case "city":
+                //validate city
+                cityValidationEnum = validationService.cityInputValidation(value);
+                if (cityValidationEnum != CityValidationEnum.CITY_IS_VALID) {
+                    results.add(cityValidationEnum);
+                    return new ResponseEntity<>(results, HttpStatus.UNAUTHORIZED);
+                }
                 matchByStartCity(regex, results);
                 break;
             case "startZip":
-//                System.out.println("start zip to be implemented");
+                //validate zipcode
+                zipCodeValidationEnum = zipService.zipcodeValidation(value);
+                if (zipCodeValidationEnum != ZipCodeValidationEnum.VALID_ZIP) {
+                    results.add(zipCodeValidationEnum);
+                    return new ResponseEntity<>(results, HttpStatus.UNAUTHORIZED);
+                }
+
                 matchByStartZip(value, results);
                 break;
             case "endZip":
+                //validate zipcode
+                zipCodeValidationEnum = zipService.zipcodeValidation(value);
+                if (zipCodeValidationEnum != ZipCodeValidationEnum.VALID_ZIP) {
+                    results.add(zipCodeValidationEnum);
+                    return new ResponseEntity<>(results, HttpStatus.UNAUTHORIZED);
+                }
                 matchByEndZip(value, results);
                 break;
             case "zip":
@@ -62,8 +93,7 @@ public class SearchBarController {
 
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
-
-//    List<Map<String, Object>>
+     
     private void matchByUserName (String regex, List<Object> results) {
         List<User> userList =  userRepository.findByNameMatchesRegex(regex);
         results.addAll(userList);
@@ -83,12 +113,13 @@ public class SearchBarController {
     }
 
     private void matchByStartZip (String value, List<Object> results) {
+        
+        
       Optional<ZipData> zipOptionalEnity=  zipDataRepository.findById(value);
 
         ZipData zipDataEntity;
         if (zipOptionalEnity.isPresent()) {
             zipDataEntity = zipOptionalEnity.get();
-            // Now you can manipulate the entity object as needed.
             // Distance = 20;
   //        Radius = 6371; // earth radius in km
 //          Radius = 3958; // earth radius in miles
@@ -227,5 +258,8 @@ public class SearchBarController {
         List<Pool> poolList =  poolRepository.findByCityMatchesRegex(regex);
         results.addAll(poolList);
     }
+
+
+
 
 }

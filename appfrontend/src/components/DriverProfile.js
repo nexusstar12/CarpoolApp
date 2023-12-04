@@ -11,7 +11,7 @@ const DriverProfile = () => {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "80vh",
+    maxHeight: "85vh",
   };
 
   const profileStyle = {
