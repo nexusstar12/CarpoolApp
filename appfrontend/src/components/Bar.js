@@ -188,6 +188,7 @@ export default function Bar() {
                 to="/"
                 color="inherit"
                 sx={{
+                
                   fontWeight: "bold",
                   color: "#fff",
                   "&:hover": { background: "rgba(255,255,255,0.08)" },
@@ -195,11 +196,16 @@ export default function Bar() {
               >
                 Join a pool
               </Button>
-              <img
-                src="Pool_Logo2.png"
-                alt="Logo"
-                style={{ height: "80px", marginLeft: "950px" }} // Adjust the height and margin as needed
-              />
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              
+              </Typography>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                  src="Pool_Logo2.png"
+                  alt="Logo"
+                  style={{ height: "80px" }}
+                />
+              </div>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               
               </Typography>
@@ -207,7 +213,7 @@ export default function Bar() {
                 component={RouterLink}
                 to="/"
                 sx={{
-                 // flexGrow: 1,
+                 //flexGrow: 1,
                   fontWeight: "bold",
                   color: "#fff",
                   "&:hover": { background: "rgba(255,255,255,0.08)" },
