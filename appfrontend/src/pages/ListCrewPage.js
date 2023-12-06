@@ -168,6 +168,7 @@ export default function ListCrewPage() {
         alignItems: "center",
         overflowY: "auto",
         height: "80vh",
+        justifyContent: crews.length === 0 ? "center" : "flex-start",
       }}
     >
       {isLoading ? (
@@ -180,7 +181,9 @@ export default function ListCrewPage() {
               <CardContainer>{getCards(crews)}</CardContainer>
             </>
           ) : (
-            <Typography variant="h4">You are in no crew now.</Typography>
+            <Typography variant="h4" sx={{ textAlign: "center" }}>
+              You are in no crew now.
+            </Typography>
           )}
         </>
       )}

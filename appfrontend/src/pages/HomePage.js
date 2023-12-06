@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import SearchBar from "../components/SearchBar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../config/axios.config";
 import { SearchResult } from "../components/SearchResult";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,9 +9,11 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CookieConsent from "../components/CookieConsent";
-import { isZipCodeValid } from "../utilities/zipCodeValidation";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { useLocation } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -22,6 +24,13 @@ function HomePage() {
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
   const [notFound, setNotFound] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.showSuccessModal) {
+      setShowSuccessModal(true);
+    }
+  }, [location.state]);
 
   const handleSearchSubmit = async ({ searchQuery, filterOption }) => {
     setSearch({ searchQuery, filterOption });
@@ -43,8 +52,41 @@ function HomePage() {
     }
   };
 
+  const SuccessModal = () => {
+    return (
+      <Modal
+        open={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Typography id="success-modal-title" variant="h6" component="h2">
+            Logout Successful!
+          </Typography>
+        </Box>
+      </Modal>
+    );
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
+      <SuccessModal />
       <Grid
         container
         component="main"
