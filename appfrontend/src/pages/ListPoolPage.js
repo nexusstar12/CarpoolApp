@@ -283,6 +283,14 @@ export default function ListPoolPage() {
         <LoadingBackdrop />
       ) : (
         <>
+          {console.log("data", data)}
+          {!data.myPools.length &&
+            !data.pastPools.length &&
+            !data.availablePools.length && (
+              <>
+                <Typography variant="h4">You are in no pool now.</Typography>
+              </>
+            )}
           {data?.myPools?.length ? (
             <>
               <Typography variant="h4">My Pools</Typography>

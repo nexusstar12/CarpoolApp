@@ -26,6 +26,7 @@ export default function Bar() {
   const isDriver = userInfo?.driver;
   const isLoggedIn = userInfo?.email;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,7 +39,8 @@ export default function Bar() {
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
     setUserInfo(null);
-    history("/");
+    setShowSuccessModal(true);
+    history("/", { state: { showSuccessModal: true } });
   };
 
   const handleOpenMenu = (event) => {
@@ -58,7 +60,7 @@ export default function Bar() {
               <img
                 src="Pool_Logo2.png"
                 alt="Logo"
-                style={{ height: "60px", marginRight: "8px" }} 
+                style={{ height: "60px", marginRight: "8px" }}
               />
               <IconButton
                 size="large"
@@ -188,7 +190,6 @@ export default function Bar() {
                 to="/"
                 color="inherit"
                 sx={{
-                
                   fontWeight: "bold",
                   color: "#fff",
                   "&:hover": { background: "rgba(255,255,255,0.08)" },
@@ -196,24 +197,28 @@ export default function Bar() {
               >
                 Join a pool
               </Button>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              
-              </Typography>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1 }}
+              ></Typography>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <img
                   src="Pool_Logo2.png"
                   alt="Logo"
                   style={{ height: "80px" }}
                 />
               </div>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              
-              </Typography>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1 }}
+              ></Typography>
               <Button
                 component={RouterLink}
                 to="/"
                 sx={{
-                 //flexGrow: 1,
+                  //flexGrow: 1,
                   fontWeight: "bold",
                   color: "#fff",
                   "&:hover": { background: "rgba(255,255,255,0.08)" },
