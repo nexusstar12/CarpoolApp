@@ -1,0 +1,23 @@
+  .FooterText:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  .FooterText:visited {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  .FooterText:hover {
+    color: white;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
+  .FooterText:active {
+    color: white;
+    background-color: transparent;
+    text-decoration: underline;
+  }

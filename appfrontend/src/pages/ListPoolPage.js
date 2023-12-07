@@ -6,12 +6,15 @@ import { UserContext } from "../App";
 import { LoadingBackdrop } from "../components/LoadingData";
 import { convertFromUTC } from "../utilities/convertUTCToBrowserTimeZone";
 import { getBrowserTimezone } from "../utilities/getTimeZoneBrowser";
+import { useNavigate } from "react-router-dom";
 
 export default function ListPoolPage() {
+  const history = useNavigate();
   const [crewCreatedPoolId, setCrewCreatedPoolId] = useState(null);
   const userContext = useContext(UserContext);
   const { profileId, userId, jwtToken } = userContext.userInfo;
   const [data, setData] = useState({});
+ 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const getFormattedStartTime = (utcTime) => {
@@ -26,9 +29,11 @@ export default function ListPoolPage() {
       hour: "2-digit",
       minute: "2-digit",
     });
+    
 
     return `${dateString} ${timeString}`;
   };
+
 
   const handleClick = async (poolId, type) => {
     if (type === "DELETE POOL") {
@@ -47,11 +52,16 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error?.response?.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
+      
     }
+    
     if (type === "LEAVE POOL") {
       try {
         setIsLoading(true);
@@ -71,33 +81,72 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error?.response?.status >= 500) {
+          history("/down");
+        }
+        setError(error);
+        setIsLoading(false);
+      }
+    }
+    if (type === "JOIN POOL") {
+      try {
+        setIsLoading(true);
+        const requestBody = { profileId, poolId };
+
+        await axiosInstance.put(`/pool/addUserToPool`, requestBody, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+
+     
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error?.response?.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     }
 
     if (type === "CREATE CREW") {
-      const requestBody = {
-        origin_pool_id: poolId,
-        creator_id: profileId,
-      };
+      try {
+        const requestBody = {
+          origin_pool_id: poolId,
+          creator_id: profileId,
+        };
 
-      await axiosInstance.post(`/crew/createcrew`, requestBody, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+        await axiosInstance.post(`/crew/createcrew`, requestBody, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      setIsLoading(true);
-      const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+        setIsLoading(true);
+        const response = await axiosInstance.get(`/pool/getpools/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      setData(response.data);
-      setIsLoading(false);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error?.response?.status >= 500) {
+          history("/down");
+        }
+        setError(error);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -114,8 +163,11 @@ export default function ListPoolPage() {
 
         setData(response.data);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
+      } catch (error) {
+        if (error?.response?.status >= 500) {
+          history("/down");
+        }
+        setError(error);
         setIsLoading(false);
       }
     };
@@ -238,7 +290,7 @@ export default function ListPoolPage() {
               variant="contained"
               onClick={() => handleClick(dataRow.poolId, type)}
               style={{
-                backgroundColor: type === "CREATE CREW" ? "green" : "red",
+                backgroundColor: type === "CREATE CREW" || type === "JOIN POOL" ? "green" : "red",
               }}
             >
               {type}
@@ -257,13 +309,21 @@ export default function ListPoolPage() {
         flexDirection: "column",
         alignItems: "center",
         overflowY: "auto",
-        maxHeight: "80vh",
+        maxHeight: "74vh",
       }}
     >
       {isLoading ? (
         <LoadingBackdrop />
       ) : (
         <>
+          {console.log("data", data)}
+          {!data.myPools.length &&
+            !data.pastPools.length &&
+            !data.availablePools.length && (
+              <>
+                <Typography variant="h4">You are in no pool now.</Typography>
+              </>
+            )}
           {data?.myPools?.length ? (
             <>
               <Typography variant="h4">My Pools</Typography>
@@ -277,7 +337,7 @@ export default function ListPoolPage() {
             <>
               <Typography variant="h4">Available Pools</Typography>
               <CardContainer>
-                {getCards(data.availablePools, "LEAVE POOL")}
+                {getCards(data.availablePools, "JOIN POOL")}
               </CardContainer>
             </>
           ) : null}

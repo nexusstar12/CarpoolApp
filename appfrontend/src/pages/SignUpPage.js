@@ -126,6 +126,10 @@ export default function SignUp() {
       }
     } catch (error) {
       setError(error.response.data.message);
+
+      if (error?.response?.status >= 500) {
+        history("/down");
+      }
     }
     if (!firstName) {
       setFirstNameError("Required");
@@ -217,7 +221,7 @@ export default function SignUp() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "100vh" }}
+        sx={{ height: "80vh" }}
       >
         <CssBaseline />
         <Grid
@@ -230,7 +234,7 @@ export default function SignUp() {
           elevation={6}
           square
           sx={{
-            height: "90vh",
+            height: "calc(100vh - 10vh - 80px)",
             overflow: "auto",
             display: "flex",
             flexDirection: "column",

@@ -256,7 +256,7 @@ public class CrewController {
             if(optionalPool.isPresent()){
                 pool = optionalPool.get();
                 pool.setCrewCreated(true);
-                poolRepository.save(pool);
+                poolRepository.save(pool); //saved pool before adding crew id
                 crew.setOriginPoolId((int)jsonMap.get("origin_pool_id"));
             }
         }
@@ -279,12 +279,12 @@ public class CrewController {
             profileExists = true;
         }
         if(pool.getMember2() != null){
-            member2_id = pool.getMember1();
+            member2_id = pool.getMember2();
             crew.setMember2(member2_id);
             profileExists = true;
         }
         if(pool.getMember3() != null){
-            member3_id = pool.getMember1();
+            member3_id = pool.getMember3();
             crew.setMember3(member3_id);
             profileExists = true;
         }

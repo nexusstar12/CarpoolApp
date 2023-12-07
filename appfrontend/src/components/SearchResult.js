@@ -4,13 +4,16 @@ import { Button, Card, CardContent, Typography } from "@mui/material";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../config/axios.config";
+import { convertFromUTC } from "../utilities/convertUTCToBrowserTimeZone";
+import { getBrowserTimezone } from "../utilities/getTimeZoneBrowser";
 
 export const SearchResult = ({ result }) => {
   const userContext = useContext(UserContext);
   const [disabledButtons, setDisabledButtons] = useState([]);
   const [errorPoolId, setErrorPoolId] = useState("");
   const history = useNavigate();
-  const getFormattedStartTime = (startTime) => {
+  const getFormattedStartTime = (utcTime) => {
+    let startTime = convertFromUTC(utcTime, getBrowserTimezone());
     if (!startTime) {
       return "N/A";
     }
@@ -122,60 +125,51 @@ export const SearchResult = ({ result }) => {
   `;
 
   const getCards = () => {
-    return result.map((data) => (
-      <StyledCard key={data.poolId}>
-        <StyledCardContent>
-          {/* Title */}
-          <CardTitle>{data.description || "No Description"}</CardTitle>
+    if (result.length < 1000) {
+      return result.map((data) => (
+        <StyledCard key={data.poolId}>
+          <StyledCardContent>
+            {/* Title */}
+            <CardTitle>{data.description || "No Description"}</CardTitle>
 
-          {/* Time */}
-          <TimeContainer>
-            <Typography variant="body2" color="textSecondary">
-              <strong>Starts: </strong> {getFormattedStartTime(data.startTime)}
-            </Typography>
-          </TimeContainer>
+            {/* Time */}
+            <TimeContainer>
+              <Typography variant="body2" color="textSecondary">
+                <strong>Starts: </strong>
+                {getFormattedStartTime(data.startTime)}
+              </Typography>
+            </TimeContainer>
 
-          {/* Details */}
-          <DetailsContainer>
-            <Typography variant="body2" color="textSecondary">
-              <strong>Starting Location: </strong> {data.startLocation}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              <strong>Ending Location: </strong> {data.endLocation}
-            </Typography>
-          </DetailsContainer>
+            {/* Details */}
+            <DetailsContainer>
+              <Typography variant="body2" color="textSecondary">
+                <strong>Starting Location: </strong> {data.startLocation}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                <strong>Ending Location: </strong> {data.endLocation}
+              </Typography>
+            </DetailsContainer>
 
-          {/* Button */}
-          <JoinButton
-            variant="contained"
-            onClick={() => handleJoinPoolClick(data.poolId)}
-            style={{
-              backgroundColor: disabledButtons[data.poolId] ? "red" : "green",
-            }}
-          >
-            {disabledButtons[data.poolId] ? "LEAVE POOL" : "JOIN POOL"}
-          </JoinButton>
-          {errorPoolId === data.poolId && (
-            <Typography color="error" variant="body2" marginTop={"10px"}>
-              Pool is full
-            </Typography>
-          )}
-        </StyledCardContent>
-      </StyledCard>
-    ));
+            {/* Button */}
+            <JoinButton
+              variant="contained"
+              onClick={() => handleJoinPoolClick(data.poolId)}
+              style={{
+                backgroundColor: disabledButtons[data.poolId] ? "red" : "green",
+              }}
+            >
+              {disabledButtons[data.poolId] ? "LEAVE POOL" : "JOIN POOL"}
+            </JoinButton>
+            {errorPoolId === data.poolId && (
+              <Typography color="error" variant="body2" marginTop={"10px"}>
+                Pool is full
+              </Typography>
+            )}
+          </StyledCardContent>
+        </StyledCard>
+      ));
+    }
   };
 
-  return (
-    <>
-      <CardContainer>{getCards()}</CardContainer>
-
-      <div>
-        {result.length === 0 ? (
-          <p>No results found.</p>
-        ) : (
-          <CardContainer>{getCards()}</CardContainer>
-        )}
-      </div>
-    </>
-  );
+  return <CardContainer>{getCards()}</CardContainer>;
 };

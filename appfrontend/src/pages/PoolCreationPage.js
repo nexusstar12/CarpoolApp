@@ -62,6 +62,9 @@ export default function PostPool() {
           setCrews(data);
         }
       } catch (error) {
+        if (error?.response?.status >= 500) {
+          history("/down");
+        }
         console.error("Error fetching data: ", error);
       }
     };
@@ -116,7 +119,7 @@ export default function PostPool() {
       endState,
       crewId: selectedCrewId ? parseInt(selectedCrewId) : null,
       creatorId: profileId,
-      privacy: privacy === "public" ? true : false,
+      privacy: privacy === "public" ? false : true,
     };
 
     //field validations
@@ -246,6 +249,9 @@ export default function PostPool() {
         history("/my-pools");
       }
     } catch (error) {
+      if (error?.response?.status >= 500) {
+        history("/down");
+      }
       console.log("error", error);
     }
 
@@ -372,6 +378,7 @@ export default function PostPool() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        height: "74vh",
       }}
     >
       <Paper

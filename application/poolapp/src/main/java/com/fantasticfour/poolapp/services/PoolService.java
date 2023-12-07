@@ -1,8 +1,8 @@
 package com.fantasticfour.poolapp.services;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.fantasticfour.poolapp.domain.*;
 import com.fantasticfour.poolapp.repository.*;
@@ -202,5 +202,23 @@ public class PoolService {
 
     private boolean crewExists(Integer crewId) {
         return crewRepository.existsById(crewId);
+    }
+
+   public List<Pool> getPoolsByCrewIds (List<Crew> crewList) {
+       System.out.println("1.getpoolsbycrewid method crewlist" + Arrays.toString(crewList.toArray()));
+       List<Pool> poolList = new ArrayList<>();
+
+       for (Crew crew: crewList) {
+           System.out.println(crew.getCrewId());
+          List<Pool> poolWithSameCrewIdList = poolRepository.findByCrewId(crew.getCrewId()).stream()
+                  .filter(Optional::isPresent)
+                  .map(Optional::get)
+                  .collect(Collectors.toList());
+           System.out.println("2. for loop pools with matching crewid" + Arrays.toString(poolWithSameCrewIdList.toArray()));
+           poolList.addAll(poolWithSameCrewIdList);
+           System.out.println("3. poolList" + Arrays.toString(poolList.toArray()));
+
+       }
+        return poolList;
     }
 }

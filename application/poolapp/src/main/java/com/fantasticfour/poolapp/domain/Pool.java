@@ -1,5 +1,6 @@
 package com.fantasticfour.poolapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -12,8 +13,11 @@ public class Pool {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poolId;
 
+//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+//    @JoinColumn(name = "crew_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "crew_id")
+    @JsonIgnore
     private Crew crew;
 
     @ManyToOne
