@@ -99,10 +99,10 @@ public class PoolController {
                                          .toList();
 
 
-        //mypools- user created pools occuring today or in the future.
+        //mypools- user is driver or creator of a pool in the future
         LocalDateTime currentTime = LocalDateTime.now();
         List<Pool> myPools = pools.stream()
-                                  .filter(pool -> pool.getCreator().getProfileId() == profileId)
+//                                  .filter(pool -> pool.getCreator().getProfileId() == profileId)
                                   .filter(pool -> pool.getStartTime().isAfter(currentTime))
                                   .toList();
 
@@ -111,7 +111,7 @@ public class PoolController {
         //build custom response
         poolsByIdResponse.setMyPools(customPoolResponse.buildPoolResponseList(myPools));
 
-        //        available pools -  private pools they are not a member of that have a crew they are associated with
+        // available pools -  private pools they are not a member of that have a crew they are associated with
         List<Crew> crews = crewService.getCrewByProfileId(profileId).stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -130,6 +130,7 @@ public class PoolController {
         System.out.println("profile id: " + profileId);
         List<Pool> availablePools = poolsWithCrewsList.stream()
                 .filter(pool -> pool.getStartTime().isAfter(currentTime))
+                .filter(Pool::isPrivacy)
                 .filter(pool -> {
                     if (pool.getMember1() != null) {
                         if (pool.getMember1().getProfileId() == profileId) {
@@ -152,7 +153,7 @@ public class PoolController {
                         }
                     }
                     return true;
-                })//.filter(Pool::isPrivacy)
+                })
                 .toList();
         System.out.println("available pools" + Arrays.toString(availablePools.toArray()));
         //add to custom response
