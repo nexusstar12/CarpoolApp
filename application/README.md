@@ -46,10 +46,10 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
 
 Then close your terminal
 
-Reopen the terminal and then you can install Node.js by running nvm install –lts
+Reopen the terminal and then you can install Node.js by running ## nvm install –lts
 
 You can set the default Node.js version to use if you have multiple versions installed. To do this, run
-nvm alias default <version> 
+##nvm alias default <version> 
 
 In order to check that node and npm are installed you run
 node -v
