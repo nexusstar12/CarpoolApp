@@ -36,7 +36,18 @@ Once extracted, you can set up your JAVA_HOME environment variable to point to t
 In order to check if correctly installed run the command: 	java –version
 
 #### 4. Maven
- 
+Open terminal and run command to install Homebrew
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+Then, once Homebrew is installed you run
+
+brew install maven
+
+
+Lastly, you run mvn -version
+
+
 #### 5. Node & Node npm
    
 Open the terminal
