@@ -119,7 +119,7 @@ export default function PostPool() {
       endState,
       crewId: selectedCrewId ? parseInt(selectedCrewId) : null,
       creatorId: profileId,
-      privacy: privacy === "public" ? true : false,
+      privacy: privacy === "public" ? false : true,
     };
 
     //field validations
