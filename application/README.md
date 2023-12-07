@@ -57,6 +57,19 @@ npm -v
 
 #### 6. React
 
+Fist to intall React one has to run this code on the terminal
+brew install node
+
+Then you can use the code below after Node.js is installed
+npx create-react-app my-react-app
+
+Change to the app react directory
+cd my-react-app
+
+This command must be inputted to start the server
+npm start
+
+
 #### 7. Google CLI
 
 In order to connect Google CLI follow the instructions on https://cloud.google.com/sdk/docs/install-sdk 
