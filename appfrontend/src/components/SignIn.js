@@ -54,7 +54,7 @@ export default function SignIn() {
         history("/", { replace: true });
       }
     } catch (error) {
-      if (error.response.status >= 500) {
+      if (error?.response?.status >= 500) {
         history("/down");
       }
       setError(error.response.data);
@@ -67,7 +67,7 @@ export default function SignIn() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "85vh" }}
+        sx={{ height: "80vh" }}
       >
         <CssBaseline />
         <Grid

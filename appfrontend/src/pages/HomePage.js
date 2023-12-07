@@ -39,14 +39,14 @@ function HomePage() {
         `/searchbar?filter=${filterOption}&value=${searchQuery}`
       );
 
-      if (data.data.length > 0) {
+      if (data?.data?.length > 0) {
         setResult(data.data);
       } else {
         setNotFound(true);
         setResult([]);
       }
     } catch (error) {
-      if (error.response.status >= 500) {
+      if (error?.response?.status >= 500) {
         history("/down");
       }
     }
@@ -91,7 +91,8 @@ function HomePage() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "85vh" }}
+        sx={{ height: "calc(100vh - 10vh - 80px)" }}
+        className="home-page"
       >
         <CssBaseline />
         <Grid

@@ -2,7 +2,8 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Make sure your app takes at least the full height of the viewport */
+  min-height: 100vh;
+  /* Make sure your app takes at least the full height of the viewport */
 }
 
 .content {
@@ -57,6 +58,7 @@ html {
   flex: 3;
   width: 100%;
 }
+
 .search-container {
   flex: 2;
   width: 50%;
@@ -68,12 +70,13 @@ html {
   align-items: center; */
   height: 100vh;
 }
+
 .search-bar {
   margin-top: 100px;
 }
 
 .search-results-container {
-  height: 50%;
+  height: 46%;
   overflow-y: auto;
 }
 
@@ -100,24 +103,30 @@ html {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 /* CSS */
 .searchBar {
-  width: 100%; /* Full width on mobile devices */
-  margin: 0 auto; /* Center the search bar */
+  width: 100%;
+  /* Full width on mobile devices */
+  margin: 0 auto;
+  /* Center the search bar */
 }
 
 @media (min-width: 600px) {
   .searchBar {
-    width: 80%; /* Adjust width for larger screens */
+    width: 80%;
+    /* Adjust width for larger screens */
   }
 }
 
 .scrollable-container {
-  max-height: 100vh; /* Adjust the value as needed */
+  max-height: 100vh;
+  /* Adjust the value as needed */
   overflow-y: auto;
 }
 
@@ -132,6 +141,7 @@ html {
     height: 70%;
     overflow-y: auto;
   }
+
   .home-page-title {
     font-size: 20px;
   }
@@ -139,9 +149,12 @@ html {
   .team-grid {
     display: flex;
     flex-direction: column;
-    align-items: center; /* This centers the images horizontally */
-    justify-content: flex-start; /* This aligns the images to the top of the container */
-    gap: 20px; /* Adjusts the space between items */
+    align-items: center;
+    /* This centers the images horizontally */
+    justify-content: flex-start;
+    /* This aligns the images to the top of the container */
+    gap: 20px;
+    /* Adjusts the space between items */
   }
 
   /* Desktop styles */
@@ -150,5 +163,16 @@ html {
       width: 100px;
       height: 100px;
     }
+  }
+}
+
+@media (max-width: 600px) {
+  .home-page {
+    height: 100vh !important;
+  }
+
+  .footer {
+    display: none;
+    /* Adjust width for larger screens */
   }
 }
