@@ -1,8 +1,6 @@
 package com.fantasticfour.poolapp.repository;
 
-import com.fantasticfour.poolapp.domain.Crew;
 import com.fantasticfour.poolapp.domain.Pool;
-import com.fantasticfour.poolapp.domain.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,5 +29,11 @@ public interface PoolRepository extends JpaRepository<Pool, Integer> {
     @Query(value = "SELECT * FROM pool WHERE member_1_id = ?1 OR member_2_id = ?1 OR member_3_id = ?1 OR creator_id = ?1", nativeQuery = true)
     List<Optional<Pool>> findByProfileId(@Param("profile_id") int profileId);
 
+    @Query(value = "SELECT * FROM pool WHERE crew_id = ?1", nativeQuery = true)
+    List<Optional<Pool>> findByCrewId(int crewId);
+
+
     Optional<Pool> findPoolByPoolId(int poolId);
+
+
 }
