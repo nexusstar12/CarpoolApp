@@ -50,7 +50,7 @@ export default function ListPoolPage() {
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
-        if (error.response.status >= 500) {
+        if (error?.response?.status >= 500) {
           history("/down");
         }
         setError(error);
@@ -77,7 +77,7 @@ export default function ListPoolPage() {
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
-        if (error.response.status >= 500) {
+        if (error?.response?.status >= 500) {
           history("/down");
         }
         setError(error);
@@ -108,7 +108,7 @@ export default function ListPoolPage() {
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
-        if (error.response.status >= 500) {
+        if (error?.response?.status >= 500) {
           history("/down");
         }
         setError(error);
@@ -131,7 +131,7 @@ export default function ListPoolPage() {
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
-        if (error.response.status >= 500) {
+        if (error?.response?.status >= 500) {
           history("/down");
         }
         setError(error);

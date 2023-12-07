@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React, { useState } from "react";
 
 const TeamMember = ({ name, role, imageUrl }) => {
@@ -63,21 +64,32 @@ function AboutPage() {
   ];
 
   return (
-    <div className="scrollable-container about-page">
-      <h1>About the Pool Team</h1>
-      <h2>More Information</h2>
-      <p style={{ paddingLeft: "60px", paddingRight: "60px" }}>
-        Pool was created by a team of San Francisco State University undergrad
-        and graduate students. Learn about us by clicking on a picture below.
-        Art by Isiah Paul McGlothin
-      </p>
+    <Box
+      sx={{
+        mt: 5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        overflowY: "auto",
+        maxHeight: "74vh",
+      }}
+    >
+      <div className="scrollable-container about-page">
+        <h1>About the Pool Team</h1>
+        <h2>More Information</h2>
+        <p style={{ paddingLeft: "60px", paddingRight: "60px" }}>
+          Pool was created by a team of San Francisco State University undergrad
+          and graduate students. Learn about us by clicking on a picture below.
+          Art by Isiah Paul McGlothin
+        </p>
 
-      <div className="team-grid">
-        {teamMembers.map((member, index) => (
-          <TeamMember key={index} {...member} />
-        ))}
+        <div className="team-grid">
+          {teamMembers.map((member, index) => (
+            <TeamMember key={index} {...member} />
+          ))}
+        </div>
       </div>
-    </div>
+    </Box>
   );
 }
 

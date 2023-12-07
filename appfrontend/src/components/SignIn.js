@@ -54,7 +54,7 @@ export default function SignIn() {
         history("/", { replace: true });
       }
     } catch (error) {
-      if (error.response.status >= 500) {
+      if (error?.response?.status >= 500) {
         history("/down");
       }
       setError(error.response.data);

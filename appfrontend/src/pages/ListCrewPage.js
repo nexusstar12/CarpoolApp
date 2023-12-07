@@ -56,7 +56,7 @@ export default function ListCrewPage() {
       setCrews(data);
       setIsLoading(false);
     } catch (error) {
-      if (error.response.status >= 500) {
+      if (error?.response?.status >= 500) {
         history("/down");
       }
     }

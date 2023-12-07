@@ -127,7 +127,7 @@ export default function SignUp() {
     } catch (error) {
       setError(error.response.data.message);
 
-      if (error.response.status >= 500) {
+      if (error?.response?.status >= 500) {
         history("/down");
       }
     }

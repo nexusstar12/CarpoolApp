@@ -62,7 +62,7 @@ export default function PostPool() {
           setCrews(data);
         }
       } catch (error) {
-        if (error.response.status >= 500) {
+        if (error?.response?.status >= 500) {
           history("/down");
         }
         console.error("Error fetching data: ", error);
@@ -249,7 +249,7 @@ export default function PostPool() {
         history("/my-pools");
       }
     } catch (error) {
-      if (error.response.status >= 500) {
+      if (error?.response?.status >= 500) {
         history("/down");
       }
       console.log("error", error);
@@ -378,7 +378,7 @@ export default function PostPool() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height : "80vh",
+        height: "80vh",
       }}
     >
       <Paper
