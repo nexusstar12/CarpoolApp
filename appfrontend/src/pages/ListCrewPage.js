@@ -167,7 +167,7 @@ export default function ListCrewPage() {
         flexDirection: "column",
         alignItems: "center",
         overflowY: "auto",
-        height: "80vh",
+        height: "74vh",
         justifyContent: crews.length === 0 ? "center" : "flex-start",
       }}
     >

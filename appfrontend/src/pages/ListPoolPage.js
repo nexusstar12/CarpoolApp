@@ -276,7 +276,7 @@ export default function ListPoolPage() {
         flexDirection: "column",
         alignItems: "center",
         overflowY: "auto",
-        maxHeight: "80vh",
+        maxHeight: "74vh",
       }}
     >
       {isLoading ? (
