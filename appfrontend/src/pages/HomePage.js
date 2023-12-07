@@ -39,7 +39,7 @@ function HomePage() {
         `/searchbar?filter=${filterOption}&value=${searchQuery}`
       );
 
-      if (data.data.length > 0) {
+      if (data?.data?.length > 0) {
         setResult(data.data);
       } else {
         setNotFound(true);
@@ -91,7 +91,8 @@ function HomePage() {
         container
         component="main"
         direction={"row"}
-        sx={{ height: "85vh" }}
+        sx={{ height: "calc(100vh - 10vh - 80px)" }}
+        className="home-page"
       >
         <CssBaseline />
         <Grid
